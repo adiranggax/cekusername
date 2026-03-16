@@ -1,5 +1,20 @@
 export default async function handler(req, res) {
-  // Ambil ID dan Zone dari Query String (misal: ?id=123&zone=456)
+  // --- BAGIAN CORS ---
+  res.setHeader('Access-Control-Allow-Credentials', true);
+  res.setHeader('Access-Control-Allow-Origin', '*'); // Mengizinkan semua domain
+  res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT');
+  res.setHeader(
+    'Access-Control-Allow-Headers',
+    'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version'
+  );
+
+  // Handle request OPTIONS (Preflight)
+  if (req.method === 'OPTIONS') {
+    res.status(200).end();
+    return;
+  }
+  // -------------------
+
   const { id, zone } = req.query;
 
   if (!id || !zone) {
@@ -14,44 +29,39 @@ export default async function handler(req, res) {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)",
+        "User-Agent": "Mozilla/5.0",
         "Referer": "https://gopay.co.id/games/mobile-legends"
       },
       body: JSON.stringify({
         code: "MOBILE_LEGENDS",
-        data: {
-          userId: id,
-          zoneId: zone
-        }
+        data: { userId: id, zoneId: zone }
       })
     });
 
     const result = await response.json();
 
-    // Jika berhasil dapat data dari Gopay
     if (result.message === "Success" && result.data) {
       return res.status(200).json({
         status: 200,
         username: result.data.username,
-        country: result.data.countryOrigin || "unknown", // Menampilkan Country
+        country: result.data.countryOrigin || "id",
         id: id,
         zone: zone
       });
     } else {
-      // Jika ID/Zone salah atau tidak ditemukan
       return res.status(404).json({ 
         status: 404, 
         message: "User ID atau Zone tidak ditemukan",
-        raw: result 
+        id: id,
+        zone: zone
       });
     }
 
   } catch (error) {
     return res.status(500).json({ 
       status: 500, 
-      message: "Koneksi ke server Gopay bermasalah", 
+      message: "Internal Server Error", 
       error: error.message 
     });
   }
 }
-// update v2

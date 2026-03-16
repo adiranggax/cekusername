@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game Username Checker</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { background: #0f172a; color: white; }
+        .card { background: #1e293b; border: 1px solid #334155; }
+    </style>
+</head>
+<body class="p-5">
+    <div class="max-w-md mx-auto mt-10 card p-6 rounded-2xl shadow-xl">
+        <h1 class="text-2xl font-bold mb-5 text-center text-blue-400">🎮 Game Checker</h1>
+        
+        <div class="space-y-4">
+            <div>
+                <label class="block text-sm font-medium mb-1">Pilih Game</label>
+                <select id="game" class="w-full p-3 rounded-lg bg-slate-700 border-none outline-none focus:ring-2 focus:ring-blue-500">
+                    <option value="emel">Mobile Legends</option>
+                    <option value="epep">Free Fire</option>
+                    <option value="pubg">PUBG Mobile</option>
+                    <option value="codm">CODM</option>
+                    <option value="fcmobile">FC Mobile</option>
+                    <option value="mcgg">Magic Chess Go Go</option>
+                </select>
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium mb-1">User ID</label>
+                <input type="text" id="userid" placeholder="Masukkan ID" class="w-full p-3 rounded-lg bg-slate-700 border-none outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
+
+            <div id="zonebox">
+                <label class="block text-sm font-medium mb-1">Zone ID</label>
+                <input type="text" id="zoneid" placeholder="Masukkan Zone" class="w-full p-3 rounded-lg bg-slate-700 border-none outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
+
+            <button onclick="checkUser()" id="btnCheck" class="w-full py-3 bg-blue-600 hover:bg-blue-700 rounded-lg font-bold transition">Periksa Username</button>
+        </div>
+
+        <div id="result" class="mt-6 p-4 rounded-lg bg-slate-800 hidden text-center">
+            <p class="text-gray-400 text-sm">Username Ditemukan:</p>
+            <div id="username" class="text-xl font-bold text-green-400 my-2"></div>
+            <div id="flagbox" class="flex justify-center items-center gap-2">
+                <img id="flagimg" src="" class="w-8 h-5 rounded shadow-sm hidden">
+                <span id="country" class="uppercase text-sm font-semibold"></span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const gameSelect = document.getElementById('game');
+        const zoneBox = document.getElementById('zonebox');
+
+        // Sembunyikan Zone ID kalau gamenya gak butuh
+        gameSelect.addEventListener('change', () => {
+            const needZone = ['emel', 'mcgg'];
+            zoneBox.style.display = needZone.includes(gameSelect.value) ? 'block' : 'none';
+        });
+
+        async function checkUser() {
+            const game = gameSelect.value;
+            const id = document.getElementById('userid').value;
+            const zone = document.getElementById('zoneid').value;
+            const btn = document.getElementById('btnCheck');
+            const resDiv = document.getElementById('result');
+
+            if (!id) return alert('Isi ID dulu bos!');
+
+            btn.innerText = 'Checking...';
+            btn.disabled = true;
+            resDiv.classList.add('hidden');
+
+            try {
+                let url = `/api/${game}?id=${id}`;
+                if (['emel', 'mcgg'].includes(game)) url += `&zone=${zone}`;
+
+                const response = await fetch(url);
+                const data = await response.json();
+
+                if (data.status === 200) {
+                    document.getElementById('username').innerText = data.username;
+                    document.getElementById('country').innerText = data.country || '';
+                    
+                    if (data.flag) {
+                        document.getElementById('flagimg').src = data.flag;
+                        document.getElementById('flagimg').classList.remove('hidden');
+                    } else {
+                        document.getElementById('flagimg').classList.add('hidden');
+                    }
+                    
+                    resDiv.classList.remove('hidden');
+                } else {
+                    alert('User Tidak Ditemukan!');
+                }
+            } catch (err) {
+                alert('Gagal mengambil data!');
+            } finally {
+                btn.innerText = 'Periksa Username';
+                btn.disabled = false;
+            }
+        }
+    </script>
+</body>
+</html>

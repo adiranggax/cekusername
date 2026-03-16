@@ -3,101 +3,90 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Game Checker Premium</title>
+    <title>Premium Game Checker</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
     <style>
-        /* CSS Murni untuk cegah glitch saat refresh */
-        :root { --bg-dark: #0f172a; }
-        
-        body {
-            background-color: var(--bg-dark);
-            margin: 0;
+        :root { --accent: #3b82f6; }
+        body { 
+            background: #0f172a; 
+            background-image: radial-gradient(circle at 50% 50%, #1e293b 0%, #0f172a 100%);
+            color: white; 
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
-            min-height: 100vh;
-            font-family: ui-sans-serif, system-ui, -apple-system, sans-serif;
-            color: white;
-            overflow-x: hidden;
+            margin: 0;
+            overflow: hidden;
         }
 
-        /* Animasi Masuk Tanpa Library */
-        @keyframes revealCard {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+        /* 1. ANIMASI MASUK (CSS Murni - No Glitch) */
+        @keyframes entrance {
+            from { opacity: 0; transform: scale(0.9) translateY(30px); filter: blur(10px); }
+            to { opacity: 1; transform: scale(1) translateY(0); filter: blur(0); }
         }
-
-        @keyframes fadeInDown {
-            from { opacity: 0; transform: translateY(-10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
         .main-card {
-            opacity: 0; /* Sembunyi dulu */
-            animation: revealCard 0.6s ease-out forwards;
+            animation: entrance 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
             background: rgba(30, 41, 59, 0.8);
             backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
             border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 0 40px rgba(0,0,0,0.5);
         }
 
-        .stagger-item {
-            opacity: 0;
-            animation: fadeInDown 0.4s ease-out forwards;
+        /* 2. EFEK GLOW PADA INPUT */
+        input:focus, select:focus {
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
+            border-color: var(--accent) !important;
+            transform: translateY(-2px);
         }
+        input, select, button { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
 
-        /* Delay Manual agar muncul satu-satu tanpa glitch */
-        .delay-1 { animation-delay: 0.2s; }
-        .delay-2 { animation-delay: 0.3s; }
-        .delay-3 { animation-delay: 0.4s; }
-
-        /* Logic Zone Box Smooth */
+        /* 3. LOGIC ZONE BOX (Smooth & Elastic) */
         #zonebox {
             max-height: 0;
             opacity: 0;
             overflow: hidden;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            margin-bottom: 0;
+            transform: scaleY(0);
+            transform-origin: top;
+            transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
         }
-
         #zonebox.active {
-            max-height: 100px;
+            max-height: 120px;
             opacity: 1;
+            transform: scaleY(1);
             margin-bottom: 1rem;
-            padding-top: 0.5rem;
         }
 
-        input, select {
-            -webkit-appearance: none;
-            background: rgba(15, 23, 42, 0.6) !important;
+        /* 4. ANIMASI LOGO (Floating) */
+        @keyframes logoFloat {
+            0%, 100% { transform: translateY(0) rotate(0); }
+            50% { transform: translateY(-15px) rotate(10deg); }
         }
+        .logo-anim { animation: logoFloat 4s ease-in-out infinite; }
 
-        .btn-check {
-            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
-            transition: all 0.2s;
-        }
-
-        .btn-check:active { transform: scale(0.96); }
-
-        /* Mencegah highlight biru di HP */
+        /* Mencegah highlight di HP */
         * { -webkit-tap-highlight-color: transparent; }
     </style>
 </head>
 <body class="p-4">
 
-    <div class="main-card max-w-md w-full p-8 rounded-[2.5rem] shadow-2xl">
-        
-        <div class="text-center mb-8 stagger-item">
-            <h1 class="text-3xl font-black tracking-tighter bg-gradient-to-r from-blue-400 to-emerald-400 bg-clip-text text-transparent italic">
+    <div class="main-card max-w-md w-full p-8 rounded-[3rem] relative overflow-hidden">
+        <div class="absolute -top-24 -left-24 w-48 h-48 bg-blue-500/10 rounded-full blur-3xl"></div>
+        <div class="absolute -bottom-24 -right-24 w-48 h-48 bg-emerald-500/10 rounded-full blur-3xl"></div>
+
+        <div class="text-center mb-8">
+            <div class="text-6xl mb-4 logo-anim inline-block">💎</div>
+            <h1 class="text-3xl font-black tracking-tighter bg-gradient-to-br from-white via-blue-300 to-blue-600 bg-clip-text text-transparent italic">
                 GAME CHECKER
             </h1>
-            <div class="h-1 w-12 bg-blue-500 mx-auto mt-2 rounded-full shadow-[0_0_10px_rgba(59,130,246,0.5)]"></div>
+            <p class="text-[10px] text-slate-500 uppercase tracking-[0.4em] mt-1">Premium Edition</p>
         </div>
 
         <div class="space-y-4">
-            <div class="stagger-item delay-1">
-                <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-widest ml-1 mb-1.5">Platform</label>
-                <select id="game" class="w-full p-4 rounded-2xl border border-slate-700 outline-none focus:border-blue-500 transition-all text-sm text-white">
+            <div>
+                <label class="block text-[10px] font-bold text-slate-400 uppercase ml-2 mb-1.5">Platform</label>
+                <select id="game" class="w-full p-4 rounded-2xl bg-slate-900/50 border border-slate-700 outline-none text-sm appearance-none">
                     <option value="emel">Mobile Legends</option>
                     <option value="epep">Free Fire</option>
                     <option value="pubg">PUBG Mobile</option>
@@ -107,29 +96,29 @@
                 </select>
             </div>
 
-            <div class="stagger-item delay-2">
-                <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-widest ml-1 mb-1.5">User ID</label>
-                <input type="text" id="userid" inputmode="numeric" placeholder="Masukkan ID" class="w-full p-4 rounded-2xl border border-slate-700 outline-none focus:border-blue-500 transition-all text-sm text-white">
+            <div>
+                <label class="block text-[10px] font-bold text-slate-400 uppercase ml-2 mb-1.5">User ID</label>
+                <input type="text" id="userid" inputmode="numeric" placeholder="Masukkan ID Player" class="w-full p-4 rounded-2xl bg-slate-900/50 border border-slate-700 outline-none text-sm">
             </div>
 
             <div id="zonebox" class="active">
-                <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-widest ml-1 mb-1.5">Zone ID</label>
-                <input type="text" id="zoneid" inputmode="numeric" placeholder="Zone" class="w-full p-4 rounded-2xl border border-slate-700 outline-none focus:border-blue-500 transition-all text-sm text-white">
+                <label class="block text-[10px] font-bold text-slate-400 uppercase ml-2 mb-1.5">Zone ID</label>
+                <input type="text" id="zoneid" inputmode="numeric" placeholder="Masukkan Zone" class="w-full p-4 rounded-2xl bg-slate-900/50 border border-slate-700 outline-none text-sm">
             </div>
 
-            <button onclick="checkUser()" id="btnCheck" class="btn-check w-full py-4 rounded-2xl font-black text-xs tracking-widest uppercase shadow-lg shadow-blue-500/20 stagger-item delay-3">
-                Cek Akun Sekarang
+            <button onclick="checkUser()" id="btnCheck" class="w-full py-4 bg-blue-600 hover:bg-blue-500 rounded-2xl font-black text-xs tracking-widest text-white shadow-lg shadow-blue-900/40 active:scale-90 uppercase">
+                Periksa Akun
             </button>
         </div>
 
-        <div id="result" class="mt-8 hidden overflow-hidden">
-            <div class="bg-slate-900/50 p-6 rounded-3xl border border-slate-700 text-center animate-[fadeInDown_0.4s_ease-out]">
-                <p class="text-slate-500 text-[9px] font-bold uppercase tracking-widest mb-2">Username Ditemukan</p>
-                <div id="username" class="text-2xl font-black text-emerald-400 break-words uppercase"></div>
+        <div id="result" class="mt-8 hidden">
+            <div class="p-6 rounded-[2rem] bg-gradient-to-b from-slate-800 to-slate-900 border border-blue-500/30 text-center relative shadow-inner">
+                <p class="text-blue-400 text-[9px] font-black uppercase tracking-widest mb-2">Username Verified</p>
+                <div id="username" class="text-2xl font-black text-white break-words drop-shadow-[0_0_10px_rgba(255,255,255,0.3)]"></div>
                 
-                <div id="flagbox" class="mt-4 flex justify-center items-center gap-2 hidden pt-4 border-t border-slate-800">
-                    <img id="flagimg" src="" class="w-7 h-4 rounded-sm">
-                    <span id="country" class="text-[10px] font-bold text-slate-400 uppercase tracking-widest"></span>
+                <div id="flagbox" class="mt-4 flex justify-center items-center gap-2 hidden pt-4 border-t border-slate-700/50">
+                    <img id="flagimg" src="" class="w-7 h-4 rounded-sm shadow-md">
+                    <span id="country" class="text-[10px] font-bold text-slate-500 uppercase"></span>
                 </div>
             </div>
         </div>
@@ -139,7 +128,7 @@
         const gameSelect = document.getElementById('game');
         const zoneBox = document.getElementById('zonebox');
 
-        // Logic switch zone tanpa glitch
+        // Ganti game -> Box zone gerak elastic
         gameSelect.addEventListener('change', () => {
             const needZone = ['emel', 'mcgg'];
             if (needZone.includes(gameSelect.value)) {
@@ -158,12 +147,15 @@
             const userText = document.getElementById('username');
             const flagBox = document.getElementById('flagbox');
 
-            if (!id) return;
+            if (!id) {
+                btn.classList.add('animate__animated', 'animate__shakeX');
+                setTimeout(() => btn.classList.remove('animate__animated', 'animate__shakeX'), 500);
+                return;
+            }
 
-            btn.innerText = 'MEMPROSES...';
+            btn.innerHTML = '<span class="inline-block animate-spin mr-2">🌀</span> PROSES...';
             btn.disabled = true;
             resDiv.classList.add('hidden');
-            flagBox.classList.add('hidden');
 
             try {
                 let url = `/api/${game}?id=${id}`;
@@ -175,6 +167,9 @@
                 if (data.status === 200) {
                     userText.innerText = data.username;
                     resDiv.classList.remove('hidden');
+                    
+                    // ANIMASI MELEDAK PAS KETEMU (BounceIn)
+                    resDiv.classList.add('animate__animated', 'animate__bounceIn');
 
                     if (game === 'emel' && data.flag) {
                         document.getElementById('flagimg').src = data.flag;
@@ -182,13 +177,15 @@
                         flagBox.classList.remove('hidden');
                     }
                 } else {
-                    alert('ID Tidak Ditemukan');
+                    // Animasi Gagal
+                    alert('Data Tidak Ditemukan!');
                 }
             } catch (err) {
                 alert('Gagal mengecek');
             } finally {
-                btn.innerText = 'Cek Akun Sekarang';
+                btn.innerText = 'Periksa Akun';
                 btn.disabled = false;
+                setTimeout(() => resDiv.classList.remove('animate__bounceIn'), 1000);
             }
         }
     </script>

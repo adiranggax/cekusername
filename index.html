@@ -189,11 +189,11 @@
         }
     </script>
         <script>
-            // Tambahkan logika sembunyi/muncul Country di script bawah
+// Logika tampilkan Zone hanya untuk game tertentu
 document.getElementById('gameType').onchange = function() {
     const game = this.value;
+    // Zone muncul hanya untuk ML (emel) dan Magic Chess (mcgg)
     document.getElementById('gameZone').style.display = ['emel', 'mcgg'].includes(game) ? 'block' : 'none';
-    document.getElementById('gameCountry').style.display = (game === 'emel') ? 'block' : 'none';
 }
 
 async function checkGameUser() {
@@ -201,34 +201,35 @@ async function checkGameUser() {
     const game = document.getElementById('gameType').value;
     const id = document.getElementById('gameId').value;
     const zone = document.getElementById('gameZone').value;
-    const country = document.getElementById('gameCountry').value;
     const resDiv = document.getElementById('resGame');
     const resText = document.getElementById('gameUserRes');
 
-    if (!id) return alert("Masukkan User ID!");
+    if (!id) return alert("User ID mana Bos?");
 
     btn.disabled = true;
-    btn.innerText = "WAITING...";
+    btn.innerText = "WAIT...";
     resDiv.classList.add('hidden');
 
     try {
-        // Build URL: /api/emel?id=xxx&zone=xxx&country=id
+        // Tembak langsung ke API kamu. 
+        // Biarkan file PHP/NodeJS di folder /api/ yang urus country-nya.
         let url = `/api/${game}?id=${id}`;
         if (zone) url += `&zone=${zone}`;
-        if (game === 'emel' && country) url += `&country=${country}`;
 
         const response = await fetch(url);
         const data = await response.json();
 
-        // Cek status 200 atau field username
-        if (data.status === 200 || data.username) {
-            resText.innerText = data.username || data.data.username;
+        // Ambil username dari response API kamu
+        const username = data.username || (data.data && data.data.username);
+
+        if (username) {
+            resText.innerText = username;
             resDiv.classList.remove('hidden');
         } else {
             alert("Username tidak ditemukan!");
         }
     } catch (err) {
-        alert("API Game Error!");
+        alert("Gagal koneksi ke API kamu!");
     } finally {
         btn.disabled = false;
         btn.innerText = "CHECK USERNAME";

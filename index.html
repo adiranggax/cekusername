@@ -122,9 +122,12 @@
                 </div>
 
                 <div id="resGame" class="hidden mt-4 p-6 glass rounded-[2rem] text-center border-blue-500/30 animate__animated animate__bounceIn">
-                    <p class="text-[9px] text-slate-500 uppercase font-black tracking-widest mb-1">Validation Success</p>
-                    <h3 id="gameNickname" class="text-white font-black text-2xl tracking-tighter italic">NICKNAME - ID</h3>
-                </div>
+    <p class="text-[9px] text-slate-500 uppercase font-black tracking-widest mb-2">Validation Success</p>
+    <div class="flex flex-col items-center justify-center gap-2">
+        <img id="gameFlag" src="" class="w-10 h-auto rounded shadow-lg hidden">
+        <h3 id="gameNickname" class="text-white font-black text-xl tracking-tighter italic uppercase"></h3>
+    </div>
+</div>
             </section>
 
             <section id="social" class="section-content animate__animated animate__fadeInRight">
@@ -245,54 +248,63 @@
             }, 1000);
         }
     </script>
-    <script>
+<script>
+    // Fungsi pembantu untuk mengubah kode negara (ID, TR, dll) jadi Nama Lengkap
+    const regionNames = new Intl.DisplayNames(['en'], {type: 'region'});
+
     async function validateGame() {
-        // 1. Definisi Element
         const btn = document.getElementById('btnCheck');
         const resBox = document.getElementById('resGame');
         const resText = document.getElementById('gameNickname');
+        const flagImg = document.getElementById('gameFlag');
         
-        // 2. Ambil Value Input
         const game = document.getElementById('gameType').value;
         const id = document.getElementById('gameId').value;
         const zone = document.getElementById('gameZone').value;
 
-        // Validation simple
-        if (!id) return alert("Masukkan User ID dulu Bos!");
+        if (!id) return alert("User ID wajib diisi!");
 
-        // 3. UI Loading State
         btn.disabled = true;
-        btn.innerHTML = '<span class="animate-spin inline-block mr-2">↻</span> VALIDATING...';
+        btn.innerHTML = '<span class="animate-spin inline-block mr-2">↻</span> PROCESSING...';
         resBox.classList.add('hidden');
+        flagImg.classList.add('hidden');
 
         try {
-            // 4. Hit API Lokal Kamu (/api/game?id=xxx&zone=xxx)
+            // Tembak API Lokal
             let url = `/api/${game}?id=${id}`;
-            if (zone && ['emel', 'mcgg'].includes(game)) {
-                url += `&zone=${zone}`;
-            }
+            if (zone && ['emel', 'mcgg'].includes(game)) url += `&zone=${zone}`;
 
             const response = await fetch(url);
             const data = await response.json();
 
-            // 5. Olah Data (Nickname + Country sesuai permintaan sebelumnya)
-            // Sesuaikan "data.username" & "data.country" dengan struktur JSON API kamu
+            // Ambil data dari API kamu
             const nickname = data.username || (data.data && data.data.username);
-            const country = data.country || (data.data && data.data.country) || "";
+            const countryCode = data.country || (data.data && data.data.country);
 
             if (nickname) {
-                // Tampilkan hasil dengan animasi bounceIn (sudah ada di class resGame)
-                resText.innerText = country ? `${nickname} - ${country}` : nickname;
+                let finalInfo = nickname;
+
+                if (countryCode) {
+                    const countryLower = countryCode.toLowerCase();
+                    const countryFullName = regionNames.of(countryCode.toUpperCase());
+                    
+                    // Format: Nickname - Nama Negara (KODE)
+                    finalInfo = `${nickname} - ${countryFullName} (${countryCode.toUpperCase()})`;
+                    
+                    // Ambil bendera dari Flagpedia
+                    flagImg.src = `https://flagcdn.com/w80/${countryLower}.png`;
+                    flagImg.classList.remove('hidden');
+                }
+
+                resText.innerText = finalInfo;
                 resBox.classList.remove('hidden');
             } else {
-                alert("Data tidak ditemukan! Cek ID/Zone lagi.");
+                alert("Username tidak ditemukan.");
             }
 
         } catch (error) {
-            console.error(error);
-            alert("Gagal koneksi ke API Lokal kamu.");
+            alert("Terjadi kesalahan pada API!");
         } finally {
-            // 6. Restore Button
             btn.disabled = false;
             btn.innerHTML = 'CHECK USERNAME';
         }

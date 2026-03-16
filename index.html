@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Premium Game Checker & Tools</title>
+    <title>Premium Checker & Downloader</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
     <style>
@@ -17,175 +17,160 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: flex-start;
             padding: 2rem 1rem;
-            margin: 0;
         }
 
-        /* 1. ANIMASI MASUK (CSS Murni - No Glitch) */
-        @keyframes entrance {
-            from { opacity: 0; transform: scale(0.9) translateY(30px); filter: blur(10px); }
-            to { opacity: 1; transform: scale(1) translateY(0); filter: blur(0); }
-        }
         .main-card, .tool-card {
-            animation: entrance 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
             background: rgba(30, 41, 59, 0.8);
             backdrop-filter: blur(20px);
             border: 1px solid rgba(255, 255, 255, 0.1);
+            animation: fadeIn 0.8s ease-out;
         }
 
-        .tool-card:hover {
-            border-color: var(--accent);
-            box-shadow: 0 0 20px rgba(59, 130, 246, 0.2);
-            transform: translateY(-5px);
-            transition: all 0.3s ease;
-        }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* 2. LOGIC ZONE BOX */
+        /* Logic Zone Box */
         #zonebox {
-            max-height: 0; opacity: 0; overflow: hidden; transform: scaleY(0); transform-origin: top;
-            transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            max-height: 0; opacity: 0; overflow: hidden;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        #zonebox.active { max-height: 120px; opacity: 1; transform: scaleY(1); margin-bottom: 1rem; }
+        #zonebox.active { max-height: 120px; opacity: 1; margin-bottom: 1rem; }
 
-        @keyframes logoFloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
-        .logo-anim { animation: logoFloat 3s ease-in-out infinite; }
+        .input-glow:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.3);
+        }
 
         * { -webkit-tap-highlight-color: transparent; }
     </style>
 </head>
 <body>
 
-    <div class="main-card max-w-md w-full p-8 rounded-[3rem] relative overflow-hidden mb-10">
-        <div class="text-center mb-8">
-            <div class="text-5xl mb-4 logo-anim inline-block">🚀</div>
-            <h1 class="text-3xl font-black tracking-tighter bg-gradient-to-br from-white to-blue-500 bg-clip-text text-transparent italic">
-                GAME CHECKER
-            </h1>
+    <div class="main-card max-w-md w-full p-7 rounded-[2.5rem] mb-8 shadow-2xl">
+        <div class="flex items-center gap-3 mb-6">
+            <span class="text-3xl">🎮</span>
+            <h1 class="text-xl font-black tracking-tighter text-blue-400 italic uppercase">User Checker</h1>
         </div>
 
         <div class="space-y-4">
-            <div>
-                <label class="block text-[10px] font-bold text-slate-400 uppercase ml-2 mb-1.5 tracking-widest">Platform</label>
-                <select id="game" class="w-full p-4 rounded-2xl bg-slate-900/50 border border-slate-700 outline-none text-sm appearance-none cursor-pointer">
-                    <option value="emel">Mobile Legends</option>
-                    <option value="epep">Free Fire</option>
-                    <option value="pubg">PUBG Mobile</option>
-                    <option value="codm">CODM</option>
-                    <option value="fcmobile">FC Mobile</option>
-                    <option value="mcgg">Magic Chess Go Go</option>
-                </select>
-            </div>
+            <select id="game" class="w-full p-4 rounded-2xl bg-slate-900/50 border border-slate-700 outline-none text-sm appearance-none cursor-pointer input-glow transition-all">
+                <option value="emel">Mobile Legends</option>
+                <option value="epep">Free Fire</option>
+                <option value="pubg">PUBG Mobile</option>
+                <option value="mcgg">Magic Chess Go Go</option>
+            </select>
 
-            <div>
-                <label class="block text-[10px] font-bold text-slate-400 uppercase ml-2 mb-1.5 tracking-widest">User ID</label>
-                <input type="text" id="userid" inputmode="numeric" placeholder="Masukkan ID" class="w-full p-4 rounded-2xl bg-slate-900/50 border border-slate-700 outline-none text-sm focus:border-blue-500 transition-all">
-            </div>
+            <input type="text" id="userid" placeholder="Enter Player ID" class="w-full p-4 rounded-2xl bg-slate-900/50 border border-slate-700 outline-none text-sm input-glow transition-all">
 
             <div id="zonebox" class="active">
-                <label class="block text-[10px] font-bold text-slate-400 uppercase ml-2 mb-1.5 tracking-widest">Zone ID</label>
-                <input type="text" id="zoneid" inputmode="numeric" placeholder="Masukkan Zone" class="w-full p-4 rounded-2xl bg-slate-900/50 border border-slate-700 outline-none text-sm focus:border-blue-500 transition-all">
+                <input type="text" id="zoneid" placeholder="Enter Zone ID" class="w-full p-4 rounded-2xl bg-slate-900/50 border border-slate-700 outline-none text-sm input-glow transition-all">
             </div>
 
-            <button onclick="checkUser()" id="btnCheck" class="w-full py-4 bg-blue-600 hover:bg-blue-500 rounded-2xl font-black text-xs tracking-widest text-white shadow-lg shadow-blue-900/40 active:scale-95 transition-all">
-                PERIKSA SEKARANG
+            <button onclick="checkUser()" id="btnCheck" class="w-full py-4 bg-blue-600 hover:bg-blue-500 rounded-2xl font-black text-xs tracking-widest text-white transition-all active:scale-95 shadow-lg shadow-blue-500/20">
+                CHECK ACCOUNT
             </button>
         </div>
 
-        <div id="result" class="mt-8 hidden">
-            <div class="p-6 rounded-[2rem] bg-slate-900 border border-blue-500/30 text-center animate__animated animate__bounceIn">
-                <p class="text-blue-400 text-[9px] font-black uppercase tracking-[0.3em] mb-2">Username Found</p>
-                <div id="username" class="text-2xl font-black text-white break-words drop-shadow-md"></div>
-                <div id="flagbox" class="mt-4 flex justify-center items-center gap-2 hidden pt-4 border-t border-slate-800">
-                    <img id="flagimg" src="" class="w-7 h-4 rounded-sm">
+        <div id="result" class="mt-6 hidden animate__animated animate__fadeIn">
+            <div class="p-4 rounded-2xl bg-slate-900/80 border border-slate-700 text-center">
+                <p id="username" class="text-xl font-black text-emerald-400"></p>
+                <div id="flagbox" class="hidden flex justify-center items-center gap-2 mt-2">
+                    <img id="flagimg" src="" class="w-6 h-4">
                     <span id="country" class="text-[10px] font-bold text-slate-500 uppercase"></span>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="max-w-md w-full">
-        <h2 class="text-sm font-black text-slate-500 uppercase tracking-[0.5em] mb-5 ml-4">Developer Tools</h2>
-        <div class="grid grid-cols-2 gap-4">
-            <div onclick="copyApiLink()" class="tool-card p-5 rounded-3xl cursor-pointer text-center group">
-                <div class="text-2xl mb-2 group-hover:scale-125 transition-transform">🔗</div>
-                <h3 class="text-[10px] font-bold uppercase tracking-widest text-blue-400">Copy API</h3>
-                <p class="text-[9px] text-slate-500 mt-1">Get Endpoint URL</p>
-            </div>
-            
-            <a href="https://github.com/USER_KAMU/REPO_KAMU" target="_blank" class="tool-card p-5 rounded-3xl text-center group">
-                <div class="text-2xl mb-2 group-hover:scale-125 transition-transform">📂</div>
-                <h3 class="text-[10px] font-bold uppercase tracking-widest text-emerald-400">GitHub</h3>
-                <p class="text-[9px] text-slate-500 mt-1">Source Code</p>
-            </a>
+    <div class="main-card max-w-md w-full p-7 rounded-[2.5rem] shadow-2xl">
+        <div class="flex items-center gap-3 mb-6">
+            <span class="text-3xl">📥</span>
+            <h1 class="text-xl font-black tracking-tighter text-emerald-400 italic uppercase">Media Downloader</h1>
+        </div>
 
-            <div class="tool-card p-5 rounded-3xl text-center col-span-2 flex items-center justify-between px-8">
-                <div class="text-left">
-                    <h3 class="text-[10px] font-bold uppercase tracking-widest text-indigo-400">System Status</h3>
-                    <p class="text-[9px] text-slate-500 mt-1">All Systems Operational</p>
-                </div>
-                <div class="flex items-center gap-2">
-                    <span class="relative flex h-3 w-3">
-                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                        <span class="relative inline-flex rounded-full h-3 w-3 bg-emerald-500"></span>
-                    </span>
-                    <span class="text-[10px] font-bold text-emerald-400">ONLINE</span>
-                </div>
+        <div class="space-y-4">
+            <p class="text-[10px] text-slate-400 uppercase tracking-widest ml-1">Support: TikTok, IG, FB, YT</p>
+            
+            <div class="relative">
+                <input type="text" id="dlUrl" placeholder="Paste link video di sini..." class="w-full p-4 pr-12 rounded-2xl bg-slate-900/50 border border-slate-700 outline-none text-sm input-glow transition-all">
+                <button onclick="pasteLink()" class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-500 hover:text-white transition-colors">
+                    📋
+                </button>
             </div>
+
+            <div class="grid grid-cols-2 gap-3">
+                <button onclick="download('video')" class="py-4 bg-slate-800 hover:bg-slate-700 rounded-2xl font-bold text-[10px] tracking-widest uppercase border border-slate-700 transition-all active:scale-95">
+                    🎬 Video
+                </button>
+                <button onclick="download('audio')" class="py-4 bg-slate-800 hover:bg-slate-700 rounded-2xl font-bold text-[10px] tracking-widest uppercase border border-slate-700 transition-all active:scale-95">
+                    🎵 Audio (MP3)
+                </button>
+            </div>
+        </div>
+
+        <div id="dlStatus" class="mt-4 hidden text-center animate__animated animate__pulse animate__infinite">
+            <p class="text-[10px] font-bold text-blue-400 tracking-widest uppercase italic">Fetching data...</p>
         </div>
     </div>
 
     <script>
+        // --- LOGIC GAME CHECKER ---
         const gameSelect = document.getElementById('game');
         const zoneBox = document.getElementById('zonebox');
 
         gameSelect.addEventListener('change', () => {
-            const needZone = ['emel', 'mcgg'];
-            if (needZone.includes(gameSelect.value)) {
-                zoneBox.classList.add('active');
-            } else {
-                zoneBox.classList.remove('active');
-            }
+            zoneBox.className = ['emel', 'mcgg'].includes(gameSelect.value) ? 'active' : '';
         });
 
         async function checkUser() {
-            const game = gameSelect.value;
-            const id = document.getElementById('userid').value;
-            const zone = document.getElementById('zoneid').value;
             const btn = document.getElementById('btnCheck');
-            const resDiv = document.getElementById('result');
-
-            if (!id) return;
-
-            btn.innerHTML = 'PROCESSING...';
+            const id = document.getElementById('userid').value;
+            if(!id) return alert("ID Kosong!");
+            
+            btn.innerText = "CHECKING...";
             btn.disabled = true;
-            resDiv.classList.add('hidden');
 
             try {
+                const game = gameSelect.value;
+                const zone = document.getElementById('zoneid').value;
                 let url = `/api/${game}?id=${id}`;
-                if (['emel', 'mcgg'].includes(game)) url += `&zone=${zone}`;
+                if(['emel', 'mcgg'].includes(game)) url += `&zone=${zone}`;
 
-                const response = await fetch(url);
-                const data = await response.json();
+                const res = await fetch(url);
+                const data = await res.json();
 
-                if (data.status === 200) {
+                if(data.status === 200) {
                     document.getElementById('username').innerText = data.username;
-                    resDiv.classList.remove('hidden');
-                    if (game === 'emel' && data.flag) {
+                    document.getElementById('result').classList.remove('hidden');
+                    if(game === 'emel' && data.flag) {
                         document.getElementById('flagimg').src = data.flag;
                         document.getElementById('country').innerText = data.country;
                         document.getElementById('flagbox').classList.remove('hidden');
                     }
-                } else { alert('User tidak ditemukan'); }
-            } catch (err) { alert('Gagal mengecek'); }
-            finally { btn.innerText = 'PERIKSA SEKARANG'; btn.disabled = false; }
+                } else { alert("Not Found!"); }
+            } catch(e) { alert("Error!"); }
+            finally { btn.innerText = "CHECK ACCOUNT"; btn.disabled = false; }
         }
 
-        function copyApiLink() {
-            const game = gameSelect.value;
-            const dummyLink = `${window.location.origin}/api/${game}?id=12345`;
-            navigator.clipboard.writeText(dummyLink);
-            alert('Link API ' + game + ' berhasil disalin ke clipboard!');
+        // --- LOGIC DOWNLOADER ---
+        async function download(type) {
+            const urlInput = document.getElementById('dlUrl').value;
+            const status = document.getElementById('dlStatus');
+
+            if(!urlInput) return alert("Masukkan link dulu!");
+
+            status.classList.remove('hidden');
+            
+            // Contoh simulasi: Di sini nanti kamu tembak ke API downloader kamu
+            setTimeout(() => {
+                status.classList.add('hidden');
+                alert(`Fitur Download ${type} sedang disiapkan! Integrasikan dengan API Downloader kamu.`);
+            }, 2000);
+        }
+
+        async function pasteLink() {
+            const text = await navigator.clipboard.readText();
+            document.getElementById('dlUrl').value = text;
         }
     </script>
 </body>

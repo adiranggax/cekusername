@@ -3,200 +3,186 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Premium Game Checker & Downloader</title>
+    <title>SkyLen - Premium Tools</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
     <style>
-        :root { --accent: #3b82f6; }
+        :root { --accent: #3b82f6; --emerald: #10b981; }
         body { 
             background: #0f172a; 
             background-image: radial-gradient(circle at 50% 50%, #1e293b 0%, #0f172a 100%);
-            color: white; 
-            font-family: 'Inter', sans-serif;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 2rem 1rem;
-            margin: 0;
+            color: white; font-family: 'Inter', sans-serif;
+            min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 2rem 1rem; margin: 0;
         }
 
-        /* ANIMASI MASUK (CSS Murni - No Glitch) */
-        @keyframes entrance {
-            from { opacity: 0; transform: scale(0.9) translateY(30px); filter: blur(10px); }
-            to { opacity: 1; transform: scale(1) translateY(0); filter: blur(0); }
-        }
         .main-card {
             animation: entrance 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
-            background: rgba(30, 41, 59, 0.8);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
             border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
-        /* LOGIC ZONE BOX (Elastic) */
-        #zonebox {
-            max-height: 0; opacity: 0; overflow: hidden; transform: scaleY(0); transform-origin: top;
-            transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-        }
-        #zonebox.active { max-height: 120px; opacity: 1; transform: scaleY(1); margin-bottom: 1rem; }
-
-        @keyframes logoFloat { 0%, 100% { transform: translateY(0) rotate(0); } 50% { transform: translateY(-15px) rotate(10deg); } }
-        .logo-anim { animation: logoFloat 4s ease-in-out infinite; }
-
-        input:focus, select:focus {
-            box-shadow: 0 0 15px rgba(59, 130, 246, 0.3);
-            border-color: var(--accent) !important;
-        }
-
+        @keyframes entrance { from { opacity: 0; transform: scale(0.9) translateY(30px); } to { opacity: 1; transform: scale(1) translateY(0); } }
+        @keyframes logoFloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+        
+        .logo-anim { animation: logoFloat 3s ease-in-out infinite; }
+        #zonebox { max-height: 0; opacity: 0; overflow: hidden; transition: all 0.5s ease; }
+        #zonebox.active { max-height: 100px; opacity: 1; margin-bottom: 1rem; }
+        
+        .dl-result-img { width: 100%; aspect-ratio: 1/1; object-fit: cover; border-radius: 12px; }
         * { -webkit-tap-highlight-color: transparent; }
+        ::-webkit-scrollbar { width: 5px; }
+        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 10px; }
     </style>
 </head>
 <body>
 
-    <div class="main-card max-w-md w-full p-8 rounded-[3rem] relative overflow-hidden mb-8 shadow-2xl">
-        <div class="text-center mb-8">
-            <div class="text-6xl mb-4 logo-anim inline-block">💎</div>
-            <h1 class="text-3xl font-black tracking-tighter bg-gradient-to-br from-white via-blue-300 to-blue-600 bg-clip-text text-transparent italic uppercase leading-none">
-                Game Checker
-            </h1>
-            <div class="h-1 w-12 bg-blue-500 mx-auto mt-2 rounded-full opacity-50"></div>
+    <div class="main-card max-w-md w-full p-8 rounded-[2.5rem] shadow-2xl mb-8">
+        <div class="text-center mb-6">
+            <div class="text-5xl mb-3 logo-anim inline-block">💎</div>
+            <h1 class="text-2xl font-black tracking-tighter bg-gradient-to-r from-blue-400 to-indigo-500 bg-clip-text text-transparent italic uppercase">Game Checker</h1>
         </div>
 
         <div class="space-y-4">
-            <div>
-                <label class="block text-[10px] font-bold text-slate-400 uppercase ml-2 mb-1.5 tracking-widest">Platform</label>
-                <select id="game" class="w-full p-4 rounded-2xl bg-slate-900/50 border border-slate-700 outline-none text-sm appearance-none cursor-pointer transition-all">
-                    <option value="emel">Mobile Legends</option>
-                    <option value="epep">Free Fire</option>
-                    <option value="pubg">PUBG Mobile</option>
-                    <option value="codm">CODM</option>
-                    <option value="fcmobile">FC Mobile</option>
-                    <option value="mcgg">Magic Chess Go Go</option>
-                </select>
-            </div>
-
-            <div>
-                <label class="block text-[10px] font-bold text-slate-400 uppercase ml-2 mb-1.5 tracking-widest">User ID</label>
-                <input type="text" id="userid" inputmode="numeric" placeholder="Enter ID" class="w-full p-4 rounded-2xl bg-slate-900/50 border border-slate-700 outline-none text-sm transition-all">
-            </div>
-
+            <select id="game" class="w-full p-4 rounded-2xl bg-slate-900/60 border border-slate-700 outline-none text-sm appearance-none cursor-pointer">
+                <option value="emel">Mobile Legends</option>
+                <option value="epep">Free Fire</option>
+                <option value="pubg">PUBG Mobile</option>
+                <option value="codm">CODM</option>
+                <option value="fcmobile">FC Mobile</option>
+                <option value="mcgg">Magic Chess Go Go</option>
+            </select>
+            <input type="text" id="userid" inputmode="numeric" placeholder="User ID" class="w-full p-4 rounded-2xl bg-slate-900/60 border border-slate-700 outline-none text-sm focus:border-blue-500 transition-all">
             <div id="zonebox" class="active">
-                <label class="block text-[10px] font-bold text-slate-400 uppercase ml-2 mb-1.5 tracking-widest">Zone ID</label>
-                <input type="text" id="zoneid" inputmode="numeric" placeholder="Enter Zone" class="w-full p-4 rounded-2xl bg-slate-900/50 border border-slate-700 outline-none text-sm transition-all">
+                <input type="text" id="zoneid" inputmode="numeric" placeholder="Zone ID" class="w-full p-4 rounded-2xl bg-slate-900/60 border border-slate-700 outline-none text-sm focus:border-blue-500 transition-all">
             </div>
-
-            <button onclick="checkUser()" id="btnCheck" class="w-full py-4 bg-blue-600 hover:bg-blue-500 rounded-2xl font-black text-xs tracking-[0.2em] text-white shadow-lg shadow-blue-900/40 active:scale-95 transition-all uppercase">
-                Periksa Akun
-            </button>
+            <button onclick="checkUser()" id="btnCheck" class="w-full py-4 bg-blue-600 rounded-2xl font-black text-xs tracking-widest active:scale-95 transition-all shadow-lg shadow-blue-500/20">PERIKSA AKUN</button>
         </div>
 
-        <div id="result" class="mt-8 hidden">
-            <div class="p-6 rounded-[2rem] bg-slate-900 border border-blue-500/30 text-center animate__animated animate__bounceIn">
-                <p class="text-blue-400 text-[9px] font-black uppercase tracking-[0.3em] mb-2">Username Found</p>
-                <div id="username" class="text-2xl font-black text-white break-words uppercase"></div>
-                <div id="flagbox" class="mt-4 flex justify-center items-center gap-2 hidden pt-4 border-t border-slate-800">
-                    <img id="flagimg" src="" class="w-7 h-4 rounded-sm">
-                    <span id="country" class="text-[10px] font-bold text-slate-500 uppercase"></span>
+        <div id="resultChecker" class="mt-6 hidden animate__animated animate__fadeIn">
+            <div class="bg-slate-900/80 p-5 rounded-3xl border border-blue-500/30 text-center">
+                <p id="usernameRes" class="text-xl font-black text-white uppercase italic"></p>
+                <div id="flagbox" class="hidden flex justify-center items-center gap-2 mt-2">
+                    <img id="flagimg" src="" class="w-6 h-4 rounded-sm">
+                    <span id="countryRes" class="text-[10px] font-bold text-slate-500 uppercase"></span>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="main-card max-w-md w-full p-8 rounded-[3rem] shadow-2xl">
+    <div class="main-card max-w-md w-full p-8 rounded-[2.5rem] shadow-2xl">
         <div class="flex items-center gap-3 mb-6">
-            <span class="text-3xl">📥</span>
-            <h2 class="text-xl font-black tracking-tighter text-emerald-400 italic uppercase">Media Downloader</h2>
+            <span class="text-3xl">🎬</span>
+            <h2 class="text-xl font-black italic uppercase text-emerald-400">TikTok Downloader</h2>
         </div>
 
         <div class="space-y-4">
             <div class="relative">
-                <input type="text" id="dlUrl" placeholder="Paste link video (TikTok/IG/FB)..." class="w-full p-4 pr-12 rounded-2xl bg-slate-900/50 border border-slate-700 outline-none text-sm focus:border-emerald-500 transition-all">
-                <button onclick="pasteLink()" class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-500 hover:text-white">📋</button>
+                <input type="text" id="tkUrl" placeholder="Paste TikTok Link..." class="w-full p-4 rounded-2xl bg-slate-900/60 border border-slate-700 outline-none text-sm focus:border-emerald-500 transition-all">
+                <button onclick="pasteTk()" class="absolute right-4 top-1/2 -translate-y-1/2 opacity-50 hover:opacity-100 transition-opacity">📋</button>
+            </div>
+            <button onclick="downloadTikTok()" id="btnDl" class="w-full py-4 bg-emerald-600 rounded-2xl font-black text-xs tracking-widest active:scale-95 transition-all shadow-lg shadow-emerald-500/20 uppercase">Get Media</button>
+        </div>
+
+        <div id="resultDl" class="mt-8 hidden space-y-4 animate__animated animate__fadeIn">
+            <div class="flex items-center gap-3 p-3 bg-slate-800/50 rounded-2xl">
+                <img id="tkAvatar" src="" class="w-10 h-10 rounded-full border border-emerald-500">
+                <div>
+                    <p id="tkUser" class="text-xs font-black"></p>
+                    <p id="tkTitle" class="text-[9px] text-slate-400 line-clamp-1"></p>
+                </div>
+            </div>
+
+            <div id="tkSlides" class="grid grid-cols-3 gap-2 max-h-60 overflow-y-auto p-1 hidden"></div>
+
+            <div id="tkVideoBox" class="hidden">
+                <video id="tkPreview" controls class="w-full rounded-2xl border border-slate-700"></video>
             </div>
 
             <div class="grid grid-cols-2 gap-3">
-                <button onclick="download('video')" class="py-4 bg-slate-800/50 hover:bg-slate-700 rounded-2xl font-bold text-[10px] tracking-widest uppercase border border-slate-700 active:scale-95 transition-all">
-                    🎬 Video
-                </button>
-                <button onclick="download('audio')" class="py-4 bg-slate-800/50 hover:bg-slate-700 rounded-2xl font-bold text-[10px] tracking-widest uppercase border border-slate-700 active:scale-95 transition-all">
-                    🎵 Audio (MP3)
-                </button>
+                <a id="dlNowm" href="#" target="_blank" class="p-3 bg-slate-800 hover:bg-emerald-600 rounded-xl text-[10px] font-bold text-center transition-all">HD VIDEO</a>
+                <a id="dlAudio" href="#" target="_blank" class="p-3 bg-slate-800 hover:bg-emerald-600 rounded-xl text-[10px] font-bold text-center transition-all">MUSIC MP3</a>
             </div>
-        </div>
-
-        <div id="dlStatus" class="mt-4 hidden text-center animate__animated animate__pulse animate__infinite">
-            <p class="text-[10px] font-bold text-blue-400 tracking-widest uppercase italic">Fetching data...</p>
         </div>
     </div>
 
     <script>
-        const gameSelect = document.getElementById('game');
-        const zoneBox = document.getElementById('zonebox');
-
-        // Logic Zone ID Toggle
-        gameSelect.addEventListener('change', () => {
-            const needZone = ['emel', 'mcgg'];
-            if (needZone.includes(gameSelect.value)) {
-                zoneBox.classList.add('active');
-            } else {
-                zoneBox.classList.remove('active');
-            }
-        });
+        // --- GAME CHECKER LOGIC ---
+        const gameSel = document.getElementById('game');
+        const zb = document.getElementById('zonebox');
+        gameSel.onchange = () => zb.className = ['emel', 'mcgg'].includes(gameSel.value) ? 'active' : '';
 
         async function checkUser() {
-            const game = gameSelect.value;
+            const btn = document.getElementById('btnCheck');
             const id = document.getElementById('userid').value;
             const zone = document.getElementById('zoneid').value;
-            const btn = document.getElementById('btnCheck');
-            const resDiv = document.getElementById('result');
-            const userText = document.getElementById('username');
-            const flagBox = document.getElementById('flagbox');
-
-            if (!id) return;
-
-            btn.innerHTML = '<span class="inline-block animate-spin mr-2">🌀</span> PROSES...';
-            btn.disabled = true;
-            resDiv.classList.add('hidden');
-            flagBox.classList.add('hidden');
-
+            if(!id) return;
+            
+            btn.innerText = "WAIT...";
             try {
-                let url = `/api/${game}?id=${id}`;
-                if (['emel', 'mcgg'].includes(game)) url += `&zone=${zone}`;
-
-                const response = await fetch(url);
-                const data = await response.json();
-
-                if (data.status === 200) {
-                    userText.innerText = data.username;
-                    resDiv.classList.remove('hidden');
-                    if (game === 'emel' && data.flag) {
-                        document.getElementById('flagimg').src = data.flag;
-                        document.getElementById('country').innerText = data.country;
-                        flagBox.classList.remove('hidden');
+                const res = await fetch(`/api/${gameSel.value}?id=${id}${zone ? '&zone='+zone : ''}`);
+                const json = await res.json();
+                if(json.status === 200) {
+                    document.getElementById('usernameRes').innerText = json.username;
+                    document.getElementById('resultChecker').classList.remove('hidden');
+                    if(json.flag) {
+                        document.getElementById('flagimg').src = json.flag;
+                        document.getElementById('countryRes').innerText = json.country;
+                        document.getElementById('flagbox').classList.remove('hidden');
                     }
-                } else { alert('ID Tidak Ditemukan!'); }
-            } catch (err) { alert('Gagal mengecek'); }
-            finally { 
-                btn.innerText = 'Periksa Akun'; 
-                btn.disabled = false; 
-                setTimeout(() => resDiv.classList.remove('animate__bounceIn'), 1000);
-            }
+                }
+            } catch(e) { alert("Error!"); }
+            finally { btn.innerText = "PERIKSA AKUN"; }
         }
 
-        async function download(type) {
-            const urlInput = document.getElementById('dlUrl').value;
-            if(!urlInput) return alert("Paste linknya dulu!");
-            document.getElementById('dlStatus').classList.remove('hidden');
-            setTimeout(() => {
-                document.getElementById('dlStatus').classList.add('hidden');
-                alert(`Fitur Download ${type} segera hadir!`);
-            }, 2000);
-        }
+        // --- TIKTOK LOGIC ---
+        function pasteTk() { navigator.clipboard.readText().then(t => document.getElementById('tkUrl').value = t); }
 
-        async function pasteLink() {
-            const text = await navigator.clipboard.readText();
-            document.getElementById('dlUrl').value = text;
+        async function downloadTikTok() {
+            const url = document.getElementById('tkUrl').value;
+            const btn = document.getElementById('btnDl');
+            if(!url) return;
+
+            btn.innerText = "FETCHING...";
+            try {
+                // Ganti URL ini dengan endpoint API TikTok kamu
+                const res = await fetch(`/api/tiktok?url=${encodeURIComponent(url)}`);
+                const json = await res.json();
+                const d = json.data.response;
+
+                // Setup Author
+                document.getElementById('tkAvatar').src = d.author.avatar || d.dlink.profilePic;
+                document.getElementById('tkUser').innerText = d.author.username || d.username;
+                document.getElementById('tkTitle').innerText = d.title || d.description;
+
+                // Reset Tampilan
+                document.getElementById('tkSlides').classList.add('hidden');
+                document.getElementById('tkVideoBox').classList.add('hidden');
+                document.getElementById('tkSlides').innerHTML = '';
+
+                if(d.type === 'slide' || d.slides.length > 0) {
+                    // Jika Slide Foto
+                    document.getElementById('tkSlides').classList.remove('hidden');
+                    d.slides.forEach(s => {
+                        const img = document.createElement('img');
+                        img.src = s.url;
+                        img.className = 'dl-result-img border border-slate-700 hover:border-emerald-500 transition-all';
+                        img.onclick = () => window.open(s.url, '_blank');
+                        document.getElementById('tkSlides').appendChild(img);
+                    });
+                } else {
+                    // Jika Video Biasa
+                    document.getElementById('tkVideoBox').classList.remove('hidden');
+                    document.getElementById('tkPreview').src = d.dl_hd || d.dl;
+                }
+
+                // Link Download Utama
+                document.getElementById('dlNowm').href = d.dl_hd || d.dl || d.dlink.nowm;
+                document.getElementById('dlAudio').href = d.music.id ? d.dl : d.dlink.audio; // Disesuaikan dengan struktur JSON kamu
+
+                document.getElementById('resultDl').classList.remove('hidden');
+            } catch(e) { alert("Gagal mengambil data TikTok!"); }
+            finally { btn.innerText = "GET MEDIA"; }
         }
     </script>
 </body>

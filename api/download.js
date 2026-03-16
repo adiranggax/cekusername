@@ -1,33 +1,28 @@
-// api/download.js (NATIVE FETCH - TANPA AXIOS)
+// api/download.js (SMART PROXY: VIDEO & PHOTO OK)
 export default async function handler(req, res) {
-    // Ambil URL dari query string
     const { url, name } = req.query;
 
-    if (!url) return res.status(400).send('URL link tidak ada Bos!');
+    if (!url) return res.status(400).send('URL missing');
 
     try {
-        // Ambil data dari link TikTok/Source asli
-        const response = await fetch(url, {
-            headers: {
-                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
-            }
-        });
+        const response = await fetch(url);
+        if (!response.ok) throw new Error(`Gagal fetch: ${response.statusText}`);
 
-        if (!response.ok) throw new Error(`Gagal ambil file: ${response.statusText}`);
-
-        // Ambil data sebagai buffer (file mentah)
         const arrayBuffer = await response.arrayBuffer();
         const buffer = Buffer.from(arrayBuffer);
 
-        // Paksa browser download (Header Sakti)
-        res.setHeader('Content-Type', 'video/mp4');
-        res.setHeader('Content-Disposition', `attachment; filename="${name || 'video'}.mp4"`);
+        // --- LOGIKA PINTAR DETEKSI TYPE ---
+        // Cek apakah ini gambar atau video berdasarkan extension atau content-type asli
+        const contentType = response.headers.get('content-type') || 'video/mp4';
+        const extension = contentType.includes('image') ? 'jpg' : 'mp4';
+
+        // Set Header dinamis
+        res.setHeader('Content-Type', contentType);
+        res.setHeader('Content-Disposition', `attachment; filename="${name || 'download'}.${extension}"`);
         
-        // Kirim file ke user
         return res.send(buffer);
 
     } catch (error) {
-        console.error('Error Proxy:', error);
-        return res.status(500).json({ error: 'Server Error', message: error.message });
+        return res.status(500).send('Error: ' + error.message);
     }
 }

@@ -321,37 +321,32 @@
 <script>
     async function downloadSocial() {
         console.log("Tombol Download diklik!");
-        
         const btn = document.getElementById('btnSocial');
         const type = document.getElementById('socialType').value;
         const urlInput = document.getElementById('socialUrl').value;
         const resBox = document.getElementById('resSocial');
         const content = document.getElementById('socialMediaContent');
 
-        if (!urlInput) return alert("Tempel link TikTok-nya dulu Bos!");
+        if (!urlInput) return alert("Tempel linknya dulu Bos!");
 
-        // UI Loading State
         btn.disabled = true;
         btn.innerHTML = '<span class="animate-spin inline-block mr-2">↻</span> LOADING...';
         resBox.classList.add('hidden');
 
         try {
             if (type === 'tiktok') {
-                // Tembak API Skylen
+                // Tembak V2 dulu untuk cek slide
                 let response = await fetch(`https://api.skylen.my.id/api/tiktok/v2?url=${encodeURIComponent(urlInput)}`);
                 let json = await response.json();
                 
-                // Cek apakah data ada
-                if (!json || !json.data) throw new Error("API Skylen tidak merespon");
+                if (!json.data) throw new Error("Gagal mengambil data dari API.");
 
                 let data = json.data.response;
 
-                // Jika V2 tidak ada slide, tembak V1 (Video)
+                // Logika: Jika tidak ada data.slides, berarti dia video (V1)
                 if (!data.slides || data.slides.length === 0) {
-                    const resV1 = await fetch(`https://api.skylen.my.id/api/tiktok?url=${encodeURIComponent(urlInput)}`);
-                    const jsonV1 = await resV1.json();
-                    if (!jsonV1.data) throw new Error("Video tidak ditemukan");
-                    renderTikTokUI(jsonV1.data.response, 'video');
+                    // Pakai data dari V2 saja karena V2 temanmu ternyata sudah lengkap datanya
+                    renderTikTokUI(data, 'video');
                 } else {
                     renderTikTokUI(data, 'photo');
                 }
@@ -372,27 +367,32 @@
     function renderTikTokUI(data, mode) {
         const content = document.getElementById('socialMediaContent');
         content.innerHTML = ""; 
-        console.log("Data diterima Render:", data);
+        console.log("Data diproses oleh Render:", data);
 
         if (mode === 'video') {
-            // Pemetaan field (antisipasi undefined)
-            const videoUrl = data.video?.no_watermark || data.video || data.url;
-            const musicUrl = data.music?.url || data.music || data.audio;
+            // MAPPING SESUAI LOG KAMU:
+            // Video No Watermark ada di field 'dl'
+            // Video HD ada di field 'dl_hd'
+            const videoUrl = data.dl || data.dl_hd || data.video?.no_watermark;
+            const title = data.title || "TikTok Video";
 
             content.innerHTML = `
                 <div class="space-y-4 animate__animated animate__fadeIn">
-                    <video controls class="w-full rounded-2xl border-2 border-emerald-500/20 shadow-lg">
-                        <source src="${videoUrl}" type="video/mp4">
-                    </video>
-                    <div class="grid grid-cols-2 gap-2">
-                        <a href="${videoUrl}" target="_blank" class="py-3 bg-emerald-600 text-center rounded-xl font-bold text-[10px] uppercase transition-all">Video</a>
-                        <a href="${musicUrl}" target="_blank" class="py-3 bg-slate-800 text-center rounded-xl font-bold text-[10px] uppercase transition-all">Audio</a>
+                    <p class="text-[10px] text-emerald-400 font-bold uppercase ml-1 truncate w-full">${title}</p>
+                    <div class="relative rounded-2xl overflow-hidden border-2 border-emerald-500/20 shadow-lg bg-black">
+                        <video controls class="w-full h-auto block">
+                            <source src="${videoUrl}" type="video/mp4">
+                        </video>
+                    </div>
+                    <div class="grid grid-cols-1 gap-2">
+                        <a href="${videoUrl}" target="_blank" class="py-4 bg-emerald-600 hover:bg-emerald-500 text-center rounded-2xl font-black text-[11px] tracking-widest uppercase transition-all shadow-lg shadow-emerald-900/30">
+                            DOWNLOAD VIDEO
+                        </a>
                     </div>
                 </div>`;
         } else {
+            // Mapping untuk Slide
             const slides = data.slides || [];
-            const musicUrl = data.music?.url || data.music;
-            
             let imgHtml = slides.map(img => `
                 <div class="shrink-0 w-64 snap-center">
                     <img src="${img}" class="w-full h-auto rounded-2xl border border-white/10 shadow-xl">
@@ -400,9 +400,9 @@
                 
             content.innerHTML = `
                 <div class="space-y-4 animate__animated animate__fadeIn">
-                    <p class="text-[10px] text-emerald-400 font-bold uppercase ml-1 tracking-widest">📸 TikTok Slide</p>
+                    <p class="text-[10px] text-emerald-400 font-bold uppercase ml-1 tracking-widest">📸 TikTok Slide (${slides.length})</p>
                     <div class="flex overflow-x-auto gap-3 pb-4 hide-scroll snap-x">${imgHtml}</div>
-                    <a href="${musicUrl}" target="_blank" class="block w-full py-3 bg-slate-800 text-center rounded-xl font-bold text-[10px] uppercase">Download MP3</a>
+                    <p class="text-center text-[9px] text-slate-500 italic">Geser untuk melihat foto</p>
                 </div>`;
         }
     }

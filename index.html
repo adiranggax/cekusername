@@ -145,7 +145,12 @@
                         <option value="sticker">Sticker.ly</option>
                     </select>
                     <input type="text" id="socialUrl" placeholder="Paste link media..." class="input-field w-full p-4 rounded-2xl text-sm text-white outline-none">
-                    <button class="w-full py-4 bg-emerald-600 hover:bg-emerald-500 rounded-2xl font-black text-[11px] tracking-widest shadow-xl shadow-emerald-900/40">START DOWNLOAD</button>
+                    <button id="btnSocial" onclick="downloadSocial()" class="w-full py-4 bg-emerald-600 hover:bg-emerald-500 rounded-2xl font-black text-[11px] tracking-widest shadow-xl shadow-emerald-900/40">
+    START DOWNLOAD
+</button>
+                    <div id="resSocial" class="hidden mt-4 p-4 glass rounded-[2rem] border-emerald-500/20">
+    <div id="socialMediaContent"></div>
+</div>
                 </div>
             </section>
 

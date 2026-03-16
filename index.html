@@ -412,68 +412,23 @@
    async function forceDownload(url, filename) {
         const btn = document.getElementById('dlBtn');
         const oldText = btn.innerText;
-        btn.innerText = "DOWNLOADING...";
+        btn.innerText = "STARTING...";
 
-        // Trik 1: Gunakan URL dari API Skylen langsung jika memungkinkan, 
-        // atau gunakan Proxy Google sebagai perantara.
-        const proxyUrl = 'https://images1-focus-opensocial.googleusercontent.com/gadgets/proxy?container=focus&refresh=604800&url=' + encodeURIComponent(url);
+        // Ganti link download ke API Proxy kita sendiri
+        // Ini akan memicu download otomatis di HP maupun Laptop
+        const proxyUrl = `/api/download?url=${encodeURIComponent(url)}&name=${encodeURIComponent(filename)}`;
 
         try {
-            const xhr = new XMLHttpRequest();
-            xhr.open('GET', proxyUrl, true);
-            xhr.responseType = 'blob';
-
-            xhr.onload = function () {
-                if (xhr.status === 200) {
-                    const blob = xhr.response;
-                    const blobUrl = window.URL.createObjectURL(blob);
-                    
-                    // Trik 2: Membuat element Anchor yang bener-bener "diklik" user
-                    const a = document.createElement('a');
-                    a.href = blobUrl;
-                    a.download = filename;
-                    
-                    // Tambahan untuk Safari iOS
-                    a.target = '_blank'; 
-                    
-                    document.body.appendChild(a);
-                    a.click();
-                    
-                    // Beri jeda lama untuk HP (1 detik) sebelum bersih-bersih memori
-                    setTimeout(() => {
-                        window.URL.revokeObjectURL(blobUrl);
-                        document.body.removeChild(a);
-                    }, 1000);
-                    
-                    btn.innerText = "SUCCESS!";
-                }
-            };
-
-            xhr.onerror = function () {
-                // Fallback jika XHR Gagal
-                fallbackDownload(url);
-            };
-
-            xhr.send();
-
+            // Langsung arahkan lokasi window ke proxy kita
+            // Browser akan mendeteksi header 'attachment' dan mulai download otomatis
+            window.location.href = proxyUrl;
+            
+            btn.innerText = "SUCCESS!";
         } catch (e) {
-            fallbackDownload(url);
+            window.open(url, '_blank');
         } finally {
             setTimeout(() => { btn.innerText = oldText; }, 2000);
         }
-    }
-
-    // Fungsi Cadangan jika Force Download bener-bener diblokir sistem HP
-    function fallbackDownload(url) {
-        // Membuka link video langsung. Di Chrome Android, 
-        // ini akan memicu menu "Download link" atau video terbuka dengan tombol titik tiga (download).
-        const link = document.createElement('a');
-        link.href = url;
-        link.target = '_blank';
-        link.download = 'video_tiktok.mp4';
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
     }
 </script>
 </body>

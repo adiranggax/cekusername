@@ -435,34 +435,34 @@ async function handleTikTokPhoto(url) {
 
     // FUNGSI FORCE DOWNLOAD (VERSI HP STABLE)
 async function forceDownload(url, filename) {
-        const btn = document.getElementById('dlBtn');
-        const oldText = btn.innerText;
-        btn.innerText = "PROCESSING...";
+    // Cari tombolnya, tapi jangan dipaksa kalau gak ada
+    const btn = document.getElementById('dlBtn');
+    const oldText = btn ? btn.innerText : "";
 
-        // Arahkan ke Proxy Vercel kita
-        const proxyUrl = `/api/download?url=${encodeURIComponent(url)}&name=${encodeURIComponent(filename)}`;
+    if (btn) btn.innerText = "WAIT...";
 
-        try {
-            // Cara paling ampuh buat Laptop & HP
-            const a = document.createElement('a');
-            a.href = proxyUrl;
-            a.download = filename; // Backup aja
-            document.body.appendChild(a);
-            a.click();
-            
-            // Hapus link siluman setelah diklik
-            setTimeout(() => {
-                document.body.removeChild(a);
-            }, 1000);
+    // Arahkan ke Proxy Vercel
+    const proxyUrl = `/api/download?url=${encodeURIComponent(url)}&name=${encodeURIComponent(filename)}`;
 
-            btn.innerText = "SUCCESS!";
-        } catch (e) {
-            console.error(e);
-            window.location.href = proxyUrl; // Fallback kalau cara di atas gagal
-        } finally {
+    try {
+        const a = document.createElement('a');
+        a.href = proxyUrl;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        
+        setTimeout(() => {
+            document.body.removeChild(a);
+            if (btn) btn.innerText = "SUCCESS!";
+        }, 1000);
+    } catch (e) {
+        window.location.href = proxyUrl;
+    } finally {
+        if (btn) {
             setTimeout(() => { btn.innerText = oldText; }, 2000);
         }
     }
+}
 </script>
 </body>
 </html>

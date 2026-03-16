@@ -8,48 +8,52 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
     <style>
         body { 
-            background: radial-gradient(circle at center, #1e293b 0%, #0f172a 100%); 
+            background: #0f172a; 
+            background-image: radial-gradient(circle at 50% 50%, #1e293b 0%, #0f172a 100%);
             color: white; 
             font-family: 'Inter', sans-serif;
             min-height: 100vh;
+            overflow-x: hidden;
         }
         .glass-card { 
-            background: rgba(30, 41, 59, 0.7);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            background: rgba(30, 41, 59, 0.8);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
         }
-        .btn-glow:hover {
-            box-shadow: 0 0 20px rgba(37, 99, 235, 0.6);
-            transform: translateY(-2px);
-        }
-        .input-focus:focus {
+        .input-glow:focus {
             border-color: #3b82f6;
-            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.3);
+            background: rgba(15, 23, 42, 0.8);
         }
-        /* Animasi kustom untuk logo */
         @keyframes float {
-            0% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
-            100% { transform: translateY(0px); }
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-15px) rotate(5deg); }
         }
-        .float-anim { animation: float 3s ease-in-out infinite; }
+        .float-logo { animation: float 4s ease-in-out infinite; }
+        
+        /* Transisi halus untuk Zone ID biar gak kaget */
+        #zonebox { transition: all 0.4s ease-in-out; }
+        .hidden-zone { opacity: 0; transform: translateY(-20px); pointer-events: none; max-height: 0; margin-bottom: 0; overflow: hidden; }
+        .show-zone { opacity: 1; transform: translateY(0); max-height: 100px; margin-bottom: 1.25rem; }
     </style>
 </head>
 <body class="p-5 flex items-center justify-center">
-    <div class="max-w-md w-full glass-card p-8 rounded-[2rem] animate__animated animate__fadeIn">
-        <div class="text-center mb-8">
-            <div class="text-5xl mb-4 float-anim">🕹️</div>
-            <h1 class="text-3xl font-black bg-gradient-to-r from-blue-400 via-indigo-400 to-emerald-400 bg-clip-text text-transparent">
+
+    <div class="max-w-md w-full glass-card p-8 rounded-[2.5rem] animate__animated animate__fadeInUp">
+        
+        <div class="text-center mb-10">
+            <div class="text-6xl mb-4 float-logo">🎮</div>
+            <h1 class="text-3xl font-black tracking-tighter bg-gradient-to-r from-blue-400 via-indigo-300 to-emerald-400 bg-clip-text text-transparent">
                 GAME CHECKER
             </h1>
-            <p class="text-slate-400 text-sm mt-2">Cek username akun game kamu</p>
+            <div class="h-1 w-20 bg-blue-500 mx-auto mt-2 rounded-full opacity-50"></div>
         </div>
         
         <div class="space-y-5">
-            <div class="animate__animated animate__fadeInLeft" style="animation-delay: 0.1s">
-                <label class="block text-xs font-bold text-slate-500 uppercase ml-1 mb-2">Game</label>
-                <select id="game" class="w-full p-4 rounded-2xl bg-slate-900/50 border border-slate-700 outline-none input-focus transition-all appearance-none cursor-pointer">
+            <div class="animate__animated animate__fadeInDown" style="animation-delay: 0.1s">
+                <label class="block text-[10px] font-black text-blue-400 uppercase tracking-[0.2em] ml-1 mb-2">Platform</label>
+                <select id="game" class="w-full p-4 rounded-2xl bg-slate-900 border border-slate-700 outline-none input-glow transition-all cursor-pointer text-sm">
                     <option value="emel">Mobile Legends</option>
                     <option value="epep">Free Fire</option>
                     <option value="pubg">PUBG Mobile</option>
@@ -59,33 +63,31 @@
                 </select>
             </div>
 
-            <div class="animate__animated animate__fadeInLeft" style="animation-delay: 0.2s">
-                <label class="block text-xs font-bold text-slate-500 uppercase ml-1 mb-2">User ID</label>
-                <input type="text" id="userid" placeholder="Masukkan ID" class="w-full p-4 rounded-2xl bg-slate-900/50 border border-slate-700 outline-none input-focus transition-all">
+            <div class="animate__animated animate__fadeInDown" style="animation-delay: 0.2s">
+                <label class="block text-[10px] font-black text-blue-400 uppercase tracking-[0.2em] ml-1 mb-2">User ID</label>
+                <input type="text" id="userid" placeholder="Contoh: 12345678" class="w-full p-4 rounded-2xl bg-slate-900 border border-slate-700 outline-none input-glow transition-all text-sm">
             </div>
 
-            <div id="zonebox" class="animate__animated animate__fadeInLeft" style="animation-delay: 0.3s">
-                <label class="block text-xs font-bold text-slate-500 uppercase ml-1 mb-2">Zone ID</label>
-                <input type="text" id="zoneid" placeholder="Masukkan Zone" class="w-full p-4 rounded-2xl bg-slate-900/50 border border-slate-700 outline-none input-focus transition-all">
+            <div id="zonebox" class="show-zone transition-all">
+                <label class="block text-[10px] font-black text-blue-400 uppercase tracking-[0.2em] ml-1 mb-2">Zone ID</label>
+                <input type="text" id="zoneid" placeholder="Contoh: 1234" class="w-full p-4 rounded-2xl bg-slate-900 border border-slate-700 outline-none input-glow transition-all text-sm">
             </div>
 
-            <button onclick="checkUser()" id="btnCheck" class="btn-glow w-full py-4 bg-blue-600 rounded-2xl font-bold text-white transition-all active:scale-95 mt-4">
+            <button onclick="checkUser()" id="btnCheck" class="w-full py-4 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 rounded-2xl font-black text-sm tracking-widest text-white transition-all active:scale-95 shadow-lg shadow-blue-500/20">
                 PERIKSA SEKARANG
             </button>
         </div>
 
-        <div id="result" class="mt-10 hidden">
-            <div class="relative p-6 rounded-3xl bg-gradient-to-b from-slate-800 to-slate-900 border border-slate-700 overflow-hidden">
-                <div class="absolute top-0 right-0 -mt-4 -mr-4 w-20 h-20 bg-blue-500/10 rounded-full blur-2xl"></div>
-                
-                <p class="text-slate-500 text-xs font-bold uppercase tracking-widest text-center mb-1">Username Found</p>
-                <div id="username" class="text-2xl font-black text-center text-white break-words animate__animated"></div>
-                
-                <div id="flagbox" class="mt-4 flex justify-center items-center gap-3 hidden animate__animated animate__fadeInUp">
-                    <div class="h-[2px] w-8 bg-slate-700"></div>
-                    <img id="flagimg" src="" class="w-8 h-5 rounded shadow-lg border border-slate-600">
-                    <span id="country" class="uppercase text-xs font-black text-slate-400 tracking-tighter"></span>
-                    <div class="h-[2px] w-8 bg-slate-700"></div>
+        <div id="result" class="mt-8 hidden">
+            <div class="p-1 rounded-3xl bg-gradient-to-r from-blue-500 via-emerald-500 to-indigo-500 animate__animated animate__pulse animate__infinite animate__slow">
+                <div class="bg-slate-900 p-6 rounded-[1.4rem] text-center">
+                    <p class="text-slate-500 text-[10px] font-bold uppercase tracking-[0.3em] mb-2">Username Ditemukan</p>
+                    <div id="username" class="text-2xl font-black text-white break-words"></div>
+                    
+                    <div id="flagbox" class="mt-4 flex justify-center items-center gap-2 hidden border-t border-slate-800 pt-4">
+                        <img id="flagimg" src="" class="w-7 h-4 rounded-sm shadow-md">
+                        <span id="country" class="uppercase text-[10px] font-black text-slate-400 tracking-widest"></span>
+                    </div>
                 </div>
             </div>
         </div>
@@ -98,10 +100,11 @@
         gameSelect.addEventListener('change', () => {
             const needZone = ['emel', 'mcgg'];
             if (needZone.includes(gameSelect.value)) {
-                zoneBox.classList.remove('hidden');
-                zoneBox.classList.add('animate__fadeIn');
+                zoneBox.classList.remove('hidden-zone');
+                zoneBox.classList.add('show-zone');
             } else {
-                zoneBox.classList.add('hidden');
+                zoneBox.classList.remove('show-zone');
+                zoneBox.classList.add('hidden-zone');
             }
         });
 
@@ -114,9 +117,9 @@
             const userText = document.getElementById('username');
             const flagBox = document.getElementById('flagbox');
 
-            if (!id) return alert('ID wajib diisi!');
+            if (!id) return alert('Input ID dulu bosku!');
 
-            btn.innerHTML = '<span class="inline-block animate-spin mr-2">🌀</span> Sedang Mengecek...';
+            btn.innerHTML = 'MENGECEK...';
             btn.disabled = true;
             resDiv.classList.add('hidden');
             flagBox.classList.add('hidden');
@@ -131,10 +134,7 @@
                 if (data.status === 200) {
                     userText.innerText = data.username;
                     resDiv.classList.remove('hidden');
-                    resDiv.classList.add('animate__animated', 'animate__zoomIn');
-                    
-                    // Efek ketik/bounce untuk username
-                    userText.classList.add('animate__bounceIn');
+                    resDiv.classList.add('animate__animated', 'animate__backInUp');
 
                     if (game === 'emel' && data.flag) {
                         document.getElementById('flagimg').src = data.flag;
@@ -142,18 +142,13 @@
                         flagBox.classList.remove('hidden');
                     }
                 } else {
-                    alert('Data tidak ditemukan!');
+                    alert('ID Salah atau Tidak Ditemukan!');
                 }
             } catch (err) {
-                alert('Server Error!');
+                alert('Server Sibuk!');
             } finally {
                 btn.innerText = 'PERIKSA SEKARANG';
                 btn.disabled = false;
-                // Bersihkan kelas animasi biar bisa diulang
-                setTimeout(() => {
-                    resDiv.classList.remove('animate__zoomIn');
-                    userText.classList.remove('animate__bounceIn');
-                }, 1000);
             }
         }
     </script>

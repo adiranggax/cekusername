@@ -31,7 +31,7 @@
         
         <div class="text-center mb-8 animate__animated animate__fadeIn">
             <h1 class="text-4xl font-black italic text-blue-500">SKYLEN<span class="text-white">PRO</span></h1>
-            <p class="text-slate-400 text-[10px] tracking-widest uppercase">Hybrid API System v3.0</p>
+            <p class="text-slate-400 text-[10px] tracking-widest uppercase">Hybrid System - Fixed Domain</p>
         </div>
 
         <div class="flex p-1 bg-slate-900/80 rounded-2xl border border-white/5">
@@ -108,34 +108,42 @@
             const g = document.getElementById('game').value;
             const id = document.getElementById('userid').value;
             const z = document.getElementById('zoneid').value;
-            if(!id) return alert("ID Kosong!");
-            btn.innerText = "CHECKING...";
+            if(!id) return;
+            btn.innerText = "WAIT...";
             try {
                 const r = await fetch(`/api/${g}?id=${id}${z ? '&zone='+z : ''}`);
                 const j = await r.json();
                 if(j.username) {
                     document.getElementById('userRes').innerText = j.username;
                     document.getElementById('resCheck').classList.remove('hidden');
-                } else { alert("User Tidak Ditemukan"); }
-            } catch(e) { alert("Server Game Error"); }
+                }
+            } catch(e) { console.error(e); }
             finally { btn.innerText = "VALIDATE ID"; }
         }
 
-        // API TEMAN (TikTok Downloader - Smart Logic)
+        // API TEMAN (TikTok Downloader - Fixed Domain)
         async function downloadTikTok() {
             const btn = document.getElementById('btnDl');
-            const url = document.getElementById('tkUrl').value;
-            if(!url) return alert("Mana linknya?");
+            const urlInput = document.getElementById('tkUrl').value;
+            if(!urlInput) return alert("Tempel link dulu!");
             
             btn.innerText = "FETCHING...";
             document.getElementById('resDl').classList.add('hidden');
 
             try {
-                const response = await fetch(`https://cekusername.vercel.app/api/tiktok?url=${encodeURIComponent(url)}`);
-                const json = await response.json();
+                // 1. Coba panggil V2 dulu (Karena kalau itu foto, kita butuh data slide-nya)
+                let response = await fetch(`https://api.skylen.my.id/api/tiktok/v2?url=${encodeURIComponent(urlInput)}`);
+                let json = await response.json();
+                
+                // Jika di V2 tidak ada data slide, coba panggil V1 (Normal Video)
+                if (!json.data.response.slides || json.data.response.slides.length === 0) {
+                    const responseV1 = await fetch(`https://api.skylen.my.id/api/tiktok?url=${encodeURIComponent(urlInput)}`);
+                    json = await responseV1.json();
+                }
+
                 const res = json.data.response;
 
-                // Set Info User & Judul
+                // Update UI
                 document.getElementById('tkAvatar').src = res.author?.avatar || res.dlink?.profilePic || "";
                 document.getElementById('tkUser').innerText = res.author?.username || res.username || "SkyLen User";
                 document.getElementById('tkTitle').innerText = res.title || res.description || "TikTok Content";
@@ -145,35 +153,28 @@
                 sBox.classList.add('hidden'); vBox.classList.add('hidden');
                 sBox.innerHTML = '';
 
-                // Cek apakah Slide atau Video berdasarkan data yang ada
+                // Logika Tampilan (Slide vs Video)
                 if (res.slides && res.slides.length > 0) {
-                    // MODE SLIDE
                     sBox.classList.remove('hidden');
                     res.slides.forEach(s => {
                         const img = document.createElement('img');
                         img.src = s.url;
-                        img.className = 'w-full aspect-square object-cover rounded-xl border border-white/5 shadow-md';
+                        img.className = 'w-full aspect-square object-cover rounded-xl border border-white/5';
                         sBox.appendChild(img);
                     });
                 } else {
-                    // MODE VIDEO
                     vBox.classList.remove('hidden');
-                    // Cari link video di berbagai kemungkinan field API temanmu
-                    const finalVid = res.dl_hd || res.dl || res.dlink?.nowm || "";
-                    document.getElementById('tkPreview').src = finalVid;
+                    document.getElementById('tkPreview').src = res.dl_hd || res.dl || res.dlink?.nowm || "";
                 }
 
-                // Tentukan Link Download (Cari yang tidak kosong)
-                const dlLink = res.dl_hd || res.dl || res.dlink?.nowm || "#";
-                const auLink = res.music?.url || res.dlink?.audio || res.dl || "#";
-
-                document.getElementById('linkVid').href = dlLink;
-                document.getElementById('linkAud').href = auLink;
+                // Link Download
+                document.getElementById('linkVid').href = res.dl_hd || res.dl || res.dlink?.nowm || "#";
+                document.getElementById('linkAud').href = res.music?.url || res.dlink?.audio || "#";
 
                 document.getElementById('resDl').classList.remove('hidden');
 
             } catch(e) {
-                alert("Gagal ambil data! API temanmu mungkin lagi error atau link salah.");
+                alert("Error: " + e.message);
             } finally {
                 btn.innerText = "GET CONTENT";
             }

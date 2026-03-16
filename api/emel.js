@@ -1,26 +1,25 @@
 export default async function handler(req, res) {
-  // --- BAGIAN CORS ---
+  // --- KONFIGURASI CORS ---
   res.setHeader('Access-Control-Allow-Credentials', true);
-  res.setHeader('Access-Control-Allow-Origin', '*'); // Mengizinkan semua domain
+  res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT');
   res.setHeader(
     'Access-Control-Allow-Headers',
     'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version'
   );
 
-  // Handle request OPTIONS (Preflight)
   if (req.method === 'OPTIONS') {
     res.status(200).end();
     return;
   }
-  // -------------------
+  // -----------------------
 
   const { id, zone } = req.query;
 
   if (!id || !zone) {
     return res.status(400).json({ 
       status: 400, 
-      message: "Parameter 'id' dan 'zone' wajib diisi!" 
+      message: "Mana ID & Zone-nya?" 
     });
   }
 
@@ -41,17 +40,22 @@ export default async function handler(req, res) {
     const result = await response.json();
 
     if (result.message === "Success" && result.data) {
+      // Ambil kode negara & buat huruf kecil (Flagpedia butuh lowercase)
+      const countryCode = (result.data.countryOrigin || "id").toLowerCase();
+      
       return res.status(200).json({
         status: 200,
         username: result.data.username,
-        country: result.data.countryOrigin || "id",
         id: id,
-        zone: zone
+        zone: zone,
+        country: countryCode,
+        // Link bendera dari Flagpedia (Flagcdn)
+        flag: `https://flagcdn.com/w80/${countryCode}.png`
       });
     } else {
       return res.status(404).json({ 
         status: 404, 
-        message: "User ID atau Zone tidak ditemukan",
+        message: "User kagak ketemu!",
         id: id,
         zone: zone
       });
@@ -60,7 +64,7 @@ export default async function handler(req, res) {
   } catch (error) {
     return res.status(500).json({ 
       status: 500, 
-      message: "Internal Server Error", 
+      message: "Server Gopay lagi pusing", 
       error: error.message 
     });
   }

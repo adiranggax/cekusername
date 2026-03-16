@@ -313,5 +313,60 @@
         }
     }
 </script>
+    <script>
+    async function downloadSocial() {
+        const btn = document.getElementById('btnSocial');
+        const type = document.getElementById('socialType').value;
+        const url = document.getElementById('socialUrl').value;
+        const resBox = document.getElementById('resSocial');
+        const content = document.getElementById('socialMediaContent');
+
+        if (!url) return alert("Link sosmed-nya mana Bos?");
+
+        btn.disabled = true;
+        btn.innerHTML = '<span class="animate-spin inline-block mr-2">↻</span> LOADING...';
+        resBox.classList.add('hidden');
+
+        try {
+            if (type === 'tiktok') {
+                // Logic Hybrid TikTok (V2 -> V1)
+                let response = await fetch(`https://api.skylen.my.id/api/tiktok/v2?url=${encodeURIComponent(url)}`);
+                let json = await response.json();
+                let data = json.data.response;
+
+                if (!data.slides || data.slides.length === 0) {
+                    const resV1 = await fetch(`https://api.skylen.my.id/api/tiktok?url=${encodeURIComponent(url)}`);
+                    const jsonV1 = await resV1.json();
+                    renderTikTokUI(jsonV1.data.response, 'video');
+                } else {
+                    renderTikTokUI(data, 'photo');
+                }
+                resBox.classList.remove('hidden');
+            } else {
+                alert("API untuk " + type + " sedang disiapkan oleh tim Skylen!");
+            }
+        } catch (err) {
+            alert("Gagal koneksi ke API Skylen!");
+        } finally {
+            btn.disabled = false;
+            btn.innerHTML = 'START DOWNLOAD';
+        }
+    }
+
+    function renderTikTokUI(data, mode) {
+        const content = document.getElementById('socialMediaContent');
+        if (mode === 'video') {
+            content.innerHTML = `<video controls class="w-full rounded-2xl border-2 border-emerald-500/20"><source src="${data.video.no_watermark}" type="video/mp4"></video>
+            <div class="grid grid-cols-2 gap-2 mt-4">
+                <a href="${data.video.no_watermark}" target="_blank" class="py-3 bg-emerald-600 text-center rounded-xl font-bold text-[10px] uppercase">Video</a>
+                <a href="${data.music.url}" target="_blank" class="py-3 bg-slate-800 text-center rounded-xl font-bold text-[10px] uppercase">Audio</a>
+            </div>`;
+        } else {
+            let imgHtml = data.slides.map(img => `<img src="${img}" class="shrink-0 w-64 rounded-2xl border border-white/10 shadow-xl">`).join('');
+            content.innerHTML = `<div class="flex overflow-x-auto gap-3 pb-4 hide-scroll">${imgHtml}</div>
+            <a href="${data.music.url}" target="_blank" class="block w-full py-3 bg-slate-800 text-center rounded-xl font-bold text-[10px] uppercase mt-2">Download MP3</a>`;
+        }
+    }
+</script>
 </body>
 </html>

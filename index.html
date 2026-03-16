@@ -3,21 +3,53 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Game Username Checker</title>
+    <title>Premium Game Checker</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
     <style>
-        body { background: #0f172a; color: white; }
-        .card { background: #1e293b; border: 1px solid #334155; }
+        body { 
+            background: radial-gradient(circle at center, #1e293b 0%, #0f172a 100%); 
+            color: white; 
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+        }
+        .glass-card { 
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+        .btn-glow:hover {
+            box-shadow: 0 0 20px rgba(37, 99, 235, 0.6);
+            transform: translateY(-2px);
+        }
+        .input-focus:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+        }
+        /* Animasi kustom untuk logo */
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+        .float-anim { animation: float 3s ease-in-out infinite; }
     </style>
 </head>
-<body class="p-5">
-    <div class="max-w-md mx-auto mt-10 card p-6 rounded-2xl shadow-xl">
-        <h1 class="text-2xl font-bold mb-5 text-center text-blue-400">🎮 Game Checker</h1>
+<body class="p-5 flex items-center justify-center">
+    <div class="max-w-md w-full glass-card p-8 rounded-[2rem] animate__animated animate__fadeIn">
+        <div class="text-center mb-8">
+            <div class="text-5xl mb-4 float-anim">🕹️</div>
+            <h1 class="text-3xl font-black bg-gradient-to-r from-blue-400 via-indigo-400 to-emerald-400 bg-clip-text text-transparent">
+                GAME CHECKER
+            </h1>
+            <p class="text-slate-400 text-sm mt-2">Cek username akun game kamu</p>
+        </div>
         
-        <div class="space-y-4">
-            <div>
-                <label class="block text-sm font-medium mb-1">Pilih Game</label>
-                <select id="game" class="w-full p-3 rounded-lg bg-slate-700 border-none outline-none focus:ring-2 focus:ring-blue-500">
+        <div class="space-y-5">
+            <div class="animate__animated animate__fadeInLeft" style="animation-delay: 0.1s">
+                <label class="block text-xs font-bold text-slate-500 uppercase ml-1 mb-2">Game</label>
+                <select id="game" class="w-full p-4 rounded-2xl bg-slate-900/50 border border-slate-700 outline-none input-focus transition-all appearance-none cursor-pointer">
                     <option value="emel">Mobile Legends</option>
                     <option value="epep">Free Fire</option>
                     <option value="pubg">PUBG Mobile</option>
@@ -27,25 +59,34 @@
                 </select>
             </div>
 
-            <div>
-                <label class="block text-sm font-medium mb-1">User ID</label>
-                <input type="text" id="userid" placeholder="Masukkan ID" class="w-full p-3 rounded-lg bg-slate-700 border-none outline-none focus:ring-2 focus:ring-blue-500">
+            <div class="animate__animated animate__fadeInLeft" style="animation-delay: 0.2s">
+                <label class="block text-xs font-bold text-slate-500 uppercase ml-1 mb-2">User ID</label>
+                <input type="text" id="userid" placeholder="Masukkan ID" class="w-full p-4 rounded-2xl bg-slate-900/50 border border-slate-700 outline-none input-focus transition-all">
             </div>
 
-            <div id="zonebox">
-                <label class="block text-sm font-medium mb-1">Zone ID</label>
-                <input type="text" id="zoneid" placeholder="Masukkan Zone" class="w-full p-3 rounded-lg bg-slate-700 border-none outline-none focus:ring-2 focus:ring-blue-500">
+            <div id="zonebox" class="animate__animated animate__fadeInLeft" style="animation-delay: 0.3s">
+                <label class="block text-xs font-bold text-slate-500 uppercase ml-1 mb-2">Zone ID</label>
+                <input type="text" id="zoneid" placeholder="Masukkan Zone" class="w-full p-4 rounded-2xl bg-slate-900/50 border border-slate-700 outline-none input-focus transition-all">
             </div>
 
-            <button onclick="checkUser()" id="btnCheck" class="w-full py-3 bg-blue-600 hover:bg-blue-700 rounded-lg font-bold transition">Periksa Username</button>
+            <button onclick="checkUser()" id="btnCheck" class="btn-glow w-full py-4 bg-blue-600 rounded-2xl font-bold text-white transition-all active:scale-95 mt-4">
+                PERIKSA SEKARANG
+            </button>
         </div>
 
-        <div id="result" class="mt-6 p-4 rounded-lg bg-slate-800 hidden text-center">
-            <p class="text-gray-400 text-sm">Username Ditemukan:</p>
-            <div id="username" class="text-xl font-bold text-green-400 my-2"></div>
-            <div id="flagbox" class="flex justify-center items-center gap-2">
-                <img id="flagimg" src="" class="w-8 h-5 rounded shadow-sm hidden">
-                <span id="country" class="uppercase text-sm font-semibold"></span>
+        <div id="result" class="mt-10 hidden">
+            <div class="relative p-6 rounded-3xl bg-gradient-to-b from-slate-800 to-slate-900 border border-slate-700 overflow-hidden">
+                <div class="absolute top-0 right-0 -mt-4 -mr-4 w-20 h-20 bg-blue-500/10 rounded-full blur-2xl"></div>
+                
+                <p class="text-slate-500 text-xs font-bold uppercase tracking-widest text-center mb-1">Username Found</p>
+                <div id="username" class="text-2xl font-black text-center text-white break-words animate__animated"></div>
+                
+                <div id="flagbox" class="mt-4 flex justify-center items-center gap-3 hidden animate__animated animate__fadeInUp">
+                    <div class="h-[2px] w-8 bg-slate-700"></div>
+                    <img id="flagimg" src="" class="w-8 h-5 rounded shadow-lg border border-slate-600">
+                    <span id="country" class="uppercase text-xs font-black text-slate-400 tracking-tighter"></span>
+                    <div class="h-[2px] w-8 bg-slate-700"></div>
+                </div>
             </div>
         </div>
     </div>
@@ -54,10 +95,14 @@
         const gameSelect = document.getElementById('game');
         const zoneBox = document.getElementById('zonebox');
 
-        // Sembunyikan Zone ID kalau gamenya gak butuh
         gameSelect.addEventListener('change', () => {
             const needZone = ['emel', 'mcgg'];
-            zoneBox.style.display = needZone.includes(gameSelect.value) ? 'block' : 'none';
+            if (needZone.includes(gameSelect.value)) {
+                zoneBox.classList.remove('hidden');
+                zoneBox.classList.add('animate__fadeIn');
+            } else {
+                zoneBox.classList.add('hidden');
+            }
         });
 
         async function checkUser() {
@@ -66,12 +111,15 @@
             const zone = document.getElementById('zoneid').value;
             const btn = document.getElementById('btnCheck');
             const resDiv = document.getElementById('result');
+            const userText = document.getElementById('username');
+            const flagBox = document.getElementById('flagbox');
 
-            if (!id) return alert('Isi ID dulu bos!');
+            if (!id) return alert('ID wajib diisi!');
 
-            btn.innerText = 'Checking...';
+            btn.innerHTML = '<span class="inline-block animate-spin mr-2">🌀</span> Sedang Mengecek...';
             btn.disabled = true;
             resDiv.classList.add('hidden');
+            flagBox.classList.add('hidden');
 
             try {
                 let url = `/api/${game}?id=${id}`;
@@ -81,25 +129,31 @@
                 const data = await response.json();
 
                 if (data.status === 200) {
-                    document.getElementById('username').innerText = data.username;
-                    document.getElementById('country').innerText = data.country || '';
-                    
-                    if (data.flag) {
-                        document.getElementById('flagimg').src = data.flag;
-                        document.getElementById('flagimg').classList.remove('hidden');
-                    } else {
-                        document.getElementById('flagimg').classList.add('hidden');
-                    }
-                    
+                    userText.innerText = data.username;
                     resDiv.classList.remove('hidden');
+                    resDiv.classList.add('animate__animated', 'animate__zoomIn');
+                    
+                    // Efek ketik/bounce untuk username
+                    userText.classList.add('animate__bounceIn');
+
+                    if (game === 'emel' && data.flag) {
+                        document.getElementById('flagimg').src = data.flag;
+                        document.getElementById('country').innerText = data.country;
+                        flagBox.classList.remove('hidden');
+                    }
                 } else {
-                    alert('User Tidak Ditemukan!');
+                    alert('Data tidak ditemukan!');
                 }
             } catch (err) {
-                alert('Gagal mengambil data!');
+                alert('Server Error!');
             } finally {
-                btn.innerText = 'Periksa Username';
+                btn.innerText = 'PERIKSA SEKARANG';
                 btn.disabled = false;
+                // Bersihkan kelas animasi biar bisa diulang
+                setTimeout(() => {
+                    resDiv.classList.remove('animate__zoomIn');
+                    userText.classList.remove('animate__bounceIn');
+                }, 1000);
             }
         }
     </script>

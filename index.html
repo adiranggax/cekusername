@@ -130,29 +130,33 @@
 </div>
             </section>
 
-            <section id="social" class="section-content animate__animated animate__fadeInRight">
-                <div class="glass p-7 rounded-[2.5rem] space-y-5">
-                    <div class="flex items-center gap-2 text-emerald-400 font-bold uppercase text-[11px] tracking-widest">
-                        <span>📲</span> Downloader Hub
-                    </div>
-                    <select id="socialType" class="input-field w-full p-4 rounded-2xl text-sm text-white outline-none">
-                        <option value="tiktok">TikTok (Video/Slide)</option>
-                        <option value="ig">Instagram</option>
-                        <option value="fb">Facebook</option>
-                        <option value="twit">Twitter / X</option>
-                        <option value="ytmp4">YouTube Video</option>
-                        <option value="ytmp3">YouTube Audio</option>
-                        <option value="sticker">Sticker.ly</option>
-                    </select>
-                    <input type="text" id="socialUrl" placeholder="Paste link media..." class="input-field w-full p-4 rounded-2xl text-sm text-white outline-none">
-                    <button id="btnSocial" onclick="downloadSocial()" class="w-full py-4 bg-emerald-600 hover:bg-emerald-500 rounded-2xl font-black text-[11px] tracking-widest shadow-xl shadow-emerald-900/40">
-    START DOWNLOAD
-</button>
-                    <div id="resSocial" class="hidden mt-4 p-4 glass rounded-[2rem] border-emerald-500/20">
-    <div id="socialMediaContent"></div>
-</div>
+<section id="social" class="section-content animate__animated animate__fadeInRight">
+    <div class="glass p-7 rounded-[2.5rem] space-y-5">
+        <div class="flex items-center gap-2 text-emerald-400 font-bold uppercase text-[11px] tracking-widest">
+            <span>📲</span> Downloader Hub
+        </div>
+
+        <select id="socialType" class="input-field w-full p-4 rounded-2xl text-sm text-white outline-none cursor-pointer bg-slate-900/50 border border-white/5">
+            <option value="tiktok_video">TikTok Video (No WM)</option>
+            <option value="tiktok_photo">TikTok Photo (Slide)</option>
+            <option value="ig">Instagram</option>
+            <option value="fb">Facebook</option>
+            <option value="ytmp4">YouTube Video</option>
+            <option value="ytmp3">YouTube Audio</option>
+        </select>
+
+        <input type="text" id="socialUrl" placeholder="Paste link media..." class="input-field w-full p-4 rounded-2xl text-sm text-white outline-none bg-slate-900/50 border border-white/5">
+
+        <button id="btnSocial" onclick="downloadSocial()" class="w-full py-4 bg-emerald-600 hover:bg-emerald-500 rounded-2xl font-black text-[11px] text-white tracking-widest shadow-xl shadow-emerald-900/40 transition-all active:scale-95 uppercase">
+            START DOWNLOAD
+        </button>
+
+        <div id="resSocial" class="hidden mt-4 animate__animated animate__fadeIn">
+            <div id="socialMediaContent" class="p-4 glass rounded-[2rem] border border-emerald-500/20">
                 </div>
-            </section>
+        </div>
+    </div>
+</section>
 
             <section id="cloud" class="section-content animate__animated animate__fadeInRight">
                 <div class="glass p-7 rounded-[2.5rem] space-y-5">
@@ -319,92 +323,98 @@
     }
 </script>
 <script>
-    async function downloadSocial() {
-        console.log("Tombol Download diklik!");
-        const btn = document.getElementById('btnSocial');
-        const type = document.getElementById('socialType').value;
-        const urlInput = document.getElementById('socialUrl').value;
+    async function getTikTokVideo(url) {
         const resBox = document.getElementById('resSocial');
         const content = document.getElementById('socialMediaContent');
 
-        if (!urlInput) return alert("Tempel linknya dulu Bos!");
-
-        btn.disabled = true;
-        btn.innerHTML = '<span class="animate-spin inline-block mr-2">↻</span> LOADING...';
-        resBox.classList.add('hidden');
-
         try {
-            if (type === 'tiktok') {
-                // Tembak V2 dulu untuk cek slide
-                let response = await fetch(`https://api.skylen.my.id/api/tiktok/v2?url=${encodeURIComponent(urlInput)}`);
-                let json = await response.json();
-                
-                if (!json.data) throw new Error("Gagal mengambil data dari API.");
+            const response = await fetch(`https://api.skylen.my.id/api/tiktok?url=${encodeURIComponent(url)}`);
+            const json = await response.json();
+            const data = json.data?.response;
 
-                let data = json.data.response;
+            if (!data) throw new Error("Video tidak ditemukan!");
 
-                // Logika: Jika tidak ada data.slides, berarti dia video (V1)
-                if (!data.slides || data.slides.length === 0) {
-                    // Pakai data dari V2 saja karena V2 temanmu ternyata sudah lengkap datanya
-                    renderTikTokUI(data, 'video');
-                } else {
-                    renderTikTokUI(data, 'photo');
-                }
-                
-                resBox.classList.remove('hidden');
-            } else {
-                alert("Fitur " + type + " sedang disiapkan!");
-            }
-        } catch (err) {
-            console.error("Detail Error:", err);
-            alert("Error: " + err.message);
-        } finally {
-            btn.disabled = false;
-            btn.innerHTML = 'START DOWNLOAD';
-        }
-    }
-
-    function renderTikTokUI(data, mode) {
-        const content = document.getElementById('socialMediaContent');
-        content.innerHTML = ""; 
-        console.log("Data diproses oleh Render:", data);
-
-        if (mode === 'video') {
-            // MAPPING SESUAI LOG KAMU:
-            // Video No Watermark ada di field 'dl'
-            // Video HD ada di field 'dl_hd'
             const videoUrl = data.dl || data.dl_hd || data.video?.no_watermark;
-            const title = data.title || "TikTok Video";
 
             content.innerHTML = `
                 <div class="space-y-4 animate__animated animate__fadeIn">
-                    <p class="text-[10px] text-emerald-400 font-bold uppercase ml-1 truncate w-full">${title}</p>
-                    <div class="relative rounded-2xl overflow-hidden border-2 border-emerald-500/20 shadow-lg bg-black">
-                        <video controls class="w-full h-auto block">
+                    <p class="text-[10px] text-emerald-400 font-bold uppercase truncate">${data.title || 'TikTok Video'}</p>
+                    <div class="relative rounded-2xl overflow-hidden border-2 border-emerald-500/20 bg-black shadow-2xl">
+                        <video controls class="w-full h-auto block" poster="${data.cover}">
                             <source src="${videoUrl}" type="video/mp4">
                         </video>
                     </div>
-                    <div class="grid grid-cols-1 gap-2">
-                        <a href="${videoUrl}" target="_blank" class="py-4 bg-emerald-600 hover:bg-emerald-500 text-center rounded-2xl font-black text-[11px] tracking-widest uppercase transition-all shadow-lg shadow-emerald-900/30">
-                            DOWNLOAD VIDEO
-                        </a>
-                    </div>
+                    <a href="${videoUrl}" target="_blank" class="block w-full py-4 bg-emerald-600 hover:bg-emerald-500 text-center rounded-2xl font-black text-[11px] text-white tracking-widest uppercase transition-all shadow-lg shadow-emerald-900/40">
+                        DOWNLOAD VIDEO
+                    </a>
                 </div>`;
-        } else {
-            // Mapping untuk Slide
-            const slides = data.slides || [];
-            let imgHtml = slides.map(img => `
-                <div class="shrink-0 w-64 snap-center">
+            resBox.classList.remove('hidden');
+        } catch (err) {
+            alert("Error Video: " + err.message);
+        }
+    }
+</script>
+    <script>
+    async function getTikTokPhoto(url) {
+        const resBox = document.getElementById('resSocial');
+        const content = document.getElementById('socialMediaContent');
+
+        try {
+            const response = await fetch(`https://api.skylen.my.id/api/tiktok/v2?url=${encodeURIComponent(url)}`);
+            const json = await response.json();
+            const data = json.data?.response;
+
+            if (!data || (!data.slides && !data.images)) throw new Error("Slide foto tidak ditemukan!");
+
+            const slides = data.slides || data.images || [];
+
+            let imgHtml = slides.map((img, i) => `
+                <div class="shrink-0 w-64 snap-center relative">
                     <img src="${img}" class="w-full h-auto rounded-2xl border border-white/10 shadow-xl">
+                    <div class="absolute top-2 right-2 bg-black/60 backdrop-blur-md text-[8px] text-white px-2 py-1 rounded-lg font-bold">#${i+1}</div>
                 </div>`).join('');
                 
             content.innerHTML = `
                 <div class="space-y-4 animate__animated animate__fadeIn">
-                    <p class="text-[10px] text-emerald-400 font-bold uppercase ml-1 tracking-widest">📸 TikTok Slide (${slides.length})</p>
-                    <div class="flex overflow-x-auto gap-3 pb-4 hide-scroll snap-x">${imgHtml}</div>
-                    <p class="text-center text-[9px] text-slate-500 italic">Geser untuk melihat foto</p>
+                    <p class="text-[10px] text-emerald-400 font-bold uppercase tracking-widest ml-1">📸 Photo Slide (${slides.length})</p>
+                    <div class="flex overflow-x-auto gap-3 pb-4 hide-scroll snap-x">
+                        ${imgHtml}
+                    </div>
+                    <p class="text-center text-[9px] text-slate-500 italic mt-1">← Geser foto →</p>
                 </div>`;
+            resBox.classList.remove('hidden');
+        } catch (err) {
+            alert("Error Photo: " + err.message);
         }
+    }
+</script>
+    <script>
+    async function downloadSocial() {
+        const btn = document.getElementById('btnSocial');
+        const type = document.getElementById('socialType').value;
+        const urlInput = document.getElementById('socialUrl').value;
+        const resBox = document.getElementById('resSocial');
+
+        if (!urlInput) return alert("Masukkan link dulu Bos!");
+
+        // Loading UI
+        btn.disabled = true;
+        btn.innerHTML = '<span class="animate-spin inline-block mr-2 text-white">↻</span> LOADING...';
+        resBox.classList.add('hidden');
+
+        // EKSEKUSI TERPISAH
+        if (type === 'tiktok_video') {
+            await getTikTokVideo(urlInput);
+        } 
+        else if (type === 'tiktok_photo') {
+            await getTikTokPhoto(urlInput);
+        } 
+        else {
+            alert("Fitur " + type + " belum tersedia.");
+        }
+
+        btn.disabled = false;
+        btn.innerHTML = 'START DOWNLOAD';
     }
 </script>
 </body>

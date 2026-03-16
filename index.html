@@ -245,5 +245,58 @@
             }, 1000);
         }
     </script>
+    <script>
+    async function validateGame() {
+        // 1. Definisi Element
+        const btn = document.getElementById('btnCheck');
+        const resBox = document.getElementById('resGame');
+        const resText = document.getElementById('gameNickname');
+        
+        // 2. Ambil Value Input
+        const game = document.getElementById('gameType').value;
+        const id = document.getElementById('gameId').value;
+        const zone = document.getElementById('gameZone').value;
+
+        // Validation simple
+        if (!id) return alert("Masukkan User ID dulu Bos!");
+
+        // 3. UI Loading State
+        btn.disabled = true;
+        btn.innerHTML = '<span class="animate-spin inline-block mr-2">↻</span> VALIDATING...';
+        resBox.classList.add('hidden');
+
+        try {
+            // 4. Hit API Lokal Kamu (/api/game?id=xxx&zone=xxx)
+            let url = `/api/${game}?id=${id}`;
+            if (zone && ['emel', 'mcgg'].includes(game)) {
+                url += `&zone=${zone}`;
+            }
+
+            const response = await fetch(url);
+            const data = await response.json();
+
+            // 5. Olah Data (Nickname + Country sesuai permintaan sebelumnya)
+            // Sesuaikan "data.username" & "data.country" dengan struktur JSON API kamu
+            const nickname = data.username || (data.data && data.data.username);
+            const country = data.country || (data.data && data.data.country) || "";
+
+            if (nickname) {
+                // Tampilkan hasil dengan animasi bounceIn (sudah ada di class resGame)
+                resText.innerText = country ? `${nickname} - ${country}` : nickname;
+                resBox.classList.remove('hidden');
+            } else {
+                alert("Data tidak ditemukan! Cek ID/Zone lagi.");
+            }
+
+        } catch (error) {
+            console.error(error);
+            alert("Gagal koneksi ke API Lokal kamu.");
+        } finally {
+            // 6. Restore Button
+            btn.disabled = false;
+            btn.innerHTML = 'CHECK USERNAME';
+        }
+    }
+</script>
 </body>
 </html>

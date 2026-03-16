@@ -379,7 +379,6 @@
     }
 </script>
 <script>
-    // Fungsi Pemicu Utama
     async function downloadSocial() {
         const btn = document.getElementById('btnSocial');
         const type = document.getElementById('socialType').value;
@@ -394,9 +393,9 @@
 
         try {
             if (type === 'tiktok_video') {
-                await handleTikTokVideo(urlInput); // Memanggil script di Part 1
+                await handleTikTokVideo(urlInput);
             } else if (type === 'tiktok_photo') {
-                await handleTikTokPhoto(urlInput); // Memanggil script di Part 2
+                await handleTikTokPhoto(urlInput);
             } else {
                 alert("Fitur segera hadir!");
             }
@@ -409,25 +408,43 @@
         }
     }
 
-    // Fungsi Force Download (Bypass CORS via Google Proxy)
+    // FUNGSI FORCE DOWNLOAD (VERSI HP STABLE)
     async function forceDownload(url, filename) {
         const btn = document.getElementById('dlBtn');
         const oldText = btn.innerText;
-        btn.innerText = "PROCESSING...";
+        btn.innerText = "DOWNLOADING...";
+
         try {
+            // Gunakan Proxy untuk bypass CORS
             const proxyUrl = 'https://images1-focus-opensocial.googleusercontent.com/gadgets/proxy?container=focus&refresh=604800&url=' + encodeURIComponent(url);
-            const res = await fetch(proxyUrl);
-            const blob = await res.blob();
+            
+            const response = await fetch(proxyUrl);
+            if (!response.ok) throw new Error("Network response was not ok");
+            
+            const blob = await response.blob();
             const blobUrl = window.URL.createObjectURL(blob);
+            
+            // Trik khusus HP: Gunakan 'target' dan 'rel' agar browser tidak curiga
             const a = document.createElement('a');
+            a.style.display = 'none';
             a.href = blobUrl;
             a.download = filename;
+            a.rel = 'noopener'; 
+            
             document.body.appendChild(a);
             a.click();
-            document.body.removeChild(a);
+            
+            // Kasih jeda sedikit sebelum dihapus (penting untuk mobile browser)
+            setTimeout(() => {
+                window.URL.revokeObjectURL(blobUrl);
+                document.body.removeChild(a);
+            }, 200);
+
             btn.innerText = "SUCCESS!";
         } catch (e) {
-            window.open(url, '_blank');
+            console.error("Download failed:", e);
+            // Fallback terakhir jika Blob gagal di HP: Buka di tab baru (manual save)
+            window.location.href = url; 
         } finally {
             setTimeout(() => { btn.innerText = oldText; }, 2000);
         }

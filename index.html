@@ -3,12 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>SkyLen Ultra Ecosystem</title>
+    <title>SKYLEN ULTRA V3</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap');
-        
         body { 
             background: #020617; 
             color: #f8fafc;
@@ -23,218 +22,156 @@
         .nav-tab.active {
             background: #3b82f6;
             color: white;
-            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4);
+            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
         }
         .input-field {
             background: rgba(2, 6, 23, 0.8);
             border: 1px solid rgba(255, 255, 255, 0.1);
+            outline: none;
             transition: all 0.3s;
         }
-        .section-anim {
-            animation: fadeInUp 0.4s ease-out;
-        }
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+        .input-field:focus { border-color: #3b82f6; }
         .hide-scroll::-webkit-scrollbar { display: none; }
     </style>
 </head>
 <body class="p-4 flex justify-center">
 
-    <div class="max-w-md w-full space-y-6 pb-10">
+    <div class="max-w-md w-full space-y-6 pb-20">
         
-        <header class="text-center py-4">
+        <header class="text-center py-6">
             <h1 class="text-4xl font-extrabold italic tracking-tighter text-blue-500">SKYLEN<span class="text-white">ULTRA</span></h1>
-            <p class="text-slate-400 text-[10px] tracking-[0.4em] uppercase mt-1">Multi-Tools Ecosystem</p>
+            <p class="text-slate-500 text-[10px] tracking-[0.5em] uppercase mt-1">Premium All-in-One Tools</p>
         </header>
 
         <div class="overflow-x-auto hide-scroll">
-            <nav class="flex p-1.5 glass rounded-2xl gap-1 min-w-[400px]">
-                <button onclick="showSection('game')" class="nav-tab active w-1/4 py-2.5 rounded-xl text-[9px] font-bold uppercase transition-all">Games</button>
-                <button onclick="showSection('social')" class="nav-tab w-1/4 py-2.5 rounded-xl text-[9px] font-bold uppercase transition-all text-slate-400">Social</button>
-                <button onclick="showSection('cloud')" class="nav-tab w-1/4 py-2.5 rounded-xl text-[9px] font-bold uppercase transition-all text-slate-400">Cloud</button>
-                <button onclick="showSection('info')" class="nav-tab w-1/4 py-2.5 rounded-xl text-[9px] font-bold uppercase transition-all text-slate-400">Stats</button>
+            <nav class="flex p-1.5 glass rounded-2xl gap-1 min-w-[450px]">
+                <button onclick="switchTab('game')" id="tab-game" class="nav-tab active w-1/4 py-3 rounded-xl text-[10px] font-bold uppercase transition-all">Games</button>
+                <button onclick="switchTab('social')" id="tab-social" class="nav-tab w-1/4 py-3 rounded-xl text-[10px] font-bold uppercase transition-all text-slate-400">Social</button>
+                <button onclick="switchTab('cloud')" id="tab-cloud" class="nav-tab w-1/4 py-3 rounded-xl text-[10px] font-bold uppercase transition-all text-slate-400">Cloud</button>
+                <button onclick="switchTab('stats')" id="tab-stats" class="nav-tab w-1/4 py-3 rounded-xl text-[10px] font-bold uppercase transition-all text-slate-400">Stats</button>
             </nav>
         </div>
 
-        <div id="game-section" class="section-content space-y-4">
-<div class="glass p-6 rounded-[2.5rem] space-y-4 section-anim">
-    <div class="flex items-center gap-2 mb-2">
-        <span class="text-blue-500 text-lg">🎮</span>
-        <h2 class="text-sm font-bold uppercase tracking-widest text-blue-400">Game Validator</h2>
-    </div>
-    
-    <select id="gameType" class="input-field w-full p-4 rounded-2xl text-sm outline-none">
-        <option value="emel">Mobile Legends</option>
-        <option value="epep">Free Fire</option>
-        <option value="pubg">PUBG Mobile</option>
-        <option value="codm">Call of Duty Mobile</option>
-        <option value="eafc">EA Sports FC</option>
-        <option value="mcgg">Magic Chess Go Go</option>
-    </select>
-
-    <div class="flex gap-2">
-        <input type="text" id="gameId" placeholder="User ID" class="input-field flex-1 p-4 rounded-2xl text-sm outline-none">
-        <input type="text" id="gameZone" placeholder="Zone" class="input-field w-1/3 p-4 rounded-2xl text-sm outline-none">
-    </div>
-
-    <input type="text" id="gameCountry" placeholder="Country (id, ph, my, dll)" class="input-field w-full p-4 rounded-2xl text-sm outline-none">
-
-    <button id="btnGame" onclick="checkGameUser()" class="w-full py-4 bg-blue-600 hover:bg-blue-500 rounded-2xl font-black text-xs tracking-[0.2em] transition-all active:scale-95 shadow-lg">CHECK USERNAME</button>
-</div>
-
-<div id="resGame" class="mt-4 hidden p-4 bg-blue-500/10 border border-blue-500/30 rounded-2xl text-center animate__animated animate__fadeIn">
-    <p class="text-[10px] text-slate-400 uppercase tracking-widest">Result</p>
-    <p id="gameUserRes" class="text-white font-bold text-lg uppercase tracking-tighter"></p>
-</div>
-
-        <div id="social-section" class="section-content hidden space-y-4">
-            <div class="glass p-6 rounded-[2.5rem] space-y-4 section-anim">
-                <div class="flex items-center gap-2 mb-2">
-                    <span class="text-emerald-500 text-lg">📲</span>
-                    <h2 class="text-sm font-bold uppercase tracking-widest text-emerald-400">Social Downloader</h2>
+        <div id="sec-game" class="tab-content space-y-4 animate__animated animate__fadeIn">
+            <div class="glass p-6 rounded-[2.5rem] space-y-4">
+                <div class="flex items-center gap-2 mb-2 text-blue-400 font-bold uppercase text-xs tracking-widest">
+                    <span>🎮</span> Game Validator
                 </div>
+                <select id="gameType" class="input-field w-full p-4 rounded-2xl text-sm text-white">
+                    <option value="emel">Mobile Legends</option>
+                    <option value="epep">Free Fire</option>
+                    <option value="pubg">PUBG Mobile</option>
+                    <option value="codm">Call of Duty Mobile</option>
+                    <option value="eafc">EA Sports FC</option>
+                    <option value="mcgg">Magic Chess Go Go</option>
+                </select>
+                <div class="flex gap-2">
+                    <input type="text" id="gameId" placeholder="User ID" class="input-field flex-1 p-4 rounded-2xl text-sm text-white">
+                    <input type="text" id="gameZone" placeholder="Zone" class="input-field w-1/3 p-4 rounded-2xl text-sm text-white">
+                </div>
+                <button class="w-full py-4 bg-blue-600 hover:bg-blue-500 rounded-2xl font-black text-xs tracking-widest transition-all active:scale-95 shadow-lg shadow-blue-900/20">VALIDATE USER</button>
+            </div>
+            
+            <div id="res-game" class="hidden p-6 glass rounded-[2rem] text-center border-blue-500/20 animate__animated animate__zoomIn">
+                <p class="text-[10px] text-slate-500 uppercase tracking-widest mb-1">Result Found</p>
+                <p class="text-white font-black text-xl uppercase tracking-tighter">NICKNAME - ID</p>
+            </div>
+        </div>
 
-                <select id="socialType" class="input-field w-full p-4 rounded-2xl text-sm outline-none">
+        <div id="sec-social" class="tab-content hidden space-y-4 animate__animated animate__fadeIn">
+            <div class="glass p-6 rounded-[2.5rem] space-y-4">
+                <div class="flex items-center gap-2 mb-2 text-emerald-400 font-bold uppercase text-xs tracking-widest">
+                    <span>📲</span> Social Downloader
+                </div>
+                <select class="input-field w-full p-4 rounded-2xl text-sm text-white">
                     <option value="tiktok">TikTok (Video/Slide)</option>
                     <option value="ig">Instagram</option>
-                    <option value="twit">Twitter / X</option>
                     <option value="fb">Facebook</option>
+                    <option value="twit">Twitter / X</option>
                     <option value="ytmp4">YouTube Video</option>
                     <option value="ytmp3">YouTube Audio</option>
                     <option value="sticker">Sticker.ly</option>
                 </select>
-
-                <input type="text" id="socialUrl" placeholder="Paste link here..." class="input-field w-full p-4 rounded-2xl text-sm outline-none">
-
-                <button class="w-full py-4 bg-emerald-600 hover:bg-emerald-500 rounded-2xl font-black text-xs tracking-[0.2em] transition-all active:scale-95">DOWNLOAD MEDIA</button>
+                <input type="text" placeholder="Paste link here..." class="input-field w-full p-4 rounded-2xl text-sm text-white">
+                <button class="w-full py-4 bg-emerald-600 hover:bg-emerald-500 rounded-2xl font-black text-xs tracking-widest transition-all active:scale-95">DOWNLOAD</button>
             </div>
         </div>
 
-        <div id="cloud-section" class="section-content hidden space-y-4">
-            <div class="glass p-6 rounded-[2.5rem] space-y-4 section-anim">
-                <div class="flex items-center gap-2 mb-2">
-                    <span class="text-purple-500 text-lg">☁️</span>
-                    <h2 class="text-sm font-bold uppercase tracking-widest text-purple-400">Cloud Bypass</h2>
+        <div id="sec-cloud" class="tab-content hidden space-y-4 animate__animated animate__fadeIn">
+            <div class="glass p-6 rounded-[2.5rem] space-y-4">
+                <div class="flex items-center gap-2 mb-2 text-purple-400 font-bold uppercase text-xs tracking-widest">
+                    <span>☁️</span> Cloud Bypass
                 </div>
-
-                <select id="cloudType" class="input-field w-full p-4 rounded-2xl text-sm outline-none">
+                <select class="input-field w-full p-4 rounded-2xl text-sm text-white">
                     <option value="terabox">Terabox</option>
                     <option value="gdrive">Google Drive</option>
                     <option value="mfire">Mediafire</option>
                     <option value="videy">Videy.co</option>
                 </select>
-
-                <input type="text" id="cloudUrl" placeholder="Paste file link..." class="input-field w-full p-4 rounded-2xl text-sm outline-none">
-
-                <button class="w-full py-4 bg-purple-600 hover:bg-purple-500 rounded-2xl font-black text-xs tracking-[0.2em] transition-all active:scale-95">GET DIRECT LINK</button>
+                <input type="text" placeholder="Paste file link..." class="input-field w-full p-4 rounded-2xl text-sm text-white">
+                <button class="w-full py-4 bg-purple-600 hover:bg-purple-500 rounded-2xl font-black text-xs tracking-widest transition-all active:scale-95">GET DIRECT LINK</button>
             </div>
         </div>
 
-        <div id="info-section" class="section-content hidden space-y-4">
-            <div class="glass p-6 rounded-[2.5rem] space-y-4 section-anim">
-                <div class="flex items-center gap-2 mb-2">
-                    <span class="text-amber-500 text-lg">📊</span>
-                    <h2 class="text-sm font-bold uppercase tracking-widest text-amber-400">Info & Stats</h2>
+        <div id="sec-stats" class="tab-content hidden space-y-4 animate__animated animate__fadeIn">
+            <div class="glass p-6 rounded-[2.5rem] space-y-4">
+                <div class="flex items-center gap-2 mb-2 text-amber-500 font-bold uppercase text-xs tracking-widest">
+                    <span>📊</span> Info & Statistics
                 </div>
-
-                <div class="grid grid-cols-2 gap-3">
-                    <div class="col-span-2 space-y-2">
-                        <label class="text-[10px] font-bold text-slate-500 ml-1 uppercase">GSMArena Search</label>
-                        <div class="flex gap-2">
-                            <input type="text" id="gsmQuery" placeholder="Phone name..." class="input-field flex-1 p-3 rounded-xl text-sm outline-none">
-                            <button class="px-4 bg-amber-600 rounded-xl text-xs font-bold">GO</button>
-                        </div>
+                
+                <div class="space-y-2">
+                    <label class="text-[10px] font-bold text-slate-500 ml-1">GSMARENA SEARCH</label>
+                    <div class="flex gap-2">
+                        <input type="text" placeholder="Phone name..." class="input-field flex-1 p-3 rounded-xl text-sm text-white">
+                        <button class="px-4 bg-amber-600 rounded-xl text-xs font-bold active:scale-95">SEARCH</button>
                     </div>
+                </div>
 
-                    <div class="border-t border-white/5 col-span-2 my-2"></div>
-
-                    <button class="p-4 bg-slate-900/50 border border-white/5 rounded-2xl text-center group hover:border-amber-500 transition-all">
-                        <p class="text-[10px] text-slate-400 group-hover:text-amber-500">MPL ID</p>
-                        <p class="text-xs font-bold uppercase">Schedule</p>
+                <div class="grid grid-cols-2 gap-3 pt-2">
+                    <button class="p-4 bg-slate-900/50 border border-white/5 rounded-2xl text-center hover:border-amber-500 transition-all">
+                        <p class="text-[9px] text-slate-400 uppercase">MPL ID</p>
+                        <p class="text-[11px] font-bold">SCHEDULE</p>
                     </button>
-                    <button class="p-4 bg-slate-900/50 border border-white/5 rounded-2xl text-center group hover:border-amber-500 transition-all">
-                        <p class="text-[10px] text-slate-400 group-hover:text-amber-500">MPL ID</p>
-                        <p class="text-xs font-bold uppercase">Ranking</p>
+                    <button class="p-4 bg-slate-900/50 border border-white/5 rounded-2xl text-center hover:border-amber-500 transition-all">
+                        <p class="text-[9px] text-slate-400 uppercase">MPL ID</p>
+                        <p class="text-[11px] font-bold">RANKING</p>
                     </button>
                 </div>
             </div>
         </div>
 
-        <footer class="text-center space-y-2">
-            <p class="text-slate-500 text-[10px] font-medium tracking-widest uppercase">&copy; 2026 SKYLEN CORPORATION</p>
-            <div class="flex justify-center gap-4 text-xs text-blue-500 font-bold">
-                <a href="https://link.skylen.my.id/contact" class="hover:text-white transition-all">Contact Developer</a>
-            </div>
+        <footer class="text-center py-4">
+            <p class="text-slate-600 text-[10px] font-medium tracking-[0.3em] uppercase">© 2026 SKYLEN CORPORATION</p>
         </footer>
 
     </div>
 
     <script>
-        function showSection(name) {
-            document.querySelectorAll('.section-content').forEach(s => s.classList.add('hidden'));
-            document.querySelectorAll('.nav-tab').forEach(t => {
-                t.classList.remove('active', 'text-white');
-                t.classList.add('text-slate-400');
+        // Logika Pindah Tab
+        function switchTab(target) {
+            // Sembunyikan semua section
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            // Hapus status aktif di semua tombol nav
+            document.querySelectorAll('.nav-tab').forEach(el => {
+                el.classList.remove('active', 'text-white');
+                el.classList.add('text-slate-400');
             });
-            document.getElementById(name + '-section').classList.remove('hidden');
-            event.currentTarget.classList.add('active', 'text-white');
-            event.currentTarget.classList.remove('text-slate-400');
+
+            // Tampilkan yang diklik
+            document.getElementById('sec-' + target).classList.remove('hidden');
+            document.getElementById('tab-' + target).classList.add('active', 'text-white');
+            document.getElementById('tab-' + target).classList.remove('text-slate-400');
         }
 
-        document.getElementById('gameType').onchange = function() {
-            const zone = document.getElementById('gameZone');
-            zone.style.display = ['emel', 'mcgg'].includes(this.value) ? 'block' : 'none';
-        }
+        // Otomatis Sembunyikan Zone ID jika bukan ML/Magic Chess
+        document.getElementById('gameType').addEventListener('change', function() {
+            const zoneInput = document.getElementById('gameZone');
+            if(this.value === 'emel' || this.value === 'mcgg') {
+                zoneInput.classList.remove('hidden');
+            } else {
+                zoneInput.classList.add('hidden');
+            }
+        });
     </script>
-        <script>
-// Logika tampilkan Zone hanya untuk game tertentu
-document.getElementById('gameType').onchange = function() {
-    const game = this.value;
-    // Zone muncul hanya untuk ML (emel) dan Magic Chess (mcgg)
-    document.getElementById('gameZone').style.display = ['emel', 'mcgg'].includes(game) ? 'block' : 'none';
-}
-
-async function checkGameUser() {
-    const btn = document.getElementById('btnGame');
-    const game = document.getElementById('gameType').value;
-    const id = document.getElementById('gameId').value;
-    const zone = document.getElementById('gameZone').value;
-    const resDiv = document.getElementById('resGame');
-    const resText = document.getElementById('gameUserRes');
-
-    if (!id) return alert("User ID mana Bos?");
-
-    btn.disabled = true;
-    btn.innerText = "WAIT...";
-    resDiv.classList.add('hidden');
-
-    try {
-        // Tembak langsung ke API kamu. 
-        // Biarkan file PHP/NodeJS di folder /api/ yang urus country-nya.
-        let url = `/api/${game}?id=${id}`;
-        if (zone) url += `&zone=${zone}`;
-
-        const response = await fetch(url);
-        const data = await response.json();
-
-        // Ambil username dari response API kamu
-        const username = data.username || (data.data && data.data.username);
-
-        if (username) {
-            resText.innerText = username;
-            resDiv.classList.remove('hidden');
-        } else {
-            alert("Username tidak ditemukan!");
-        }
-    } catch (err) {
-        alert("Gagal koneksi ke API kamu!");
-    } finally {
-        btn.disabled = false;
-        btn.innerText = "CHECK USERNAME";
-    }
-}
-        </script>
 </body>
 </html>

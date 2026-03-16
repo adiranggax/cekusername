@@ -249,7 +249,7 @@
         }
     </script>
 <script>
-    // Fungsi pembantu untuk mengubah kode negara (ID, TR, dll) jadi Nama Lengkap
+    // Fitur browser untuk ubah kode negara (ID) jadi nama lengkap (Indonesia)
     const regionNames = new Intl.DisplayNames(['en'], {type: 'region'});
 
     async function validateGame() {
@@ -264,39 +264,39 @@
 
         if (!id) return alert("User ID wajib diisi!");
 
+        // Reset UI
         btn.disabled = true;
         btn.innerHTML = '<span class="animate-spin inline-block mr-2">↻</span> PROCESSING...';
         resBox.classList.add('hidden');
         flagImg.classList.add('hidden');
 
         try {
-            // Tembak API Lokal
             let url = `/api/${game}?id=${id}`;
             if (zone && ['emel', 'mcgg'].includes(game)) url += `&zone=${zone}`;
 
             const response = await fetch(url);
             const data = await response.json();
 
-            // Ambil data dari API kamu
             const nickname = data.username || (data.data && data.data.username);
             const countryCode = data.country || (data.data && data.data.country);
 
             if (nickname) {
-                let finalInfo = nickname;
-
-                if (countryCode) {
+                // LOGIKA: Jika Game adalah EMEL, tampilkan bendera & nama negara
+                if (game === 'emel' && countryCode) {
                     const countryLower = countryCode.toLowerCase();
                     const countryFullName = regionNames.of(countryCode.toUpperCase());
                     
-                    // Format: Nickname - Nama Negara (KODE)
-                    finalInfo = `${nickname} - ${countryFullName} (${countryCode.toUpperCase()})`;
+                    // Format: NICKNAME - INDONESIA (ID)
+                    resText.innerText = `${nickname} - ${countryFullName} (${countryCode.toUpperCase()})`;
                     
-                    // Ambil bendera dari Flagpedia
+                    // Ambil bendera dari Flagpedia (FlagCDN)
                     flagImg.src = `https://flagcdn.com/w80/${countryLower}.png`;
                     flagImg.classList.remove('hidden');
+                } else {
+                    // Jika BUKAN EMEL, tampilkan Nickname saja
+                    resText.innerText = nickname;
                 }
 
-                resText.innerText = finalInfo;
                 resBox.classList.remove('hidden');
             } else {
                 alert("Username tidak ditemukan.");

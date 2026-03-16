@@ -249,7 +249,6 @@
         }
     </script>
 <script>
-    // Fitur browser untuk ubah kode negara (ID) jadi nama lengkap (Indonesia)
     const regionNames = new Intl.DisplayNames(['en'], {type: 'region'});
 
     async function validateGame() {
@@ -258,52 +257,56 @@
         const resText = document.getElementById('gameNickname');
         const flagImg = document.getElementById('gameFlag');
         
-        const game = document.getElementById('gameType').value;
+        let game = document.getElementById('gameType').value; // Ambil value: emel, eafc, dll
         const id = document.getElementById('gameId').value;
         const zone = document.getElementById('gameZone').value;
 
         if (!id) return alert("User ID wajib diisi!");
 
-        // Reset UI
+        // --- LOGIKA MAPPING NAMA FILE ---
+        // Jika pilih eafc, arahkan ke file fcmobile
+        let fileName = game;
+        if (game === 'eafc') fileName = 'fcmobile'; 
+        // --------------------------------
+
         btn.disabled = true;
         btn.innerHTML = '<span class="animate-spin inline-block mr-2">↻</span> PROCESSING...';
         resBox.classList.add('hidden');
         flagImg.classList.add('hidden');
 
         try {
-            let url = `/api/${game}?id=${id}`;
+            // Tembak ke API lokal dengan nama file yang benar
+            // Tambahkan .js jika server kamu mewajibkan ekstensi di URL
+            let url = `/api/${fileName}?id=${id}`; 
+            
             if (zone && ['emel', 'mcgg'].includes(game)) url += `&zone=${zone}`;
 
             const response = await fetch(url);
-            const data = await response.json();
+            
+            if (!response.ok) throw new Error("File API tidak ditemukan!");
 
+            const data = await response.json();
             const nickname = data.username || (data.data && data.data.username);
             const countryCode = data.country || (data.data && data.data.country);
 
             if (nickname) {
-                // LOGIKA: Jika Game adalah EMEL, tampilkan bendera & nama negara
                 if (game === 'emel' && countryCode) {
                     const countryLower = countryCode.toLowerCase();
                     const countryFullName = regionNames.of(countryCode.toUpperCase());
-                    
-                    // Format: NICKNAME - INDONESIA (ID)
                     resText.innerText = `${nickname} - ${countryFullName} (${countryCode.toUpperCase()})`;
-                    
-                    // Ambil bendera dari Flagpedia (FlagCDN)
                     flagImg.src = `https://flagcdn.com/w80/${countryLower}.png`;
                     flagImg.classList.remove('hidden');
                 } else {
-                    // Jika BUKAN EMEL, tampilkan Nickname saja
                     resText.innerText = nickname;
                 }
-
                 resBox.classList.remove('hidden');
             } else {
                 alert("Username tidak ditemukan.");
             }
 
         } catch (error) {
-            alert("Terjadi kesalahan pada API!");
+            console.error(error);
+            alert("Error: " + error.message);
         } finally {
             btn.disabled = false;
             btn.innerHTML = 'CHECK USERNAME';

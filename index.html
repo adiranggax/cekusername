@@ -409,23 +409,31 @@
     }
 
     // FUNGSI FORCE DOWNLOAD (VERSI HP STABLE)
-   async function forceDownload(url, filename) {
+async function forceDownload(url, filename) {
         const btn = document.getElementById('dlBtn');
         const oldText = btn.innerText;
-        btn.innerText = "STARTING...";
+        btn.innerText = "PROCESSING...";
 
-        // Ganti link download ke API Proxy kita sendiri
-        // Ini akan memicu download otomatis di HP maupun Laptop
+        // Arahkan ke Proxy Vercel kita
         const proxyUrl = `/api/download?url=${encodeURIComponent(url)}&name=${encodeURIComponent(filename)}`;
 
         try {
-            // Langsung arahkan lokasi window ke proxy kita
-            // Browser akan mendeteksi header 'attachment' dan mulai download otomatis
-            window.location.href = proxyUrl;
+            // Cara paling ampuh buat Laptop & HP
+            const a = document.createElement('a');
+            a.href = proxyUrl;
+            a.download = filename; // Backup aja
+            document.body.appendChild(a);
+            a.click();
             
+            // Hapus link siluman setelah diklik
+            setTimeout(() => {
+                document.body.removeChild(a);
+            }, 1000);
+
             btn.innerText = "SUCCESS!";
         } catch (e) {
-            window.open(url, '_blank');
+            console.error(e);
+            window.location.href = proxyUrl; // Fallback kalau cara di atas gagal
         } finally {
             setTimeout(() => { btn.innerText = oldText; }, 2000);
         }

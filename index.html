@@ -355,26 +355,51 @@
     }
 </script>
 <script>
-    async function handleTikTokPhoto(url) {
+async function handleTikTokPhoto(url) {
         const content = document.getElementById('socialMediaContent');
+        // Pakai API V2 khusus slide
         const response = await fetch(`https://api.skylen.my.id/api/tiktok/v2?url=${encodeURIComponent(url)}`);
         const json = await response.json();
+        
+        // Cek struktur data asli dari API
         const data = json.data?.response;
+        // Pastikan kita ambil array gambarnya dengan benar
+        const slides = data?.images || data?.slides || [];
 
-        const slides = data.slides || data.images || [];
-        if (slides.length === 0) throw new Error("Bukan konten slide!");
+        if (slides.length === 0) throw new Error("Ini bukan konten foto/slide Bos!");
 
-        let imgHtml = slides.map((img, i) => `
-            <div class="shrink-0 w-64 snap-center relative">
-                <img src="${img}" class="w-full h-auto rounded-2xl border border-white/10 shadow-xl">
-                <div class="absolute top-2 right-2 bg-black/60 backdrop-blur-md text-[8px] text-white px-2 py-1 rounded-lg font-bold">#${i+1}</div>
-            </div>`).join('');
+        // Perbaikan Loop: Kita pastikan ambil link stringnya
+        let imgHtml = slides.map((img, i) => {
+            // Jika img adalah object, ambil propertinya. Jika string, pakai langsung.
+            const imgSrc = (typeof img === 'object') ? (img.url || img.dl || img.link) : img;
+            
+            return `
+                <div class="shrink-0 w-64 snap-center relative">
+                    <img src="${imgSrc}" class="w-full h-auto rounded-2xl border border-white/10 shadow-xl" loading="lazy">
+                    <div class="absolute top-2 right-2 bg-black/60 backdrop-blur-md text-[8px] text-white px-2 py-1 rounded-lg font-bold">#${i+1}</div>
+                    
+                    <button onclick="forceDownload('${imgSrc}', 'tiktok_photo_${i+1}.jpg')" 
+                        class="absolute bottom-2 right-2 p-2 bg-emerald-600 rounded-xl shadow-lg">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                        </svg>
+                    </button>
+                </div>`;
+        }).join('');
             
         content.innerHTML = `
             <div class="space-y-4 animate__animated animate__fadeIn">
-                <p class="text-[10px] text-emerald-400 font-bold uppercase tracking-widest ml-1 text-center">📸 Photo Slide (${slides.length})</p>
-                <div class="flex overflow-x-auto gap-3 pb-4 hide-scroll snap-x">${imgHtml}</div>
-                <p class="text-center text-[9px] text-slate-500 italic">← Geser foto →</p>
+                <div class="px-2 pt-1 text-center">
+                    <p class="text-[10px] text-emerald-400 font-black uppercase tracking-widest leading-tight">
+                        📸 TikTok Photo Slide (${slides.length})
+                    </p>
+                </div>
+                
+                <div class="flex overflow-x-auto gap-3 pb-4 px-2 hide-scroll snap-x">
+                    ${imgHtml}
+                </div>
+                
+                <p class="text-center text-[9px] text-slate-500 italic mt-1">← Geser untuk lihat semua foto →</p>
             </div>`;
     }
 </script>

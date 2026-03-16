@@ -378,13 +378,13 @@ async function handleTikTokPhoto(url) {
                     <img src="${imgSrc}" class="w-full h-auto rounded-2xl border border-white/10 shadow-xl" loading="lazy">
                     <div class="absolute top-2 right-2 bg-black/60 backdrop-blur-md text-[8px] text-white px-2 py-1 rounded-lg font-bold">#${i+1}</div>
                     
-                    <button onclick="forceDownload('${imgSrc}', 'tiktok_photo_${i+1}.jpg')" 
-                        class="absolute bottom-2 right-2 p-2 bg-emerald-600 rounded-xl shadow-lg">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                        </svg>
-                    </button>
-                </div>`;
+<button 
+    onclick="event.stopPropagation(); forceDownload('${imgSrc}', 'tiktok_photo_${i+1}')" 
+    class="absolute bottom-2 right-2 p-3 bg-emerald-600/90 hover:bg-emerald-500 rounded-2xl shadow-lg active:scale-90 transition-all z-10">
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+    </svg>
+</button>                </div>`;
         }).join('');
             
         content.innerHTML = `

@@ -2,91 +2,126 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Premium Game Checker</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
+
         body { 
             background: #0f172a; 
             background-image: radial-gradient(circle at 50% 50%, #1e293b 0%, #0f172a 100%);
             color: white; 
             font-family: 'Inter', sans-serif;
             min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0;
             overflow-x: hidden;
         }
+
         .glass-card { 
-            background: rgba(30, 41, 59, 0.8);
-            backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+            background: rgba(30, 41, 59, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8);
         }
+
+        /* --- ANTI-GLITCH ZONE LOGIC --- */
+        #zonebox { 
+            display: block; 
+            overflow: hidden;
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .hidden-zone { 
+            max-height: 0 !important; 
+            opacity: 0 !important; 
+            margin-bottom: 0 !important; 
+            transform: scale(0.9) translateY(-20px);
+            pointer-events: none;
+        }
+
+        .show-zone { 
+            max-height: 120px !important; 
+            opacity: 1 !important; 
+            margin-bottom: 1.25rem !important;
+            transform: scale(1) translateY(0);
+        }
+
         .input-glow:focus {
             border-color: #3b82f6;
-            box-shadow: 0 0 15px rgba(59, 130, 246, 0.3);
-            background: rgba(15, 23, 42, 0.8);
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.4);
+            background: rgba(15, 23, 42, 0.9);
         }
+
         @keyframes float {
             0%, 100% { transform: translateY(0px) rotate(0deg); }
-            50% { transform: translateY(-15px) rotate(5deg); }
+            50% { transform: translateY(-15px) rotate(8deg); }
         }
         .float-logo { animation: float 4s ease-in-out infinite; }
-        
-        /* Transisi halus untuk Zone ID biar gak kaget */
-        #zonebox { transition: all 0.4s ease-in-out; }
-        .hidden-zone { opacity: 0; transform: translateY(-20px); pointer-events: none; max-height: 0; margin-bottom: 0; overflow: hidden; }
-        .show-zone { opacity: 1; transform: translateY(0); max-height: 100px; margin-bottom: 1.25rem; }
+
+        /* Mencegah highlight biru saat klik di HP */
+        * { -webkit-tap-highlight-color: transparent; }
     </style>
 </head>
-<body class="p-5 flex items-center justify-center">
+<body class="p-4">
 
-    <div class="max-w-md w-full glass-card p-8 rounded-[2.5rem] animate__animated animate__fadeInUp">
+    <div class="max-w-md w-full glass-card p-7 sm:p-9 rounded-[2.5rem] animate__animated animate__fadeInUp animate__fast">
         
-        <div class="text-center mb-10">
-            <div class="text-6xl mb-4 float-logo">🎮</div>
-            <h1 class="text-3xl font-black tracking-tighter bg-gradient-to-r from-blue-400 via-indigo-300 to-emerald-400 bg-clip-text text-transparent">
+        <div class="text-center mb-8">
+            <div class="text-6xl mb-4 float-logo select-none">🎮</div>
+            <h1 class="text-3xl font-black tracking-tighter bg-gradient-to-r from-blue-400 via-indigo-300 to-emerald-400 bg-clip-text text-transparent italic">
                 GAME CHECKER
             </h1>
-            <div class="h-1 w-20 bg-blue-500 mx-auto mt-2 rounded-full opacity-50"></div>
+            <div class="h-1.5 w-16 bg-gradient-to-r from-blue-600 to-emerald-500 mx-auto mt-3 rounded-full shadow-lg shadow-blue-500/50"></div>
         </div>
         
-        <div class="space-y-5">
+        <div class="space-y-4">
             <div class="animate__animated animate__fadeInDown" style="animation-delay: 0.1s">
                 <label class="block text-[10px] font-black text-blue-400 uppercase tracking-[0.2em] ml-1 mb-2">Platform</label>
-                <select id="game" class="w-full p-4 rounded-2xl bg-slate-900 border border-slate-700 outline-none input-glow transition-all cursor-pointer text-sm">
-                    <option value="emel">Mobile Legends</option>
-                    <option value="epep">Free Fire</option>
-                    <option value="pubg">PUBG Mobile</option>
-                    <option value="codm">CODM</option>
-                    <option value="fcmobile">FC Mobile</option>
-                    <option value="mcgg">Magic Chess Go Go</option>
-                </select>
+                <div class="relative">
+                    <select id="game" class="w-full p-4 rounded-2xl bg-slate-900 border border-slate-700 outline-none input-glow transition-all cursor-pointer text-sm appearance-none">
+                        <option value="emel">Mobile Legends</option>
+                        <option value="epep">Free Fire</option>
+                        <option value="pubg">PUBG Mobile</option>
+                        <option value="codm">CODM</option>
+                        <option value="fcmobile">FC Mobile</option>
+                        <option value="mcgg">Magic Chess Go Go</option>
+                    </select>
+                    <div class="absolute inset-y-0 right-4 flex items-center pointer-events-none text-slate-500">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M19 9l-7 7-7-7"></path></svg>
+                    </div>
+                </div>
             </div>
 
             <div class="animate__animated animate__fadeInDown" style="animation-delay: 0.2s">
                 <label class="block text-[10px] font-black text-blue-400 uppercase tracking-[0.2em] ml-1 mb-2">User ID</label>
-                <input type="text" id="userid" placeholder="Contoh: 12345678" class="w-full p-4 rounded-2xl bg-slate-900 border border-slate-700 outline-none input-glow transition-all text-sm">
+                <input type="text" id="userid" inputmode="numeric" placeholder="Masukkan ID Player" class="w-full p-4 rounded-2xl bg-slate-900 border border-slate-700 outline-none input-glow transition-all text-sm">
             </div>
 
-            <div id="zonebox" class="show-zone transition-all">
+            <div id="zonebox" class="show-zone">
                 <label class="block text-[10px] font-black text-blue-400 uppercase tracking-[0.2em] ml-1 mb-2">Zone ID</label>
-                <input type="text" id="zoneid" placeholder="Contoh: 1234" class="w-full p-4 rounded-2xl bg-slate-900 border border-slate-700 outline-none input-glow transition-all text-sm">
+                <input type="text" id="zoneid" inputmode="numeric" placeholder="Masukkan Zone" class="w-full p-4 rounded-2xl bg-slate-900 border border-slate-700 outline-none input-glow transition-all text-sm">
             </div>
 
-            <button onclick="checkUser()" id="btnCheck" class="w-full py-4 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 rounded-2xl font-black text-sm tracking-widest text-white transition-all active:scale-95 shadow-lg shadow-blue-500/20">
-                PERIKSA SEKARANG
+            <button onclick="checkUser()" id="btnCheck" class="w-full py-4 bg-gradient-to-br from-blue-600 to-indigo-700 hover:from-blue-500 hover:to-indigo-600 rounded-2xl font-black text-xs tracking-[0.2em] text-white transition-all active:scale-95 shadow-xl shadow-blue-500/20 mt-2 uppercase">
+                Periksa Akun
             </button>
         </div>
 
         <div id="result" class="mt-8 hidden">
-            <div class="p-1 rounded-3xl bg-gradient-to-r from-blue-500 via-emerald-500 to-indigo-500 animate__animated animate__pulse animate__infinite animate__slow">
-                <div class="bg-slate-900 p-6 rounded-[1.4rem] text-center">
-                    <p class="text-slate-500 text-[10px] font-bold uppercase tracking-[0.3em] mb-2">Username Ditemukan</p>
-                    <div id="username" class="text-2xl font-black text-white break-words"></div>
+            <div class="p-[2px] rounded-3xl bg-gradient-to-br from-blue-400 via-emerald-400 to-indigo-500 animate__animated animate__fadeIn">
+                <div class="bg-slate-900/90 p-6 rounded-[1.4rem] text-center backdrop-blur-md">
+                    <p class="text-slate-500 text-[9px] font-black uppercase tracking-[0.4em] mb-3">Target Identified</p>
+                    <div id="username" class="text-2xl font-black text-white break-words drop-shadow-sm uppercase italic"></div>
                     
-                    <div id="flagbox" class="mt-4 flex justify-center items-center gap-2 hidden border-t border-slate-800 pt-4">
-                        <img id="flagimg" src="" class="w-7 h-4 rounded-sm shadow-md">
-                        <span id="country" class="uppercase text-[10px] font-black text-slate-400 tracking-widest"></span>
+                    <div id="flagbox" class="mt-4 flex justify-center items-center gap-3 hidden border-t border-slate-800/50 pt-4">
+                        <img id="flagimg" src="" class="w-8 h-5 rounded-sm shadow-md object-cover">
+                        <span id="country" class="uppercase text-[10px] font-black text-blue-400 tracking-widest"></span>
                     </div>
                 </div>
             </div>
@@ -97,6 +132,7 @@
         const gameSelect = document.getElementById('game');
         const zoneBox = document.getElementById('zonebox');
 
+        // Logic Switch Game dengan transisi mulus
         gameSelect.addEventListener('change', () => {
             const needZone = ['emel', 'mcgg'];
             if (needZone.includes(gameSelect.value)) {
@@ -117,9 +153,14 @@
             const userText = document.getElementById('username');
             const flagBox = document.getElementById('flagbox');
 
-            if (!id) return alert('Input ID dulu bosku!');
+            if (!id) {
+                btn.classList.add('animate__shakeX');
+                setTimeout(() => btn.classList.remove('animate__shakeX'), 500);
+                return;
+            }
 
-            btn.innerHTML = 'MENGECEK...';
+            // UI State Loading
+            btn.innerHTML = '<span class="animate-pulse">PROCESSING...</span>';
             btn.disabled = true;
             resDiv.classList.add('hidden');
             flagBox.classList.add('hidden');
@@ -134,6 +175,8 @@
                 if (data.status === 200) {
                     userText.innerText = data.username;
                     resDiv.classList.remove('hidden');
+                    
+                    // Trigger animasi result
                     resDiv.classList.add('animate__animated', 'animate__backInUp');
 
                     if (game === 'emel' && data.flag) {
@@ -142,13 +185,14 @@
                         flagBox.classList.remove('hidden');
                     }
                 } else {
-                    alert('ID Salah atau Tidak Ditemukan!');
+                    alert('ID/Zone Salah atau Tidak Ditemukan!');
                 }
             } catch (err) {
-                alert('Server Sibuk!');
+                alert('Connection Error!');
             } finally {
-                btn.innerText = 'PERIKSA SEKARANG';
+                btn.innerText = 'Periksa Akun';
                 btn.disabled = false;
+                setTimeout(() => resDiv.classList.remove('animate__backInUp'), 1000);
             }
         }
     </script>

@@ -96,33 +96,23 @@
         <button class="nav-tab" onclick="switchTab(this)">Streaming</button>
         <button class="nav-tab" onclick="switchTab(this)">System</button>
     </div>
-    <section id="game" class="section-content active animate__animated animate__fadeIn">
-    <div class="glass p-6 rounded-[2.5rem] space-y-6">
+<section id="game" class="section-content active">
+    <div class="glass p-7 rounded-[2.5rem] space-y-6 max-w-md mx-auto">
         
-        <div class="grid grid-cols-2 gap-3">
-            <div onclick="setGame('emel', this)" class="game-card active-game">
-                <span class="text-xl">⚔️</span>
-                <p>Mobile Legends</p>
+        <div class="relative">
+            <p class="text-[10px] font-black text-blue-400 uppercase tracking-[0.2em] mb-2 px-2">Select Game</p>
+            <div onclick="toggleGameDropdown()" id="gameSelector" class="input-field flex justify-between items-center cursor-pointer border-blue-500/30">
+                <span id="selectedGameText" class="font-bold text-sm">MOBILE LEGENDS</span>
+                <span id="gameArrow" class="text-xs transition-transform duration-300">▼</span>
             </div>
-            <div onclick="setGame('epep', this)" class="game-card">
-                <span class="text-xl">🔥</span>
-                <p>Free Fire</p>
-            </div>
-            <div onclick="setGame('pubg', this)" class="game-card">
-                <span class="text-xl">🔫</span>
-                <p>PUBG Mobile</p>
-            </div>
-            <div onclick="setGame('codm', this)" class="game-card">
-                <span class="text-xl">🎖️</span>
-                <p>Call Of Duty Mobile</p>
-            </div>
-            <div onclick="setGame('fcmobile', this)" class="game-card">
-                <span class="text-xl">⚽</span>
-                <p>FC Mobile</p>
-            </div>
-            <div onclick="setGame('mcgg', this)" class="game-card">
-                <span class="text-xl">🧱</span>
-                <p>Minecraft Game</p>
+
+            <div id="gameOptions" class="hidden absolute top-full left-0 right-0 mt-2 glass rounded-2xl overflow-hidden z-50 animate__animated animate__fadeIn">
+                <div onclick="selectGame('emel', 'MOBILE LEGENDS', this)" class="p-4 hover:bg-blue-600/20 cursor-pointer font-bold text-xs uppercase border-b border-white/5">Mobile Legends</div>
+                <div onclick="selectGame('epep', 'FREE FIRE', this)" class="p-4 hover:bg-blue-600/20 cursor-pointer font-bold text-xs uppercase border-b border-white/5">Free Fire</div>
+                <div onclick="selectGame('pubg', 'PUBG MOBILE', this)" class="p-4 hover:bg-blue-600/20 cursor-pointer font-bold text-xs uppercase border-b border-white/5">PUBG Mobile</div>
+                <div onclick="selectGame('codm', 'CALL OF DUTY MOBILE', this)" class="p-4 hover:bg-blue-600/20 cursor-pointer font-bold text-xs uppercase border-b border-white/5">Call Of Duty Mobile</div>
+                <div onclick="selectGame('fcmobile', 'FC MOBILE', this)" class="p-4 hover:bg-blue-600/20 cursor-pointer font-bold text-xs uppercase border-b border-white/5">FC Mobile</div>
+                <div onclick="selectGame('mcgg', 'MINECRAFT GAME', this)" class="p-4 hover:bg-blue-600/20 cursor-pointer font-bold text-xs uppercase">Minecraft Game</div>
             </div>
         </div>
 
@@ -131,18 +121,13 @@
         <div class="space-y-4">
             <div class="flex gap-2">
                 <input type="text" id="gameId" placeholder="User ID" class="input-field flex-1">
-                
                 <input type="text" id="gameZone" placeholder="Zone ID" class="input-field w-28">
             </div>
 
-            <button onclick="validateGame()" id="btnCheck" class="w-full py-5 bg-blue-600 rounded-2xl font-black text-sm uppercase shadow-lg shadow-blue-900/40">
+            <button onclick="validateGame()" id="btnCheck" class="w-full py-5 bg-blue-600 rounded-2xl font-black text-[13px] tracking-widest uppercase shadow-lg shadow-blue-900/40 active:scale-95 transition-all">
                 Check Username
             </button>
         </div>
-    </div>
-
-    <div id="resGame" class="hidden mt-4 p-6 glass rounded-[2.5rem] text-center">
-        <h3 id="gameNickname" class="font-black text-xl uppercase italic text-blue-400"></h3>
     </div>
 </section>
     <script> // Fungsi update waktu real-time
@@ -174,13 +159,37 @@
             btn.classList.add('active');
         }
     </script>
-    <script>
-    // Fungsi khusus untuk handle response Nama + Negara (Khusus MLBB)
+   <script> // Fungsi Dropdown Pilih Game
+    function toggleGameDropdown() {
+        const menu = document.getElementById('gameOptions');
+        const arrow = document.getElementById('gameArrow');
+        menu.classList.toggle('hidden');
+        arrow.style.transform = menu.classList.contains('hidden') ? 'rotate(0deg)' : 'rotate(180deg)';
+    }
+
+    function selectGame(val, label, el) {
+        // Set nilai ke hidden input
+        document.getElementById('gameType').value = val;
+        // Ganti teks di tombol dropdown
+        document.getElementById('selectedGameText').innerText = label;
+        
+        // Tutup dropdown
+        toggleGameDropdown();
+
+        // Logic Zone ID (Hanya MLBB & Minecraft)
+        const zoneInput = document.getElementById('gameZone');
+        if (val === 'emel' || val === 'mcgg') {
+            zoneInput.style.display = 'block';
+            zoneInput.placeholder = (val === 'emel') ? "Zone ID" : "Server";
+        } else {
+            zoneInput.style.display = 'none';
+            zoneInput.value = '';
+        }
+    }
+
+    // <script> // Fungsi validasi nembak folder /api/ lu
     async function validateGame() {
         const btn = document.getElementById('btnCheck');
-        const resBox = document.getElementById('resGame');
-        const resText = document.getElementById('gameNickname');
-        
         const game = document.getElementById('gameType').value;
         const id = document.getElementById('gameId').value;
         const zone = document.getElementById('gameZone').value;
@@ -188,46 +197,29 @@
         if (!id) return alert("User ID wajib diisi!");
 
         btn.disabled = true;
-        btn.innerHTML = "PROCESSING...";
-        resBox.classList.add('hidden');
+        btn.innerText = "WAIT...";
 
         try {
-            // Jalur ke folder api lu
             let url = `/api/${game}?id=${id}`;
             if (zone && (game === 'emel' || game === 'mcgg')) url += `&zone=${zone}`;
 
             const response = await fetch(url);
             const data = await response.json();
             
-            // Ambil data nickname & country dari API lu
-            const nickname = data.username || (data.data && data.data.username) || data.nickname;
+            // Ambil nama + negara kalau ada (Khusus MLBB)
+            const nickname = data.username || (data.data && data.data.username);
             const country = data.country || (data.data && data.data.country);
 
             if (nickname) {
-                // LOGIC KHUSUS EMEL: Tampilkan Nama + Negara
-                if (game === 'emel' && country) {
-                    const countryLower = country.toLowerCase();
-                    resText.innerHTML = `
-                        <div class="flex flex-col items-center gap-2">
-                            <img src="https://flagcdn.com/w80/${countryLower}.png" class="w-10 rounded shadow-sm mb-1">
-                            <span>${nickname}</span>
-                            <span class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">${country}</span>
-                        </div>
-                    `;
-                } else {
-                    // Game lain cuma nama aja
-                    resText.innerText = nickname;
-                }
-                
-                resBox.classList.remove('hidden');
+                alert("Account: " + nickname + (country ? " (" + country + ")" : ""));
             } else {
-                alert("ID Gak Ditemukan!");
+                alert("ID Gak Ketemu di Folder API!");
             }
-        } catch (err) {
-            alert("Error nembak API!");
+        } catch (e) {
+            alert("Error Server!");
         } finally {
             btn.disabled = false;
-            btn.innerHTML = "CHECK USERNAME";
+            btn.innerText = "CHECK USERNAME";
         }
     }
 </script>

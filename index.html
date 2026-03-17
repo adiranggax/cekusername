@@ -421,6 +421,8 @@ async function handleTikTokPhoto(url) {
                 await handleTikTokVideo(urlInput);
             } else if (type === 'tiktok_photo') {
                 await handleTikTokPhoto(urlInput);
+            } else if (type === 'instagram') { // <-- TAMBAHKAN INI
+                await handleInstagram(urlInput);
             } else {
                 alert("Fitur segera hadir!");
             }
@@ -464,5 +466,71 @@ async function forceDownload(url, filename) {
     }
 }
 </script>
+    <script>
+        async function handleInstagram(url) {
+    const content = document.getElementById('socialMediaContent');
+    const apiUrl = `https://api.vreden.my.id/api/v1/download/instagram?url=${encodeURIComponent(url)}`;
+    
+    const response = await fetch(apiUrl);
+    const json = await response.json();
+    
+    if (!json.status || !json.result.data) throw new Error("Konten Instagram tidak ditemukan!");
+
+    const mediaList = json.result.data; // Ini array data
+    const username = json.result.profile.username || "Instagram User";
+    const caption = json.result.caption.text || "Instagram Post";
+
+    // 1. Header Judul
+    let html = `
+        <div class="space-y-4 animate__animated animate__fadeIn">
+            <div class="px-2 pt-1 text-center">
+                <p class="text-[10px] text-white font-black uppercase italic tracking-tighter leading-tight break-words">
+                    @${username} - ${caption.substring(0, 60)}...
+                </p>
+            </div>`;
+
+    // 2. Logika Tampilan (Slide vs Single)
+    if (mediaList.length > 1) {
+        // TAMPILAN SLIDE (Carousel)
+        let slidesHtml = mediaList.map((item, i) => `
+            <div class="shrink-0 w-64 snap-center relative">
+                <img src="${item.url}" class="w-full h-auto rounded-[2rem] border-2 border-pink-500/20 shadow-xl">
+                <div class="absolute top-3 right-3 bg-black/70 backdrop-blur-md text-[9px] text-white px-2 py-1 rounded-full font-bold">
+                    ${i + 1}/${mediaList.length}
+                </div>
+                <button onclick="event.stopPropagation(); forceDownload('${item.url}', 'ig_${username}_${i+1}')" 
+                    class="absolute bottom-3 right-3 p-3 bg-pink-600 rounded-2xl shadow-lg active:scale-90 transition-all">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                    </svg>
+                </button>
+            </div>`).join('');
+
+        html += `
+            <div class="flex overflow-x-auto gap-4 pb-4 px-2 hide-scroll snap-x">
+                ${slidesHtml}
+            </div>
+            <p class="text-center text-[9px] text-slate-500 italic">← Geser foto Instagram →</p>`;
+    } else {
+        // TAMPILAN SINGLE (Video atau 1 Foto)
+        const item = mediaList[0];
+        html += `
+            <div class="relative rounded-[2rem] overflow-hidden border-2 border-pink-500/30 bg-black/60 shadow-2xl">
+                ${item.type === 'video' ? `
+                    <video controls class="w-full h-auto block" poster="${item.thumb}">
+                        <source src="${item.url}" type="video/mp4">
+                    </video>` : `
+                    <img src="${item.url}" class="w-full h-auto block">`}
+            </div>
+            <button onclick="forceDownload('${item.url}', 'instagram_${username}')" id="dlBtn"
+                class="w-full py-4 bg-gradient-to-r from-purple-600 to-pink-600 text-center rounded-2xl font-black text-[11px] text-white tracking-widest uppercase shadow-xl active:scale-95">
+                SAVE ${item.type.toUpperCase()}
+            </button>`;
+    }
+
+    html += `</div>`;
+    content.innerHTML = html;
+}
+    </script>
 </body>
 </html>

@@ -49,6 +49,7 @@
             max-width: 500px;
         }
 
+/* Efek Animasi Tab */
         .nav-tab { 
             flex: 1; 
             padding: 12px 5px; 
@@ -59,15 +60,24 @@
             color: #64748b; 
             text-align: center;
             cursor: pointer;
-            transition: 0.3s;
+            /* Animasi transisi halus di sini */
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             border: none;
             background: transparent;
+            position: relative;
+            overflow: hidden;
         }
 
         .nav-tab.active { 
             background: #3b82f6; 
             color: white; 
-            box-shadow: 0 8px 20px rgba(59, 130, 246, 0.3); 
+            box-shadow: 0 8px 20px rgba(59, 130, 246, 0.4);
+            transform: translateY(-2px); /* Efek angkat dikit pas aktif */
+        }
+
+        /* Animasi klik (tekan) */
+        .nav-tab:active {
+            transform: scale(0.92);
         }
     </style>
 </head>

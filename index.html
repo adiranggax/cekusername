@@ -115,6 +115,60 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
+        /* --- PERBAIKAN TAB NAVIGASI (image_20d344.png style) --- */
+        .nav-container {
+            display: flex;
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 1.5rem;
+            padding: 6px;
+            gap: 4px;
+            margin-bottom: 20px;
+        }
+
+        .nav-tab {
+            flex: 1;
+            padding: 12px 10px;
+            border-radius: 1.2rem;
+            font-size: 13px !important; /* Ukuran pas untuk navigasi */
+            font-weight: 800 !important;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #64748b;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            text-align: center;
+            white-space: nowrap;
+            cursor: pointer;
+            border: none;
+            background: transparent;
+        }
+
+        /* Override style aktif untuk Tab */
+        .nav-tab.active {
+            background: #3b82f6 !important;
+            color: white !important;
+            box-shadow: 0 8px 20px rgba(59, 130, 246, 0.3) !important;
+            transform: translateY(0) !important; /* Biar tetap sejajar */
+        }
+
+        /* --- PERBAIKAN GAME CARD TEXT --- */
+        .game-card p {
+            font-size: 11px !important; /* Sedikit lebih besar agar terbaca */
+            margin: 0;
+            line-height: 1.2;
+        }
+
+        /* --- INPUT FIELD FOCUS GLOW --- */
+        .input-field:focus {
+            background: rgba(15, 23, 42, 1);
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.15);
+        }
+
+        /* State pas tombol ditekan */
+        .active-scale {
+            transform: scale(0.95);
+        }
     </style>
 </head>
 <body class="p-4 flex justify-center items-start">
@@ -127,15 +181,15 @@
             <p class="text-slate-500 text-[9px] tracking-[0.5em] uppercase font-bold mt-1">Next-Gen Tools System</p>
         </header>
 
-        <nav class="grid grid-cols-5 p-1 glass rounded-2xl gap-0.5 animate__animated animate__fadeInUp">
-            <button onclick="switchTab('game', this)" class="nav-tab active py-3 rounded-xl text-[7px] font-black uppercase tracking-tighter transition-all">Game</button>
-            <button onclick="switchTab('social', this)" class="nav-tab text-slate-400 py-3 rounded-xl text-[7px] font-black uppercase tracking-tighter transition-all">Download</button>
-            <button onclick="switchTab('creative', this)" class="nav-tab text-slate-400 py-3 rounded-xl text-[7px] font-black uppercase tracking-tighter transition-all">Creative</button>
-            <button onclick="switchTab('streaming', this)" class="nav-tab text-slate-400 py-3 rounded-xl text-[7px] font-black uppercase tracking-tighter transition-all">Streaming</button>
-            <button onclick="switchTab('system', this)" class="nav-tab text-slate-400 py-3 rounded-xl text-[7px] font-black uppercase tracking-tighter transition-all">System</button>
-        </nav>
-
-<section id="game" class="section-content active animate__animated animate__fadeInRight">
+<div class="nav-container mb-6">
+    <button class="nav-tab active" onclick="switchTab('game', this)">Game</button>
+    <button class="nav-tab" onclick="switchTab('download', this)">Download</button>
+    <button class="nav-tab" onclick="switchTab('creative', this)">Creative</button>
+    <button class="nav-tab" onclick="switchTab('streaming', this)">Streaming</button>
+    <button class="nav-tab" onclick="switchTab('system', this)">System</button>
+</div>
+        
+<section id="game" class="section-content active animate__animated animate__fadeIn">
     <div class="glass p-6 rounded-[2.5rem] space-y-6">
         <div class="flex items-center gap-2 text-blue-400 font-extrabold uppercase text-[10px] tracking-[0.2em] px-2">
             <span class="animate-pulse text-sm">🎮</span> ID Validator Pro
@@ -175,7 +229,7 @@
                 <input type="text" id="gameId" placeholder="User ID" 
                     class="input-field flex-1 text-white outline-none">
                 
-                <input type="text" id="gameZone" placeholder="Zone" 
+                <input type="text" id="gameZone" placeholder="Zone ID" 
                     class="input-field w-28 text-white outline-none">
             </div>
             
@@ -307,89 +361,84 @@
         </footer>
     </div>
 <script>
-    // --- 1. GLOBAL UI CONTROLLER ---
+   // --- 1. GLOBAL UI CONTROLLER (Tab Switcher) ---
     const regionNames = new Intl.DisplayNames(['en'], {type: 'region'});
 
     function switchTab(target, btn) {
-        // Sembunyikan semua section
+        // Sembunyikan semua section dengan animasi halus
         document.querySelectorAll('.section-content').forEach(s => {
             s.classList.remove('active', 'animate__fadeInRight');
             s.style.display = 'none';
         });
 
-        // Tampilkan target dengan animasi baru
+        // Tampilkan section target
         const targetEl = document.getElementById(target);
-        targetEl.style.display = 'block';
-        setTimeout(() => targetEl.classList.add('active', 'animate__fadeInRight'), 10);
+        if (targetEl) {
+            targetEl.style.display = 'block';
+            // Delay tipis biar animasinya kerasa
+            setTimeout(() => targetEl.classList.add('active', 'animate__fadeInRight'), 10);
+        }
         
-        // Reset warna tombol nav
+        // Reset tombol navigasi (Style dari image_20d344.png)
         document.querySelectorAll('.nav-tab').forEach(t => {
-            t.classList.remove('active', 'text-white');
-            t.classList.add('text-slate-400');
+            t.classList.remove('active');
         });
 
         // Aktifkan tombol yang diklik
-        btn.classList.add('active', 'text-white');
-        btn.classList.remove('text-slate-400');
+        btn.classList.add('active');
     }
 
-// --- 3. GRID GAME CONTROLLER (Tambahkan Ini) ---
+    // --- 2. GRID GAME CONTROLLER (image_20d365.png Logic) ---
     function setGame(type, el) {
-        // 1. Update nilai hidden input gameType
-        document.getElementById('gameType').value = type;
+        // Simpan tipe ke hidden input
+        const typeInput = document.getElementById('gameType');
+        if (typeInput) typeInput.value = type;
 
-        // 2. Efek Visual: Aktifkan kartu yang diklik
+        // Visual: Update kotak yang dipilih
         document.querySelectorAll('.game-card').forEach(card => {
             card.classList.remove('active-game');
         });
         el.classList.add('active-game');
 
-        // 3. Logic Zone: Sembunyikan/Munculkan otomatis
+        // Logic Zone: Muncul cuma di MLBB (emel) dan Minecraft (mcgg)
         const zoneInput = document.getElementById('gameZone');
-        // Hanya Mobile Legends (emel) dan Minecraft (mcgg) yang butuh Zone
-        if (type === 'emel' || type === 'mcgg') {
-            zoneInput.style.display = 'block';
-            zoneInput.placeholder = (type === 'emel') ? "Zone ID" : "Server";
-        } else {
-            zoneInput.style.display = 'none';
-            zoneInput.value = ''; // Reset isinya kalau disembunyikan
+        if (zoneInput) {
+            if (type === 'emel' || type === 'mcgg') {
+                zoneInput.style.display = 'block';
+                zoneInput.placeholder = (type === 'emel') ? "Zone ID" : "Server";
+            } else {
+                zoneInput.style.display = 'none';
+                zoneInput.value = ''; 
+            }
         }
 
-        // Reset Box hasil kalau ganti game (biar rapi)
-        document.getElementById('resGame').classList.add('hidden');
+        // Sembunyikan hasil lama pas ganti game
+        const resBox = document.getElementById('resGame');
+        if (resBox) resBox.classList.add('hidden');
     }
 
-    // Jalankan setting default pas halaman pertama kali dibuka
-    document.addEventListener('DOMContentLoaded', () => {
-        const defaultGame = document.querySelector('.game-card');
-        if (defaultGame) setGame('emel', defaultGame);
-    });
-
-    // --- REVISI VALIDATE GAME (Update dari punya lu) ---
+    // --- 3. VALIDATE GAME ENGINE ---
     async function validateGame() {
         const btn = document.getElementById('btnCheck');
         const resBox = document.getElementById('resGame');
         const resText = document.getElementById('gameNickname');
         const flagImg = document.getElementById('gameFlag');
         
-        let game = document.getElementById('gameType').value;
+        const game = document.getElementById('gameType').value;
         const id = document.getElementById('gameId').value;
         const zone = document.getElementById('gameZone').value;
 
         if (!id) return alert("User ID wajib diisi!");
 
-        // Mapping nama file API biar sinkron
+        // Mapping file API
         let fileName = game;
-        if (game === 'fcmobile') fileName = 'fcmobile'; 
-        if (game === 'codm') fileName = 'codm';
-
+        
         btn.disabled = true;
-        btn.innerHTML = '<span class="animate-spin inline-block mr-2">↻</span> PROCESSING...';
+        btn.innerHTML = '<span class="animate-spin inline-block mr-2 text-sm">↻</span> PROCESSING...';
         resBox.classList.add('hidden');
         flagImg.classList.add('hidden');
 
         try {
-            // URL endpoint API
             let url = `/api/${fileName}?id=${id}`; 
             if (zone && (game === 'emel' || game === 'mcgg')) url += `&zone=${zone}`;
 
@@ -397,15 +446,12 @@
             if (!response.ok) throw new Error("Server API tidak merespon!");
 
             const data = await response.json();
-            
-            // Handle berbagai format response nickname dari API
             const nickname = data.username || (data.data && data.data.username) || data.nickname;
             const countryCode = data.country || (data.data && data.data.country);
 
             if (nickname) {
                 if (game === 'emel' && countryCode) {
                     const countryLower = countryCode.toLowerCase();
-                    // regionNames harus didefinisikan di awal script (Intl.DisplayNames)
                     const countryFullName = regionNames.of(countryCode.toUpperCase());
                     resText.innerText = `${nickname} - ${countryFullName}`;
                     flagImg.src = `https://flagcdn.com/w80/${countryLower}.png`;
@@ -415,22 +461,30 @@
                 }
                 resBox.classList.remove('hidden');
             } else {
-                alert("Username tidak ditemukan. Cek kembali ID & Zone!");
+                alert("ID Tidak Ditemukan!");
             }
         } catch (error) {
             console.error(error);
-            alert("Gagal Check: " + error.message);
+            alert("Sistem Error: " + error.message);
         } finally {
             btn.disabled = false;
             btn.innerHTML = 'CHECK USERNAME';
         }
-    }    // --- 3. CREATIVE TOOLS HANDLER ---
+    }
+
+    // --- 4. CREATIVE TOOLS & INITIAL LOAD ---
     function handleTool(name) {
         if(name === 'winkai') {
             alert("WinKai AI Engine sedang melakukan handshake dengan server...");
-            // Tambahkan redirect atau logic popup WinKai di sini
+            // Tambahkan redirect ke WinKai tools lu di sini
         }
     }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        // Set MLBB sebagai pilihan awal
+        const defaultGame = document.querySelector('.game-card');
+        if (defaultGame) setGame('emel', defaultGame);
+    });
 </script>
 <script>
     // --- 4. SOCIAL MEDIA CONTROLLER ---

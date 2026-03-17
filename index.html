@@ -11,75 +11,46 @@
         
         body { 
             background: #020617; 
-            color: #f8fafc;
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            min-height: 100vh;
+            color: #f8fafc; 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            min-height: 100vh; 
             overflow-x: hidden;
         }
 
-        /* Glassmorphism Effect */
-        .glass {
-            background: rgba(15, 23, 42, 0.7);
-            backdrop-filter: blur(15px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+        /* Efek Glassmorphism Skylen */
+        .glass { 
+            background: rgba(15, 23, 42, 0.75); 
+            backdrop-filter: blur(16px); 
+            border: 1px solid rgba(255, 255, 255, 0.08); 
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
         }
 
-        /* Navigation Tab Style */
-        .nav-tab {
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-        }
-        .nav-tab.active {
-            background: #3b82f6;
-            color: white;
+        /* Tab Aktif Glow */
+        .nav-tab.active { 
+            background: #3b82f6; 
+            color: white; 
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.5); 
             transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(59, 130, 246, 0.3);
         }
 
-        /* Input Style */
-        .input-field {
-            background: rgba(15, 23, 42, 0.9);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            transition: all 0.3s ease;
-        }
-        .input-field:focus {
-            border-color: #3b82f6;
-            box-shadow: 0 0 15px rgba(59, 130, 246, 0.2);
-            transform: scale(1.01);
-        }
-
-        /* Smooth Animation for Zone Input */
-        #zoneWrapper {
-            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            max-width: 0;
-            opacity: 0;
-            overflow: hidden;
-            pointer-events: none;
-        }
-        #zoneWrapper.show {
-            max-width: 200px;
-            opacity: 1;
-            pointer-events: auto;
-            margin-left: 0.5rem;
-        }
-
-        /* Button Hover */
-        .btn-primary {
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-        .btn-primary:active { transform: scale(0.95); }
-        
         .section-content { display: none; }
         .section-content.active { display: block; }
+        
+        .input-field { 
+            background: rgba(15, 23, 42, 0.9); 
+            border: 1px solid rgba(255, 255, 255, 0.1); 
+            transition: all 0.3s ease;
+        }
+
+        .input-field:focus { border-color: #3b82f6; outline: none; box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2); }
+
+        /* Sembunyikan Scrollbar */
+        .hide-scroll::-webkit-scrollbar { display: none; }
     </style>
 </head>
 <body class="p-4 flex justify-center items-start">
 
     <div class="max-w-md w-full mt-4 space-y-6">
-        
         <header class="text-center animate__animated animate__fadeInDown">
             <h1 class="text-4xl font-extrabold italic tracking-tighter text-blue-500 drop-shadow-lg">
                 SKYLEN<span class="text-white">ULTRA</span>
@@ -87,213 +58,214 @@
             <p class="text-slate-500 text-[9px] tracking-[0.5em] uppercase font-bold mt-1">Next-Gen Tools System</p>
         </header>
 
-        <nav class="grid grid-cols-4 p-1.5 glass rounded-2xl gap-1 animate__animated animate__fadeInUp">
-            <button onclick="switchTab('game', this)" class="nav-tab active py-3 rounded-xl text-[9px] font-black uppercase">Game</button>
-            <button onclick="switchTab('social', this)" class="nav-tab text-slate-400 py-3 rounded-xl text-[9px] font-black uppercase">Social</button>
-            <button onclick="switchTab('cloud', this)" class="nav-tab text-slate-400 py-3 rounded-xl text-[9px] font-black uppercase">Cloud</button>
-            <button onclick="switchTab('stats', this)" class="nav-tab text-slate-400 py-3 rounded-xl text-[9px] font-black uppercase">Stats</button>
+        <nav class="grid grid-cols-5 p-1 glass rounded-2xl gap-0.5 animate__animated animate__fadeInUp">
+            <button onclick="switchTab('game', this)" class="nav-tab active py-3 rounded-xl text-[7px] font-black uppercase tracking-tighter transition-all">Game</button>
+            <button onclick="switchTab('social', this)" class="nav-tab text-slate-400 py-3 rounded-xl text-[7px] font-black uppercase tracking-tighter transition-all">Download</button>
+            <button onclick="switchTab('creative', this)" class="nav-tab text-slate-400 py-3 rounded-xl text-[7px] font-black uppercase tracking-tighter transition-all">Creative</button>
+            <button onclick="switchTab('streaming', this)" class="nav-tab text-slate-400 py-3 rounded-xl text-[7px] font-black uppercase tracking-tighter transition-all">Streaming</button>
+            <button onclick="switchTab('system', this)" class="nav-tab text-slate-400 py-3 rounded-xl text-[7px] font-black uppercase tracking-tighter transition-all">System</button>
         </nav>
 
-        <main class="relative min-h-[400px]">
-            
-            <section id="game" class="section-content active animate__animated animate__fadeInRight">
+        <main id="main-content" class="min-h-[500px]">
+<section id="game" class="section-content active animate__animated animate__fadeInRight">
                 <div class="glass p-7 rounded-[2.5rem] space-y-5">
-                    <div class="flex items-center gap-2 mb-2 text-blue-400 font-bold uppercase text-[11px] tracking-widest">
+                    <div class="flex items-center gap-2 text-blue-400 font-bold uppercase text-[11px] tracking-widest">
                         <span class="animate-pulse">🎮</span> ID Validator
                     </div>
                     
-                    <select id="gameType" class="input-field w-full p-4 rounded-2xl text-sm text-white outline-none cursor-pointer">
+                    <select id="gameType" class="input-field w-full p-4 rounded-2xl text-sm text-white outline-none appearance-none cursor-pointer">
                         <option value="emel">Mobile Legends</option>
                         <option value="epep">Free Fire</option>
                         <option value="pubg">PUBG Mobile</option>
-                        <option value="codm">Call of Duty Mobile</option>
-                        <option value="eafc">EA Sports FC</option>
-                        <option value="mcgg">Magic Chess Go Go</option>
+                        <option value="eafc">EA Sports FC (FCM)</option>
                     </select>
 
-                    <div class="flex items-center">
-                        <input type="text" id="gameId" placeholder="Input User ID" class="input-field flex-1 p-4 rounded-2xl text-sm text-white outline-none">
-                        <div id="zoneWrapper" class="show">
-                            <input type="text" id="gameZone" placeholder="Zone" class="input-field w-full p-4 rounded-2xl text-sm text-white outline-none">
-                        </div>
+                    <div class="flex items-center gap-2">
+                        <input type="text" id="gameId" placeholder="User ID" class="input-field flex-1 p-4 rounded-2xl text-sm text-white outline-none">
+                        <input type="text" id="gameZone" placeholder="Zone" class="input-field w-24 p-4 rounded-2xl text-sm text-white outline-none">
                     </div>
 
-                    <button id="btnCheck" onclick="validateGame()" class="btn-primary w-full py-4 bg-blue-600 hover:bg-blue-500 rounded-2xl font-black text-[11px] tracking-widest shadow-xl shadow-blue-900/40">CHECK USERNAME</button>
+                    <button id="btnCheck" onclick="validateGame()" class="w-full py-4 bg-blue-600 hover:bg-blue-500 rounded-2xl font-black text-[11px] tracking-widest uppercase transition-all active:scale-95 shadow-lg shadow-blue-900/20">
+                        Check Username
+                    </button>
                 </div>
 
-<div id="resGame" class="hidden mt-4 p-6 glass rounded-[2rem] text-center border-blue-500/30 animate__animated animate__bounceIn">
-    <p class="text-[9px] text-slate-500 uppercase font-black tracking-widest mb-2">Validation Success</p>
-    <div class="flex flex-col items-center justify-center gap-2">
-        <img id="gameFlag" src="" class="w-12 h-auto rounded shadow-lg hidden mb-1">
-        <h3 id="gameNickname" class="text-white font-black text-xl tracking-tighter italic uppercase"></h3>
-    </div>
-</div>
+                <div id="resGame" class="hidden mt-4 p-6 glass rounded-[2.2rem] text-center border-blue-500/20 animate__animated animate__bounceIn">
+                    <p class="text-[9px] text-slate-500 uppercase font-black tracking-widest mb-2">Account Found</p>
+                    <div class="flex flex-col items-center gap-3">
+                        <img id="gameFlag" src="" class="w-10 rounded-sm shadow-sm hidden">
+                        <h3 id="gameNickname" class="text-white font-black text-xl italic uppercase tracking-tight"></h3>
+                    </div>
+                </div>
             </section>
 
-<section id="social" class="section-content animate__animated animate__fadeInRight">
-    <div class="glass p-7 rounded-[2.5rem] space-y-5">
-        <div class="flex items-center gap-2 text-emerald-400 font-bold uppercase text-[11px] tracking-widest">
-            <span>📲</span> Downloader Hub
-        </div>
-
-        <select id="socialType" class="input-field w-full p-4 rounded-2xl text-sm text-white outline-none cursor-pointer bg-slate-900/50 border border-white/5">
-            <option value="tiktok_video">TikTok Video (No WM)</option>
-            <option value="tiktok_photo">TikTok Photo (Slide)</option>
-            <option value="instagram">Instagram</option>
-            <option value="facebook">Facebook</option>
-            <option value="twitter">Twitter / X (HD)</option>
-            <option value="yt_mp4">YouTube Video</option>
-            <option value="yt_mp3">YouTube Audio</option>
-            <option value="videy">Videy.co</option>
-        </select>
-
-        <input type="text" id="socialUrl" placeholder="Paste link media..." class="input-field w-full p-4 rounded-2xl text-sm text-white outline-none bg-slate-900/50 border border-white/5">
-
-        <button id="btnSocial" onclick="downloadSocial()" class="w-full py-4 bg-emerald-600 hover:bg-emerald-500 rounded-2xl font-black text-[11px] text-white tracking-widest shadow-xl shadow-emerald-900/40 transition-all active:scale-95 uppercase">
-            START DOWNLOAD
-        </button>
-
-        <div id="resSocial" class="hidden mt-4 animate__animated animate__fadeIn">
-            <div id="socialMediaContent" class="p-4 glass rounded-[2rem] border border-emerald-500/20">
-                </div>
-        </div>
-    </div>
-</section>
-
-            <section id="cloud" class="section-content animate__animated animate__fadeInRight">
+            <section id="social" class="section-content animate__animated animate__fadeInRight">
                 <div class="glass p-7 rounded-[2.5rem] space-y-5">
+                    <div class="flex items-center gap-2 text-emerald-400 font-bold uppercase text-[11px] tracking-widest">
+                        <span>📲</span> Media Downloader
+                    </div>
+
+                    <select id="socialType" class="input-field w-full p-4 rounded-2xl text-sm text-white outline-none cursor-pointer">
+                        <option value="tiktok_video">TikTok Video</option>
+                        <option value="tiktok_photo">TikTok Photo Slide</option>
+                        <option value="instagram">Instagram (Post/Reels)</option>
+                        <option value="facebook">Facebook Video</option>
+                        <option value="twitter">Twitter / X</option>
+                        <option value="yt_mp4">YouTube Video</option>
+                        <option value="yt_mp3">YouTube Audio (MP3)</option>
+                        <option value="videy">Videy.co Direct</option>
+                        <option value="anime">Anime </option>
+                        <option value="terabox">Terabox </option>
+                        <option value="gdrive">Google Drive </option>
+                        <option value="mediafire">MediaFire </option>
+                    </select>
+
+                    <input type="text" id="socialUrl" placeholder="Paste link media di sini..." class="input-field w-full p-4 rounded-2xl text-sm text-white outline-none">
+                    
+                    <button id="btnSocial" onclick="downloadSocial()" class="w-full py-4 bg-emerald-600 hover:bg-emerald-500 rounded-2xl font-black text-[11px] tracking-widest uppercase transition-all active:scale-95 shadow-lg shadow-emerald-900/20">
+                        Start Extract
+                    </button>
+
+                    <div id="resSocial" class="hidden mt-2 pt-4 border-t border-white/5">
+                        <div id="socialMediaContent" class="space-y-4">
+                            </div>
+                    </div>
+                </div>
+            </section>
+            <section id="creative" class="section-content animate__animated animate__fadeInRight">
+                <div class="glass p-7 rounded-[2.5rem] space-y-6">
                     <div class="flex items-center gap-2 text-purple-400 font-bold uppercase text-[11px] tracking-widest">
-                        <span>☁️</span> Direct Bypass
+                        <span>✨</span> Creative Studio
                     </div>
-                    <select class="input-field w-full p-4 rounded-2xl text-sm text-white outline-none">
-                        <option value="terabox">Terabox</option>
-                        <option value="gdrive">Google Drive</option>
-                        <option value="mfire">Mediafire</option>
-                    </select>
-                    <input type="text" placeholder="Paste file url..." class="input-field w-full p-4 rounded-2xl text-sm text-white outline-none">
-                    <button class="w-full py-4 bg-purple-600 rounded-2xl font-black text-[11px] tracking-widest shadow-xl shadow-purple-900/40">GET LINK</button>
-                </div>
-            </section>
-
-            <section id="stats" class="section-content animate__animated animate__fadeInRight">
-                <div class="glass p-7 rounded-[2.5rem] space-y-5">
-                    <div class="flex items-center gap-2 text-amber-500 font-bold uppercase text-[11px] tracking-widest">
-                        <span>📊</span> Info Hub
-                    </div>
-                    <div class="space-y-3">
-                        <label class="text-[9px] font-black text-slate-500 uppercase ml-1">GSMArena Search</label>
-                        <div class="flex gap-2">
-                            <input type="text" placeholder="Cari Gadget..." class="input-field flex-1 p-3.5 rounded-xl text-sm text-white outline-none">
-                            <button class="px-5 bg-amber-600 rounded-xl font-bold active:scale-90 transition-all">GO</button>
+                    
+                    <div class="p-5 bg-gradient-to-br from-purple-900/40 to-slate-900 border border-purple-500/30 rounded-[2rem] flex items-center justify-between group active:scale-95 transition-all cursor-pointer" onclick="handleTool('winkai')">
+                        <div class="space-y-1">
+                            <h3 class="text-white font-black text-xs italic uppercase tracking-tighter">WinKai Engine</h3>
+                            <p class="text-[8px] text-purple-300/60 font-bold uppercase">AI Graphics & Media Processor</p>
+                        </div>
+                        <div class="w-10 h-10 bg-purple-600/20 rounded-full flex items-center justify-center border border-purple-500/40">
+                            <span class="text-lg">💎</span>
                         </div>
                     </div>
-                    <div class="grid grid-cols-2 gap-3 pt-2">
-                        <button class="p-4 bg-slate-900/80 border border-white/5 rounded-2xl text-center hover:border-amber-500 transition-all group">
-                            <p class="text-[8px] text-slate-500 group-hover:text-amber-500 uppercase font-black">MPL ID</p>
-                            <p class="text-[10px] font-bold">SCHEDULE</p>
-                        </button>
-                        <button class="p-4 bg-slate-900/80 border border-white/5 rounded-2xl text-center hover:border-amber-500 transition-all group">
-                            <p class="text-[8px] text-slate-500 group-hover:text-amber-500 uppercase font-black">MPL ID</p>
-                            <p class="text-[10px] font-bold">RANKING</p>
+
+                    <div class="grid grid-cols-2 gap-3">
+                        <div class="p-4 bg-slate-900/80 border border-white/5 rounded-2xl text-center active:scale-95 transition-all cursor-pointer">
+                            <span class="block text-lg mb-1">📸</span>
+                            <p class="text-[8px] text-white font-black uppercase">Upscaler</p>
+                        </div>
+                        <div class="p-4 bg-slate-900/80 border border-white/5 rounded-2xl text-center active:scale-95 transition-all cursor-pointer">
+                            <span class="block text-lg mb-1">✂️</span>
+                            <p class="text-[8px] text-white font-black uppercase">BG Remover</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="streaming" class="section-content animate__animated animate__fadeInRight">
+                <div class="glass p-7 rounded-[2.5rem] space-y-5">
+                    <div class="flex items-center gap-2 text-yellow-500 font-bold uppercase text-[11px] tracking-widest">
+                        <span>🎬</span> Streaming Hub
+                    </div>
+
+                    <div class="p-6 bg-yellow-500/5 rounded-[2.2rem] border border-yellow-500/20 relative overflow-hidden">
+                        <div class="absolute -right-4 -top-4 w-20 h-20 bg-yellow-500/10 rounded-full blur-2xl"></div>
+                        <h3 class="text-yellow-500 font-black text-sm italic mb-1 uppercase tracking-tighter">Viu Premium Access</h3>
+                        <p class="text-[9px] text-slate-400 font-medium leading-relaxed mb-4">Streaming film & drama tanpa iklan. Direct session management aktif.</p>
+                        
+                        <button class="w-full py-3 bg-yellow-600 hover:bg-yellow-500 rounded-xl font-black text-[9px] text-white uppercase tracking-widest shadow-lg shadow-yellow-900/40 transition-all active:scale-95">
+                            Open Viu Dashboard
                         </button>
                     </div>
                 </div>
             </section>
 
-        </main>
+            <section id="system" class="section-content animate__animated animate__fadeInRight">
+                <div class="glass p-7 rounded-[2.5rem] space-y-5">
+                    <div class="flex justify-center gap-2 text-blue-400 font-bold uppercase text-[11px] tracking-widest">
+                        <span>⚙️</span> System Monitor
+                    </div>
 
-        <footer class="text-center animate__animated animate__fadeInUp animate__delay-1s">
+                    <div class="grid grid-cols-1 gap-4">
+                        <div class="p-6 bg-slate-900/80 rounded-[2rem] border border-white/5 text-center">
+                            <p class="text-[9px] text-slate-500 font-black uppercase tracking-[0.2em] mb-3">API Quota Usage</p>
+                            <div class="relative h-2 w-full bg-slate-800 rounded-full overflow-hidden mb-3">
+                                <div class="absolute top-0 left-0 h-full bg-blue-500 w-[78%]"></div>
+                            </div>
+                            <div class="text-2xl text-white font-black italic tracking-tighter">78<span class="text-slate-600 text-[10px] not-italic ml-1">/ 100 REQ</span></div>
+                        </div>
+
+                        <div class="flex gap-3">
+                            <div class="flex-1 p-4 bg-emerald-500/5 border border-emerald-500/20 rounded-2xl text-center">
+                                <p class="text-[8px] text-emerald-500 font-bold uppercase mb-1">Server Status</p>
+                                <p class="text-[10px] text-white font-black">ONLINE</p>
+                            </div>
+                            <div class="flex-1 p-4 bg-blue-500/5 border border-blue-500/20 rounded-2xl text-center">
+                                <p class="text-[8px] text-blue-400 font-bold uppercase mb-1">Version</p>
+                                <p class="text-[10px] text-white font-black">U-PRO 2.6</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main> <footer class="text-center animate__animated animate__fadeInUp pb-6">
             <p class="text-slate-600 text-[9px] font-bold tracking-[0.4em] uppercase">© 2026 SKYLEN ULTRA ECOSYSTEM</p>
         </footer>
-
     </div>
-
-    <script>
-        // Smooth Tab Switcher
-        function switchTab(target, btn) {
-            // Animasi Keluar
-            const current = document.querySelector('.section-content.active');
-            current.classList.replace('animate__fadeInRight', 'animate__fadeOutLeft');
-            
-            setTimeout(() => {
-                // Sembunyikan semua
-                document.querySelectorAll('.section-content').forEach(s => {
-                    s.classList.remove('active', 'animate__fadeOutLeft', 'animate__fadeInRight');
-                });
-                document.querySelectorAll('.nav-tab').forEach(t => {
-                    t.classList.remove('active', 'text-white');
-                    t.classList.add('text-slate-400');
-                });
-
-                // Tampilkan target dengan animasi masuk
-                const targetSec = document.getElementById(target);
-                targetSec.classList.add('active', 'animate__fadeInRight');
-                btn.classList.add('active', 'text-white');
-                btn.classList.remove('text-slate-400');
-            }, 200);
-        }
-
-        // Logic Animasi Zone ID (Smooth Slide)
-        document.getElementById('gameType').addEventListener('change', function() {
-            const wrapper = document.getElementById('zoneWrapper');
-            const isML = ['emel', 'mcgg'].includes(this.value);
-            
-            if (isML) {
-                wrapper.classList.add('show');
-            } else {
-                wrapper.classList.remove('show');
-            }
-        });
-
-        // Dummy Validate Function (Next Step: Masukkan API kamu di sini)
-        function validateGame() {
-            const btn = document.getElementById('btnCheck');
-            const res = document.getElementById('resGame');
-            btn.innerHTML = '<span class="animate-spin inline-block mr-2">↻</span> PLEASE WAIT...';
-            
-            // Contoh munculkan hasil
-            setTimeout(() => {
-                btn.innerHTML = 'CHECK USERNAME';
-                res.classList.remove('hidden');
-            }, 1000);
-        }
-    </script>
 <script>
+    // --- 1. GLOBAL UI CONTROLLER ---
     const regionNames = new Intl.DisplayNames(['en'], {type: 'region'});
 
+    function switchTab(target, btn) {
+        // Sembunyikan semua section
+        document.querySelectorAll('.section-content').forEach(s => {
+            s.classList.remove('active', 'animate__fadeInRight');
+            s.style.display = 'none';
+        });
+
+        // Tampilkan target dengan animasi baru
+        const targetEl = document.getElementById(target);
+        targetEl.style.display = 'block';
+        setTimeout(() => targetEl.classList.add('active', 'animate__fadeInRight'), 10);
+        
+        // Reset warna tombol nav
+        document.querySelectorAll('.nav-tab').forEach(t => {
+            t.classList.remove('active', 'text-white');
+            t.classList.add('text-slate-400');
+        });
+
+        // Aktifkan tombol yang diklik
+        btn.classList.add('active', 'text-white');
+        btn.classList.remove('text-slate-400');
+    }
+
+    // --- 2. GAME VALIDATOR LOGIC ---
     async function validateGame() {
         const btn = document.getElementById('btnCheck');
         const resBox = document.getElementById('resGame');
         const resText = document.getElementById('gameNickname');
         const flagImg = document.getElementById('gameFlag');
         
-        let game = document.getElementById('gameType').value; // Ambil value: emel, eafc, dll
+        let game = document.getElementById('gameType').value;
         const id = document.getElementById('gameId').value;
         const zone = document.getElementById('gameZone').value;
 
         if (!id) return alert("User ID wajib diisi!");
 
-        // --- LOGIKA MAPPING NAMA FILE ---
-        // Jika pilih eafc, arahkan ke file fcmobile
-        let fileName = game;
-        if (game === 'eafc') fileName = 'fcmobile'; 
-        // --------------------------------
-
+        // Mapping file API khusus EA Sports FC
+        let fileName = (game === 'eafc') ? 'fcmobile' : game;
+        
         btn.disabled = true;
         btn.innerHTML = '<span class="animate-spin inline-block mr-2">↻</span> PROCESSING...';
         resBox.classList.add('hidden');
         flagImg.classList.add('hidden');
 
         try {
-            // Tembak ke API lokal dengan nama file yang benar
-            // Tambahkan .js jika server kamu mewajibkan ekstensi di URL
+            // Tembak ke endpoint API lokal kamu
             let url = `/api/${fileName}?id=${id}`; 
-            
             if (zone && ['emel', 'mcgg'].includes(game)) url += `&zone=${zone}`;
 
             const response = await fetch(url);
-            
-            if (!response.ok) throw new Error("File API tidak ditemukan!");
+            if (!response.ok) throw new Error("Server API tidak merespon!");
 
             const data = await response.json();
             const nickname = data.username || (data.data && data.data.username);
@@ -311,36 +283,159 @@
                 }
                 resBox.classList.remove('hidden');
             } else {
-                alert("Username tidak ditemukan.");
+                alert("Username tidak ditemukan. Cek kembali ID & Zone!");
             }
-
         } catch (error) {
             console.error(error);
-            alert("Error: " + error.message);
+            alert("Sistem Error: " + error.message);
         } finally {
             btn.disabled = false;
             btn.innerHTML = 'CHECK USERNAME';
         }
     }
+
+    // --- 3. CREATIVE TOOLS HANDLER ---
+    function handleTool(name) {
+        if(name === 'winkai') {
+            alert("WinKai AI Engine sedang melakukan handshake dengan server...");
+            // Tambahkan redirect atau logic popup WinKai di sini
+        }
+    }
 </script>
 <script>
+    // --- 4. SOCIAL MEDIA CONTROLLER ---
+    async function downloadSocial() {
+        const btn = document.getElementById('btnSocial');
+        const type = document.getElementById('socialType').value;
+        const urlInput = document.getElementById('socialUrl').value;
+        const resBox = document.getElementById('resSocial');
+        const content = document.getElementById('socialMediaContent');
+
+        if (!urlInput) return alert("Linknya mana Bos?");
+
+        btn.disabled = true;
+        btn.innerHTML = '<span class="animate-spin inline-block mr-2">↻</span> EXTRACTING...';
+        resBox.classList.add('hidden');
+        content.innerHTML = '<p class="text-[10px] text-center text-slate-500 animate-pulse">Sedang mengambil data dari server...</p>';
+
+        try {
+            if (type === 'tiktok_video') await handleTikTokVideo(urlInput);
+            else if (type === 'tiktok_photo') await handleTikTokPhoto(urlInput);
+            else if (type === 'instagram') await handleInstagram(urlInput);
+            else if (type === 'facebook') await handleFacebook(urlInput);
+            else if (type === 'twitter') await handleTwitter(urlInput);
+            else if (type === 'yt_mp4') await handleYouTubeMP4(urlInput);
+            else if (type === 'yt_mp3') await handleYouTubeMP3(urlInput);
+            else if (type === 'videy') await handleVidey(urlInput);
+            else if (type === 'anime') await handleAnime(urlInput);
+            else if (type === 'terabox') await handleTerabox(urlInput);
+            else if (type === 'gdrive') await handleGDrive(urlInput);
+            else if (type === 'mediafire') await handleMediafire(urlInput);
+            
+            resBox.classList.remove('hidden');
+        } catch (err) {
+            alert("Error: " + err.message);
+        } finally {
+            btn.disabled = false;
+            btn.innerHTML = 'START EXTRACT';
+        }
+    }
+
+    // --- 5. INDIVIDUAL HANDLERS ---
     async function handleTikTokVideo(url) {
         const content = document.getElementById('socialMediaContent');
         const response = await fetch(`https://api.skylen.my.id/api/tiktok?url=${encodeURIComponent(url)}`);
         const json = await response.json();
         const data = json.data?.response;
-
         if (!data) throw new Error("Video tidak ditemukan!");
+        const dlUrl = data.dl || data.video?.no_watermark;
+        content.innerHTML = `
+            <div class="space-y-4 animate__animated animate__fadeIn">
+                <p class="text-[10px] text-white font-black uppercase italic tracking-tighter text-center">${data.title || 'TikTok Video'}</p>
+                <div class="relative rounded-[2rem] overflow-hidden border-2 border-emerald-500/30 bg-black/60 shadow-2xl">
+                    <video controls class="w-full h-auto block" poster="${data.cover}"><source src="${dlUrl}" type="video/mp4"></video>
+                </div>
+                <button onclick="forceDownload('${dlUrl}', 'tiktok_skylen.mp4')" class="w-full py-4 bg-emerald-600 rounded-2xl font-black text-[11px] text-white uppercase shadow-xl active:scale-95">SAVE VIDEO (NO WM)</button>
+            </div>`;
+    }
+
+    async function handleInstagram(url) {
+        const content = document.getElementById('socialMediaContent');
+        const response = await fetch(`https://api.vreden.my.id/api/v1/download/instagram?url=${encodeURIComponent(url)}`);
+        const json = await response.json();
+        if (!json.status || !json.result.data) throw new Error("Konten IG tidak ditemukan!");
+        const item = json.result.data[0];
+        content.innerHTML = `
+            <div class="space-y-4 animate__animated animate__fadeIn">
+                <div class="relative rounded-[2rem] overflow-hidden border-2 border-pink-500/30 bg-black/60 shadow-2xl">
+                    ${item.type === 'video' ? `<video controls class="w-full h-auto block"><source src="${item.url}"></video>` : `<img src="${item.url}" class="w-full h-auto block">`}
+                </div>
+                <button onclick="forceDownload('${item.url}', 'ig_skylen')" class="w-full py-4 bg-gradient-to-r from-purple-600 to-pink-600 rounded-2xl font-black text-[11px] text-white uppercase shadow-xl active:scale-95">SAVE ${item.type.toUpperCase()}</button>
+            </div>`;
+    }
+
+    async function handleTwitter(url) {
+        const content = document.getElementById('socialMediaContent');
+        const response = await fetch(`https://host.optikl.ink/download/x?url=${encodeURIComponent(url)}`);
+        const data = await response.json();
+        const hasVideo = data.downloads.videos && data.downloads.videos.length > 0;
+        const dlUrl = hasVideo ? data.downloads.videos[0].url : data.downloads.photo.url;
+        content.innerHTML = `
+            <div class="space-y-4 animate__animated animate__fadeIn">
+                <div class="relative rounded-[2rem] overflow-hidden border-2 border-blue-500/30 bg-black/60 shadow-2xl">
+                    ${hasVideo ? `<video controls class="w-full h-auto block"><source src="${dlUrl}"></video>` : `<img src="${dlUrl}" class="w-full h-auto block">`}
+                </div>
+                <button onclick="forceDownload('${dlUrl}', 'x_skylen')" class="w-full py-4 bg-blue-600 rounded-2xl font-black text-[11px] text-white uppercase shadow-xl active:scale-95">SAVE ${hasVideo ? 'VIDEO' : 'PHOTO'}</button>
+            </div>`;
+    }
+
+    async function handleVidey(url) {
+        const content = document.getElementById('socialMediaContent');
+        let videoId = url.includes("id=") ? url.split("id=")[1].split("&")[0] : url.split("/").pop().replace(".mp4", "");
+        if (!videoId) throw new Error("ID Videy tidak valid!");
+        const cdnUrl = `https://cdn2.videy.co/${videoId}.mp4`;
+        content.innerHTML = `
+            <div class="space-y-4 animate__animated animate__fadeIn text-center">
+                <div class="p-6 rounded-[2rem] border-2 border-teal-500/30 bg-black/40 shadow-2xl">
+                    <div class="w-12 h-12 bg-teal-600 rounded-full flex items-center justify-center mx-auto mb-3">💎</div>
+                    <p class="text-[9px] text-slate-400 font-bold uppercase tracking-widest">Bypass Security Check Success</p>
+                </div>
+                <button onclick="forceDownload('${cdnUrl}', 'videy_${videoId}.mp4')" class="w-full py-4 bg-teal-600 rounded-2xl font-black text-[11px] text-white uppercase shadow-xl active:scale-95">DOWNLOAD VIDEO SEKARANG</button>
+            </div>`;
+    }
+
+    // --- 6. CORE DOWNLOADER SYSTEM ---
+    async function forceDownload(url, filename) {
+        const btn = document.getElementById('dlBtn');
+        const proxyUrl = `/api/download?url=${encodeURIComponent(url)}&name=${encodeURIComponent(filename)}`;
+        
+        try {
+            const a = document.createElement('a');
+            a.href = proxyUrl;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        } catch (e) {
+            window.location.href = proxyUrl;
+        }
+    }
+</script>
+<script>
+    // --- HANDLER: TIKTOK (VIDEO & PHOTO SLIDE) ---
+    async function handleTikTokVideo(url) {
+        const content = document.getElementById('socialMediaContent');
+        const response = await fetch(`https://api.skylen.my.id/api/tiktok?url=${encodeURIComponent(url)}`);
+        const json = await response.json();
+        const data = json.data?.response;
+        if (!data) throw new Error("Video TikTok tidak ditemukan!");
 
         const videoUrl = data.dl || data.video?.no_watermark || data.dl_hd;
-        const title = data.title || "TikTok Video";
-
-        // UI Rapi: Judul tidak kepotong, pakai break-words
         content.innerHTML = `
             <div class="space-y-4 animate__animated animate__fadeIn">
                 <div class="px-2 pt-1 text-center">
                     <p class="text-[10px] text-white font-black uppercase italic tracking-tighter leading-tight break-words">
-                        ${title}
+                        ${data.title || "TikTok Video"}
                     </p>
                 </div>
                 <div class="relative rounded-[2rem] overflow-hidden border-2 border-emerald-500/30 bg-black/60 shadow-2xl">
@@ -354,197 +449,77 @@
                 </button>
             </div>`;
     }
-</script>
-<script>
-async function handleTikTokPhoto(url) {
+
+    async function handleTikTokPhoto(url) {
         const content = document.getElementById('socialMediaContent');
-        // Pakai API V2 khusus slide
         const response = await fetch(`https://api.skylen.my.id/api/tiktok/v2?url=${encodeURIComponent(url)}`);
         const json = await response.json();
-        
-        // Cek struktur data asli dari API
         const data = json.data?.response;
-        // Pastikan kita ambil array gambarnya dengan benar
         const slides = data?.images || data?.slides || [];
 
         if (slides.length === 0) throw new Error("Ini bukan konten foto/slide Bos!");
 
-        // Perbaikan Loop: Kita pastikan ambil link stringnya
         let imgHtml = slides.map((img, i) => {
-            // Jika img adalah object, ambil propertinya. Jika string, pakai langsung.
             const imgSrc = (typeof img === 'object') ? (img.url || img.dl || img.link) : img;
-            
             return `
                 <div class="shrink-0 w-64 snap-center relative">
                     <img src="${imgSrc}" class="w-full h-auto rounded-2xl border border-white/10 shadow-xl" loading="lazy">
                     <div class="absolute top-2 right-2 bg-black/60 backdrop-blur-md text-[8px] text-white px-2 py-1 rounded-lg font-bold">#${i+1}</div>
-                    
-<button 
-    onclick="event.stopPropagation(); forceDownload('${imgSrc}', 'tiktok_photo_${i+1}')" 
-    class="absolute bottom-2 right-2 p-3 bg-emerald-600/90 hover:bg-emerald-500 rounded-2xl shadow-lg active:scale-90 transition-all z-10">
-    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-    </svg>
-</button>                </div>`;
+                    <button onclick="event.stopPropagation(); forceDownload('${imgSrc}', 'tiktok_photo_${i+1}')" 
+                        class="absolute bottom-2 right-2 p-3 bg-emerald-600/90 hover:bg-emerald-500 rounded-2xl shadow-lg active:scale-90 transition-all z-10">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                        </svg>
+                    </button>
+                </div>`;
         }).join('');
             
         content.innerHTML = `
             <div class="space-y-4 animate__animated animate__fadeIn">
                 <div class="px-2 pt-1 text-center">
-                    <p class="text-[10px] text-emerald-400 font-black uppercase tracking-widest leading-tight">
-                        📸 TikTok Photo Slide (${slides.length})
-                    </p>
+                    <p class="text-[10px] text-emerald-400 font-black uppercase tracking-widest">📸 TikTok Photo Slide (${slides.length})</p>
                 </div>
-                
-                <div class="flex overflow-x-auto gap-3 pb-4 px-2 hide-scroll snap-x">
-                    ${imgHtml}
-                </div>
-                
+                <div class="flex overflow-x-auto gap-3 pb-4 px-2 hide-scroll snap-x">${imgHtml}</div>
                 <p class="text-center text-[9px] text-slate-500 italic mt-1">← Geser untuk lihat semua foto →</p>
             </div>`;
     }
-</script>
-<script>
-async function downloadSocial() {
-    const btn = document.getElementById('btnSocial');
-    const type = document.getElementById('socialType').value;
-    const urlInput = document.getElementById('socialUrl').value;
-    const resBox = document.getElementById('resSocial');
 
-    if (!urlInput) return alert("Linknya mana Bos?");
+    // --- HANDLER: INSTAGRAM (POST/REELS/SLIDE) ---
+    async function handleInstagram(url) {
+        const content = document.getElementById('socialMediaContent');
+        const response = await fetch(`https://api.vreden.my.id/api/v1/download/instagram?url=${encodeURIComponent(url)}`);
+        const json = await response.json();
+        if (!json.status || !json.result.data) throw new Error("Konten Instagram tidak ditemukan!");
 
-    btn.disabled = true;
-    btn.innerHTML = 'LOADING...';
-    resBox.classList.add('hidden');
-
-try {
-        if (type === 'tiktok_video') {
-            await handleTikTokVideo(urlInput);
-        } else if (type === 'tiktok_photo') {
-            await handleTikTokPhoto(urlInput);
-        } else if (type === 'instagram') {
-            await handleInstagram(urlInput);
-        } else if (type === 'facebook') {
-            await handleFacebook(urlInput);
-        } else if (type === 'yt_mp4') { // Pintu khusus MP4
-            await handleYouTubeMP4(urlInput);
-        } else if (type === 'twitter') { // <--- TAMBAHKAN INI
-            await handleTwitter(urlInput);
-        } else if (type === 'videy') { // <--- TAMBAHKAN INI
-            await handleVidey(urlInput);
-        } else if (type === 'yt_mp3') { // Pintu khusus MP3
-            await handleYouTubeMP3(urlInput);
-        } else {
-            alert("Fitur segera hadir!");
-        }
-        resBox.classList.remove('hidden');
-    } catch (err) {
-        console.error(err);
-        alert("Error: " + err.message);
-    } finally {
-        btn.disabled = false;
-        btn.innerHTML = 'START DOWNLOAD';
-    }
-}
-
-    // FUNGSI FORCE DOWNLOAD (VERSI HP STABLE)
-async function forceDownload(url, filename) {
-    // Cari tombolnya, tapi jangan dipaksa kalau gak ada
-    const btn = document.getElementById('dlBtn');
-    const oldText = btn ? btn.innerText : "";
-
-    if (btn) btn.innerText = "WAIT...";
-
-    // Arahkan ke Proxy Vercel
-    const proxyUrl = `/api/download?url=${encodeURIComponent(url)}&name=${encodeURIComponent(filename)}`;
-
-    try {
-        const a = document.createElement('a');
-        a.href = proxyUrl;
-        a.download = filename;
-        document.body.appendChild(a);
-        a.click();
-        
-        setTimeout(() => {
-            document.body.removeChild(a);
-            if (btn) btn.innerText = "SUCCESS!";
-        }, 1000);
-    } catch (e) {
-        window.location.href = proxyUrl;
-    } finally {
-        if (btn) {
-            setTimeout(() => { btn.innerText = oldText; }, 2000);
-        }
-    }
-}
-</script>
-    <script>
-        async function handleInstagram(url) {
-    const content = document.getElementById('socialMediaContent');
-    const apiUrl = `https://api.vreden.my.id/api/v1/download/instagram?url=${encodeURIComponent(url)}`;
-    
-    const response = await fetch(apiUrl);
-    const json = await response.json();
-    
-    if (!json.status || !json.result.data) throw new Error("Konten Instagram tidak ditemukan!");
-
-    const mediaList = json.result.data; // Ini array data
-    const username = json.result.profile.username || "Instagram User";
-    const caption = json.result.caption.text || "Instagram Post";
-
-    // 1. Header Judul
-    let html = `
-        <div class="space-y-4 animate__animated animate__fadeIn">
+        const mediaList = json.result.data;
+        const username = json.result.profile.username || "User";
+        let html = `<div class="space-y-4 animate__animated animate__fadeIn">
             <div class="px-2 pt-1 text-center">
-                <p class="text-[10px] text-white font-black uppercase italic tracking-tighter leading-tight break-words">
-                    @${username} - ${caption.substring(0, 60)}...
-                </p>
+                <p class="text-[10px] text-white font-black uppercase italic tracking-tighter">@${username}</p>
             </div>`;
 
-    // 2. Logika Tampilan (Slide vs Single)
-    if (mediaList.length > 1) {
-        // TAMPILAN SLIDE (Carousel)
-        let slidesHtml = mediaList.map((item, i) => `
-            <div class="shrink-0 w-64 snap-center relative">
-                <img src="${item.url}" class="w-full h-auto rounded-[2rem] border-2 border-pink-500/20 shadow-xl">
-                <div class="absolute top-3 right-3 bg-black/70 backdrop-blur-md text-[9px] text-white px-2 py-1 rounded-full font-bold">
-                    ${i + 1}/${mediaList.length}
-                </div>
-                <button onclick="event.stopPropagation(); forceDownload('${item.url}', 'ig_${username}_${i+1}')" 
-                    class="absolute bottom-3 right-3 p-3 bg-pink-600 rounded-2xl shadow-lg active:scale-90 transition-all">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                    </svg>
-                </button>
-            </div>`).join('');
-
-        html += `
-            <div class="flex overflow-x-auto gap-4 pb-4 px-2 hide-scroll snap-x">
-                ${slidesHtml}
+        if (mediaList.length > 1) {
+            let slidesHtml = mediaList.map((item, i) => `
+                <div class="shrink-0 w-64 snap-center relative">
+                    <img src="${item.url}" class="w-full h-auto rounded-[2rem] border-2 border-pink-500/20">
+                    <button onclick="event.stopPropagation(); forceDownload('${item.url}', 'ig_${username}_${i+1}')" 
+                        class="absolute bottom-3 right-3 p-3 bg-pink-600 rounded-2xl shadow-lg active:scale-90">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
+                    </button>
+                </div>`).join('');
+            html += `<div class="flex overflow-x-auto gap-4 pb-4 px-2 hide-scroll snap-x">${slidesHtml}</div>`;
+        } else {
+            const item = mediaList[0];
+            html += `<div class="relative rounded-[2rem] overflow-hidden border-2 border-pink-500/30">
+                ${item.type === 'video' ? `<video controls class="w-full h-auto block" poster="${item.thumb}"><source src="${item.url}"></video>` : `<img src="${item.url}" class="w-full h-auto block">`}
             </div>
-            <p class="text-center text-[9px] text-slate-500 italic">← Geser foto Instagram →</p>`;
-    } else {
-        // TAMPILAN SINGLE (Video atau 1 Foto)
-        const item = mediaList[0];
-        html += `
-            <div class="relative rounded-[2rem] overflow-hidden border-2 border-pink-500/30 bg-black/60 shadow-2xl">
-                ${item.type === 'video' ? `
-                    <video controls class="w-full h-auto block" poster="${item.thumb}">
-                        <source src="${item.url}" type="video/mp4">
-                    </video>` : `
-                    <img src="${item.url}" class="w-full h-auto block">`}
-            </div>
-            <button onclick="forceDownload('${item.url}', 'instagram_${username}')" id="dlBtn"
-                class="w-full py-4 bg-gradient-to-r from-purple-600 to-pink-600 text-center rounded-2xl font-black text-[11px] text-white tracking-widest uppercase shadow-xl active:scale-95">
-                SAVE ${item.type.toUpperCase()}
-            </button>`;
+            <button onclick="forceDownload('${item.url}', 'ig_${username}')" class="w-full py-4 bg-gradient-to-r from-purple-600 to-pink-600 rounded-2xl font-black text-[11px] text-white uppercase tracking-widest shadow-xl">SAVE ${item.type.toUpperCase()}</button>`;
+        }
+        content.innerHTML = html + `</div>`;
     }
-
-    html += `</div>`;
-    content.innerHTML = html;
-}
-    </script>
-    <script>
+</script>
+<script>
+    // --- HANDLER: FACEBOOK (HD & SD SELECTOR) ---
     async function handleFacebook(url) {
         const content = document.getElementById('socialMediaContent');
         const apiUrl = `https://api.vreden.my.id/api/v1/download/facebook?url=${encodeURIComponent(url)}`;
@@ -563,7 +538,7 @@ async function forceDownload(url, filename) {
             <div class="space-y-4 animate__animated animate__fadeIn">
                 <div class="px-2 pt-1 text-center">
                     <p class="text-[10px] text-white font-black uppercase italic tracking-tighter leading-tight break-words">
-                        ${title} (${data.durasi})
+                        ${title} (${data.durasi || '00:00'})
                     </p>
                 </div>
 
@@ -585,179 +560,296 @@ async function forceDownload(url, filename) {
                 </div>
             </div>`;
     }
+
+    // --- HANDLER: YOUTUBE VIDEO (MP4) ---
+    async function handleYouTubeMP4(url) {
+        const content = document.getElementById('socialMediaContent');
+        const apiUrl = `https://api.skylen.my.id/api/play?query=${encodeURIComponent(url)}&format=mp4`;
+        
+        const response = await fetch(apiUrl);
+        const json = await response.json();
+        
+        const data = json.data?.response;
+        if (!data) throw new Error("Video YouTube tidak ditemukan!");
+
+        content.innerHTML = `
+            <div class="space-y-4 animate__animated animate__fadeIn">
+                <div class="px-2 pt-1 text-center">
+                    <p class="text-[10px] text-red-500 font-black uppercase italic tracking-tighter leading-tight break-words">
+                        ${data.title}
+                    </p>
+                </div>
+
+                <div class="relative rounded-[2rem] overflow-hidden border-2 border-red-500/30 bg-black/60 shadow-2xl">
+                    <video controls class="w-full h-auto block">
+                        <source src="${data.download}" type="video/mp4">
+                    </video>
+                </div>
+
+                <button onclick="forceDownload('${data.download}', 'yt_video_${Date.now()}')" id="dlBtn"
+                    class="w-full py-4 bg-red-600 hover:bg-red-500 text-center rounded-2xl font-black text-[11px] text-white tracking-widest uppercase shadow-xl transition-all active:scale-95">
+                    DOWNLOAD MP4 SEKARANG
+                </button>
+            </div>`;
+    }
+
+    // --- HANDLER: YOUTUBE AUDIO (MP3) ---
+    async function handleYouTubeMP3(url) {
+        const content = document.getElementById('socialMediaContent');
+        const apiUrl = `https://api.skylen.my.id/api/play?query=${encodeURIComponent(url)}&format=mp3`;
+        
+        const response = await fetch(apiUrl);
+        const json = await response.json();
+        
+        const data = json.data?.response;
+        if (!data) throw new Error("Audio YouTube tidak ditemukan!");
+
+        content.innerHTML = `
+            <div class="space-y-4 animate__animated animate__fadeIn">
+                <div class="px-2 pt-1 text-center">
+                    <p class="text-[10px] text-orange-500 font-black uppercase italic tracking-tighter leading-tight break-words">
+                        ${data.title}
+                    </p>
+                    <p class="text-[8px] text-slate-500 mt-1">${data.channel.name} • ${data.duration}</p>
+                </div>
+
+                <div class="p-4 rounded-[2rem] border-2 border-orange-500/20 bg-black/40 shadow-2xl">
+                    <audio controls class="w-full h-10 custom-audio">
+                        <source src="${data.download}" type="audio/mpeg">
+                        Browser kamu nggak support preview audio.
+                    </audio>
+                </div>
+
+                <button onclick="forceDownload('${data.download}', 'yt_audio_${Date.now()}')" id="dlBtn"
+                    class="w-full py-4 bg-orange-600 hover:bg-orange-500 text-center rounded-2xl font-black text-[11px] text-white tracking-widest uppercase shadow-xl transition-all active:scale-95">
+                    DOWNLOAD MP3 SEKARANG
+                </button>
+            </div>`;
+    }
 </script>
 <script>
-async function handleYouTubeMP4(url) {
-    const content = document.getElementById('socialMediaContent');
-    const apiUrl = `https://api.skylen.my.id/api/play?query=${encodeURIComponent(url)}&format=mp4`;
-    
-    const response = await fetch(apiUrl);
-    const json = await response.json();
-    
-    const data = json.data?.response;
-    if (!data) throw new Error("Video YouTube tidak ditemukan!");
+    // --- HANDLER: TWITTER / X (VIDEO & PHOTO) ---
+    async function handleTwitter(url) {
+        const content = document.getElementById('socialMediaContent');
+        const apiUrl = `https://host.optikl.ink/download/x?url=${encodeURIComponent(url)}`;
+        
+        const response = await fetch(apiUrl);
+        if (!response.ok) throw new Error("Gagal terhubung ke Server Twitter!");
 
-    content.innerHTML = `
-        <div class="space-y-4 animate__animated animate__fadeIn">
-            <div class="px-2 pt-1 text-center">
-                <p class="text-[10px] text-red-500 font-black uppercase italic tracking-tighter leading-tight break-words">
-                    ${data.title}
-                </p>
-            </div>
+        const data = await response.json();
+        const hasVideo = data.downloads.videos && data.downloads.videos.length > 0;
+        const hasPhoto = data.downloads.photo && data.downloads.photo.url;
 
-            <div class="relative rounded-[2rem] overflow-hidden border-2 border-red-500/30 bg-black/60 shadow-2xl">
-                <video controls class="w-full h-auto block">
-                    <source src="${data.download}" type="video/mp4">
-                </video>
-            </div>
+        if (!hasVideo && !hasPhoto) throw new Error("Konten X tidak ditemukan!");
 
-            <button onclick="forceDownload('${data.download}', 'yt_video_${Date.now()}')" id="dlBtn"
-                class="w-full py-4 bg-red-600 hover:bg-red-500 text-center rounded-2xl font-black text-[11px] text-white tracking-widest uppercase shadow-xl transition-all active:scale-95">
-                DOWNLOAD MP4 SEKARANG
-            </button>
-        </div>`;
-}
+        let mediaHtml = "";
+        let downloadUrl = "";
+        let label = "";
+
+        if (hasVideo) {
+            const videoHD = data.downloads.videos[0];
+            downloadUrl = videoHD.url;
+            label = `SAVE VIDEO (${videoHD.quality})`;
+            mediaHtml = `
+                <div class="relative rounded-[2rem] overflow-hidden border-2 border-blue-500/30 bg-black/60 shadow-2xl">
+                    <video controls class="w-full h-auto block" poster="${data.thumbnail}">
+                        <source src="${videoHD.url}" type="video/mp4">
+                    </video>
+                </div>`;
+        } else {
+            downloadUrl = data.downloads.photo.url;
+            label = "SAVE IMAGE (HD)";
+            mediaHtml = `
+                <div class="relative rounded-[2rem] overflow-hidden border-2 border-blue-500/30 bg-black/60 shadow-2xl">
+                    <img src="${downloadUrl}" class="w-full h-auto block">
+                </div>`;
+        }
+
+        content.innerHTML = `
+            <div class="space-y-4 animate__animated animate__fadeIn">
+                <div class="px-2 pt-1 text-center">
+                    <span class="bg-blue-500/20 text-blue-400 text-[9px] px-2 py-0.5 rounded-full font-bold tracking-widest uppercase">
+                        Twitter / X ${hasVideo ? 'Video' : 'Photo'}
+                    </span>
+                </div>
+                ${mediaHtml}
+                <button onclick="forceDownload('${downloadUrl}', 'twitter_${Date.now()}')" id="dlBtn"
+                    class="w-full py-4 bg-blue-600 hover:bg-blue-500 text-center rounded-2xl font-black text-[11px] text-white tracking-widest uppercase shadow-xl transition-all active:scale-95">
+                    ${label}
+                </button>
+            </div>`;
+    }
+
+    // --- HANDLER: VIDEY (BYPASS SECURITY) ---
+    async function handleVidey(urlInput) {
+        const content = document.getElementById('socialMediaContent');
+        let videoId = "";
+        if (urlInput.includes("id=")) {
+            videoId = urlInput.split("id=")[1].split("&")[0];
+        } else {
+            videoId = urlInput.split("/").pop().replace(".mp4", "");
+        }
+
+        if (!videoId || videoId.length < 5) throw new Error("ID Videy tidak valid!");
+        const cdnUrl = `https://cdn2.videy.co/${videoId}.mp4`;
+
+        content.innerHTML = `
+            <div class="space-y-4 animate__animated animate__fadeIn">
+                <div class="px-2 pt-1 text-center">
+                    <span class="bg-teal-500/20 text-teal-500 text-[9px] px-2 py-0.5 rounded-full font-bold tracking-widest uppercase">Videy Direct</span>
+                    <p class="text-[11px] text-white font-black mt-2 italic">${videoId}.mp4</p>
+                </div>
+                <div class="p-6 rounded-[2rem] border-2 border-teal-500/30 bg-black/40 flex flex-col items-center shadow-2xl">
+                    <div class="w-12 h-12 bg-teal-600 rounded-full flex items-center justify-center mb-3">💎</div>
+                    <p class="text-[9px] text-slate-400 font-bold uppercase tracking-widest">Bypass Security Check</p>
+                </div>
+                <button onclick="forceDownload('${cdnUrl}', 'videy_${videoId}.mp4')"
+                    class="block w-full py-4 bg-teal-600 hover:bg-teal-500 text-center rounded-2xl font-black text-[11px] text-white tracking-widest uppercase shadow-xl transition-all active:scale-95">
+                    DOWNLOAD VIDEO SEKARANG
+                </button>
+            </div>`;
+    }
 </script>
     <script>
-        async function handleYouTubeMP3(url) {
+     // --- 1. LOGIC ANIME (RANDOM) ---
+async function handleAnime() {
     const content = document.getElementById('socialMediaContent');
-    const apiUrl = `https://api.skylen.my.id/api/play?query=${encodeURIComponent(url)}&format=mp3`;
+    const apiUrl = `https://api.vreden.my.id/api/v1/random/hentai`;
     
-    const response = await fetch(apiUrl);
-    const json = await response.json();
-    
-    const data = json.data?.response;
-    if (!data) throw new Error("Audio YouTube tidak ditemukan!");
+    try {
+        const response = await fetch(apiUrl);
+        const json = await response.json();
+        const item = json.result[Math.floor(Math.random() * json.result.length)];
 
-    content.innerHTML = `
-        <div class="space-y-4 animate__animated animate__fadeIn">
-            <div class="px-2 pt-1 text-center">
-                <p class="text-[10px] text-orange-500 font-black uppercase italic tracking-tighter leading-tight break-words">
-                    ${data.title}
-                </p>
-                <p class="text-[8px] text-slate-500 mt-1">${data.channel.name} • ${data.duration}</p>
-            </div>
-
-            <div class="p-4 rounded-[2rem] border-2 border-orange-500/20 bg-black/40 shadow-2xl">
-                <audio controls class="w-full h-10 custom-audio">
-                    <source src="${data.download}" type="audio/mpeg">
-                    Browser kamu nggak support preview audio.
-                </audio>
-            </div>
-
-            <button onclick="forceDownload('${data.download}', 'yt_audio_${Date.now()}')" id="dlBtn"
-                class="w-full py-4 bg-orange-600 hover:bg-orange-500 text-center rounded-2xl font-black text-[11px] text-white tracking-widest uppercase shadow-xl transition-all active:scale-95">
-                DOWNLOAD MP3 SEKARANG
-            </button>
-        </div>`;
-}
-    </script>
-    <script>
-async function handleVidey(urlInput) {
-    const content = document.getElementById('socialMediaContent');
-    
-    // Cara manual: Buang semua teks sebelum 'id='
-    let videoId = "";
-    if (urlInput.includes("id=")) {
-        videoId = urlInput.split("id=")[1].split("&")[0];
-    } else {
-        // Jika user masukin link murni cdn-nya langsung
-        videoId = urlInput.split("/").pop().replace(".mp4", "");
-    }
-
-    if (!videoId || videoId.length < 5) {
-        throw new Error("ID Videy gagal diekstrak. Cek lagi linknya!");
-    }
-
-    const cdnUrl = `https://cdn2.videy.co/${videoId}.mp4`;
-    
-    // Kita arahkan ke Proxy Vercel kamu supaya lolos blokir Referer
-    const proxiedUrl = `/api/download?url=${encodeURIComponent(cdnUrl)}&name=videy_${videoId}`;
-
-    content.innerHTML = `
-        <div class="space-y-4 animate__animated animate__fadeIn">
-            <div class="px-2 pt-1 text-center">
-                <span class="bg-teal-500/20 text-teal-500 text-[9px] px-2 py-0.5 rounded-full font-bold tracking-widest uppercase">
-                    Videy Direct Sedot
-                </span>
-                <p class="text-[11px] text-white font-black mt-2 italic">${videoId}.mp4</p>
-            </div>
-
-            <div class="p-6 rounded-[2rem] border-2 border-teal-500/30 bg-black/40 flex flex-col items-center shadow-2xl">
-                <div class="w-12 h-12 bg-teal-600 rounded-full flex items-center justify-center mb-3">
-                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
-                    </svg>
+        content.innerHTML = `
+            <div class="space-y-4 animate__animated animate__zoomIn">
+                <div class="text-center">
+                    <span class="bg-pink-500/20 text-pink-400 text-[9px] px-2 py-0.5 rounded-full font-bold uppercase tracking-widest">Anime Content</span>
+                    <p class="text-[10px] text-white font-black mt-2 uppercase italic truncate px-4">${item.title}</p>
                 </div>
-                <p class="text-[9px] text-slate-400 font-bold uppercase tracking-widest">Bypass Security Check</p>
-            </div>
+                <div class="relative rounded-[2rem] overflow-hidden border-2 border-pink-500/30 bg-black shadow-2xl mx-auto w-[90%]">
+                    <video controls class="w-full h-auto block">
+                        <source src="${item.video_1}" type="video/mp4">
+                    </video>
+                </div>
+                <button id="dlBtn" onclick="forceDownload('${item.video_1}', 'anime_${Date.now()}.mp4')" 
+                    class="w-full py-4 bg-pink-600 hover:bg-pink-500 text-center rounded-2xl font-black text-[11px] text-white tracking-widest uppercase transition-all active:scale-95 shadow-lg shadow-pink-500/20">
+                    DOWNLOAD VIDEO
+                </button>
+            </div>`;
+    } catch (e) { console.error(e); }
+}
 
-            <a href="${proxiedUrl}" 
-               class="block w-full py-4 bg-teal-600 hover:bg-teal-500 text-center rounded-2xl font-black text-[11px] text-white tracking-widest uppercase shadow-xl transition-all active:scale-95">
-                DOWNLOAD VIDEO SEKARANG
-            </a>
-            
-            <p class="text-[8px] text-slate-500 text-center italic">Jika gagal, Videy sedang memblokir akses server. Tunggu 5 menit.</p>
-        </div>`;
+// --- 2. LOGIC TERABOX V2 (MULTI-FILE) ---
+async function handleTerabox(url) {
+    const content = document.getElementById('socialMediaContent');
+    const apiUrl = `https://api.skylen.my.id/api/terabox/v2?url=${encodeURIComponent(url)}`;
+    
+    try {
+        const response = await fetch(apiUrl);
+        const json = await response.json();
+        const list = json.data.response.list;
+
+        let listHtml = list.map((file, index) => `
+            <div class="p-3 bg-white/5 border border-white/10 rounded-2xl flex items-center justify-between mb-2">
+                <div class="overflow-hidden mr-2">
+                    <p class="text-[10px] text-white font-bold truncate">${file.server_filename}</p>
+                    <p class="text-[8px] text-slate-400 uppercase tracking-tighter">${file.formatted_size}</p>
+                </div>
+                <button id="dlBtn_${index}" onclick="forceDownload('${file.direct_link}', '${file.server_filename}', 'dlBtn_${index}')" 
+                    class="p-2 bg-blue-600 rounded-lg active:scale-90 transition-transform">
+                    <i class="fa-solid fa-download text-white text-[10px]"></i>
+                </button>
+            </div>
+        `).join('');
+
+        content.innerHTML = `
+            <div class="space-y-4 animate__animated animate__fadeInUp">
+                <div class="text-center"><span class="bg-blue-500/20 text-blue-400 text-[9px] px-2 py-0.5 rounded-full font-bold uppercase tracking-widest">Terabox V2 Multi</span></div>
+                <div class="max-h-[250px] overflow-y-auto pr-1 custom-scroll">${listHtml}</div>
+            </div>`;
+    } catch (e) { console.error(e); }
+}
+
+// --- 3. LOGIC GOOGLE DRIVE ---
+async function handleGDrive(url) {
+    const content = document.getElementById('socialMediaContent');
+    const apiUrl = `https://api.vreden.my.id/api/v1/download/gdrive?url=${encodeURIComponent(url)}`;
+    
+    try {
+        const response = await fetch(apiUrl);
+        const json = await response.json();
+        const file = json.result.file;
+
+        content.innerHTML = `
+            <div class="space-y-4 animate__animated animate__fadeIn">
+                <div class="p-4 bg-white/5 border border-white/10 rounded-[2rem] text-center">
+                    <div class="w-12 h-12 bg-amber-500/20 rounded-2xl flex items-center justify-center mx-auto mb-3">
+                        <i class="fa-solid fa-file-arrow-down text-amber-400 text-xl"></i>
+                    </div>
+                    <p class="text-[11px] text-white font-black uppercase truncate px-2">${file.name}</p>
+                    <p class="text-[9px] text-slate-400 mt-1 italic tracking-widest uppercase">${file.mimetype}</p>
+                </div>
+                <button id="dlBtn" onclick="forceDownload('${file.download}', '${file.name}')" 
+                    class="w-full py-4 bg-amber-600 hover:bg-amber-500 text-center rounded-2xl font-black text-[11px] text-white tracking-widest uppercase transition-all active:scale-95 shadow-lg shadow-amber-500/20">
+                    PROCESS DRIVE FILE
+                </button>
+            </div>`;
+    } catch (e) { console.error(e); }
+}
+
+// --- 4. LOGIC MEDIAFIRE ---
+async function handleMediafire(url) {
+    const content = document.getElementById('socialMediaContent');
+    const apiUrl = `https://host.optikl.ink/download/mediafire?url=${encodeURIComponent(url)}`;
+    
+    try {
+        const response = await fetch(apiUrl);
+        const json = await response.json();
+        const data = json.data;
+
+        content.innerHTML = `
+            <div class="space-y-4 animate__animated animate__bounceIn">
+                <div class="p-4 bg-white/5 border border-white/10 rounded-[2rem] flex items-center">
+                    <div class="w-10 h-10 bg-blue-500 rounded-xl flex items-center justify-center text-white font-black text-[10px]">${data.filetype}</div>
+                    <div class="ml-3 overflow-hidden">
+                        <p class="text-[10px] text-white font-bold truncate uppercase tracking-tighter">${data.filename}</p>
+                        <p class="text-[8px] text-slate-400 uppercase italic font-medium">${data.filesize}</p>
+                    </div>
+                </div>
+                <button id="dlBtn" onclick="forceDownload('${data.download_url}', '${data.filename}')" 
+                    class="w-full py-4 bg-blue-700 hover:bg-blue-600 text-center rounded-2xl font-black text-[11px] text-white tracking-widest uppercase transition-all active:scale-95 shadow-xl shadow-blue-900/40">
+                    GET MEDIAFIRE FILE
+                </button>
+            </div>`;
+    } catch (e) { console.error(e); }
+}
+
+// --- CORE: PROXY DOWNLOAD SYSTEM (STABLE) ---
+async function forceDownload(url, filename, specificBtnId) {
+    const btn = document.getElementById(specificBtnId || 'dlBtn');
+    const oldText = btn ? btn.innerText : "";
+    if (btn) btn.innerText = "WAIT...";
+
+    // Menggunakan Proxy Server lu sendiri
+    const proxyUrl = `/api/download?url=${encodeURIComponent(url)}&name=${encodeURIComponent(filename)}`;
+
+    try {
+        const a = document.createElement('a');
+        a.href = proxyUrl;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        setTimeout(() => {
+            document.body.removeChild(a);
+            if (btn) btn.innerText = "SUCCESS!";
+        }, 1000);
+    } catch (e) {
+        window.location.href = proxyUrl;
+    } finally {
+        if (btn) setTimeout(() => { btn.innerText = oldText; }, 2000);
+    }
 }
     </script>
-    <script>
-async function handleTwitter(url) {
-    const content = document.getElementById('socialMediaContent');
-    const apiUrl = `https://host.optikl.ink/download/x?url=${encodeURIComponent(url)}`;
-    
-    const response = await fetch(apiUrl);
-    if (!response.ok) throw new Error("Gagal terhubung ke Server Optikl!");
-
-    const data = await response.json();
-    
-    // 1. Cek apakah ini VIDEO atau FOTO
-    const hasVideo = data.downloads.videos && data.downloads.videos.length > 0;
-    const hasPhoto = data.downloads.photo && data.downloads.photo.url;
-
-    if (!hasVideo && !hasPhoto) throw new Error("Konten tidak didukung atau link salah!");
-
-    let mediaHtml = "";
-    let downloadUrl = "";
-    let label = "";
-
-    if (hasVideo) {
-        // TAMPILAN VIDEO
-        const videoHD = data.downloads.videos[0]; // Ambil yang paling atas (HD)
-        downloadUrl = videoHD.url;
-        label = `SAVE VIDEO (${videoHD.quality})`;
-        mediaHtml = `
-            <div class="relative rounded-[2rem] overflow-hidden border-2 border-blue-500/30 bg-black/60 shadow-2xl">
-                <video controls class="w-full h-auto block" poster="${data.thumbnail}">
-                    <source src="${videoHD.url}" type="video/mp4">
-                </video>
-            </div>`;
-    } else {
-        // TAMPILAN FOTO
-        downloadUrl = data.downloads.photo.url;
-        label = "SAVE IMAGE (HD)";
-        mediaHtml = `
-            <div class="relative rounded-[2rem] overflow-hidden border-2 border-blue-500/30 bg-black/60 shadow-2xl">
-                <img src="${downloadUrl}" class="w-full h-auto block" alt="Twitter Photo">
-            </div>`;
-    }
-
-    // 2. Render ke UI Skylen Ultra
-    content.innerHTML = `
-        <div class="space-y-4 animate__animated animate__fadeIn">
-            <div class="px-2 pt-1 text-center">
-                <span class="bg-blue-500/20 text-blue-400 text-[9px] px-2 py-0.5 rounded-full font-bold tracking-widest uppercase">
-                    Twitter / X ${hasVideo ? 'Video' : 'Photo'}
-                </span>
-            </div>
-
-            ${mediaHtml}
-
-            <button onclick="forceDownload('${downloadUrl}', 'twitter_${Date.now()}.${hasVideo ? 'mp4' : 'jpg'}')" id="dlBtn"
-                class="w-full py-4 bg-blue-600 hover:bg-blue-500 text-center rounded-2xl font-black text-[11px] text-white tracking-widest uppercase shadow-xl transition-all active:scale-95">
-                ${label}
-            </button>
-        </div>`;
-}</script>
 </body>
 </html>

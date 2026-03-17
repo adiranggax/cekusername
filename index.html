@@ -141,6 +141,7 @@
             <option value="tiktok_photo">TikTok Photo (Slide)</option>
             <option value="instagram">Instagram</option>
             <option value="facebook">Facebook</option>
+            <option value="twitter">Twitter / X (HD)</option>
             <option value="yt_mp4">YouTube Video</option>
             <option value="yt_mp3">YouTube Audio</option>
             <option value="videy">Videy.co</option>
@@ -427,6 +428,8 @@ try {
             await handleFacebook(urlInput);
         } else if (type === 'yt_mp4') { // Pintu khusus MP4
             await handleYouTubeMP4(urlInput);
+        } else if (type === 'twitter') { // <--- TAMBAHKAN INI
+            await handleTwitter(urlInput);
         } else if (type === 'videy') { // <--- TAMBAHKAN INI
             await handleVidey(urlInput);
         } else if (type === 'yt_mp3') { // Pintu khusus MP3
@@ -695,6 +698,45 @@ async function handleVidey(urlInput) {
             </a>
             
             <p class="text-[8px] text-slate-500 text-center italic">Jika gagal, Videy sedang memblokir akses server. Tunggu 5 menit.</p>
+        </div>`;
+}
+    </script>
+    <script>
+        async function handleTwitter(url) {
+    const content = document.getElementById('socialMediaContent');
+    // Pakai API V3 yang kita bahas tadi
+    const response = await fetch(`https://api.skylen.my.id/api/twitter/v3?url=${encodeURIComponent(url)}`);
+    const json = await response.json();
+    
+    // Ambil data dari respon nomor 3 yang kita pilih
+    const data = json; 
+    if (!data.downloads) throw new Error("Gagal ambil data Twitter!");
+
+    // Cari kualitas tertinggi (1024p)
+    const videoHD = data.downloads.videos.find(v => v.quality === '1024p') || data.downloads.videos[0];
+    const thumb = data.thumbnail;
+    const duration = data.duration;
+
+    content.innerHTML = `
+        <div class="space-y-4 animate__animated animate__fadeIn">
+            <div class="px-2 pt-1 text-center">
+                <span class="bg-blue-500/20 text-blue-400 text-[9px] px-2 py-0.5 rounded-full font-bold tracking-widest uppercase">
+                    Twitter X Video - ${duration}
+                </span>
+            </div>
+
+            <div class="relative rounded-[2rem] overflow-hidden border-2 border-blue-500/30 bg-black/60 shadow-2xl">
+                <video controls class="w-full h-auto block" poster="${thumb}">
+                    <source src="${videoHD.url}" type="video/mp4">
+                </video>
+            </div>
+
+            <div class="grid grid-cols-1 gap-2">
+                <button onclick="forceDownload('${videoHD.url}', 'twitter_hd.mp4')" id="dlBtn"
+                    class="w-full py-4 bg-blue-600 hover:bg-blue-500 text-center rounded-2xl font-black text-[11px] text-white tracking-widest uppercase shadow-xl transition-all active:scale-95">
+                    SAVE VIDEO (${videoHD.quality})
+                </button>
+            </div>
         </div>`;
 }
     </script>

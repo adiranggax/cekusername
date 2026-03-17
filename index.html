@@ -79,6 +79,63 @@
         .nav-tab:active {
             transform: scale(0.92);
         }
+        /* --- CSS UNTUK DROPDOWN FORM GAME --- */
+    
+    /* Tombol Utama Dropdown */
+    #gameSelector {
+        background: rgba(15, 23, 42, 0.9) !important;
+        border: 1px solid rgba(255, 255, 255, 0.1) !important;
+        color: white !important;
+        padding: 16px !important;
+        border-radius: 1.2rem !important;
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        transition: all 0.3s ease;
+    }
+
+    #gameSelector:hover {
+        border-color: rgba(59, 130, 246, 0.5);
+    }
+
+    /* List Pilihan yang Muncul ke Bawah */
+    #gameOptions {
+        background: rgba(15, 23, 42, 0.95) !important;
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 1.2rem;
+        margin-top: 8px;
+        box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
+    }
+
+    /* Tiap Baris Game di Dropdown */
+    #gameOptions div {
+        padding: 14px 20px;
+        color: #94a3b8;
+        font-weight: 700;
+        transition: all 0.2s;
+    }
+
+    #gameOptions div:hover {
+        background: rgba(59, 130, 246, 0.2);
+        color: #3b82f6;
+    }
+
+    /* Box Kaca Pembungkus Form */
+    .glass {
+        background: rgba(15, 23, 42, 0.7);
+        backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    /* Input Field Biar Gak Putih */
+    .input-field {
+        background: rgba(15, 23, 42, 0.9) !important;
+        border: 1px solid rgba(255, 255, 255, 0.1) !important;
+        color: white !important;
+        outline: none;
+    }
     </style>
 </head>
 <body>

@@ -1,21 +1,29 @@
-// api/download.js (ULTRA SMART PROXY)
+// api/download.js (ULTRA SMART PROXY + STEALTH HEADERS)
 export default async function handler(req, res) {
     const { url, name } = req.query;
 
     if (!url) return res.status(400).send('URL missing');
 
     try {
-        const response = await fetch(url);
-        if (!response.ok) throw new Error(`Gagal fetch: ${response.statusText}`);
+        // --- STEALTH MODE: Menyamar jadi Browser ---
+        const response = await fetch(url, {
+            headers: {
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36',
+                'Referer': 'https://videy.co/',
+                'Accept': '*/*',
+                'Accept-Language': 'id,en-US;q=0.9,en;q=0.8'
+            }
+        });
+
+        if (!response.ok) throw new Error(`Gagal fetch: ${response.statusText} (${response.status})`);
 
         const arrayBuffer = await response.arrayBuffer();
         const buffer = Buffer.from(arrayBuffer);
 
         // --- DETEKSI FORMAT SAKTI ---
         let contentType = response.headers.get('content-type') || '';
-        let extension = 'mp4'; // Default awal
+        let extension = 'mp4'; 
 
-        // 1. Cek dari Content-Type Header
         if (contentType.includes('audio') || contentType.includes('mpeg')) {
             extension = 'mp3';
             contentType = 'audio/mpeg';
@@ -25,19 +33,20 @@ export default async function handler(req, res) {
             extension = 'mp4';
         }
 
-        // 2. Cross-check dari URL (Force MP3 jika ada parameter mp3)
+        // Force MP3 Logic
         if (url.toLowerCase().includes('format=mp3') || (name && name.toLowerCase().includes('audio'))) {
             extension = 'mp3';
             contentType = 'audio/mpeg';
         }
 
-        // Set Header dinamis supaya HP langsung ngenalin filenya
+        // Set Header dinamis
         res.setHeader('Content-Type', contentType);
         res.setHeader('Content-Disposition', `attachment; filename="${name || 'download'}.${extension}"`);
         
         return res.send(buffer);
 
     } catch (error) {
-        return res.status(500).send('Error: ' + error.message);
+        // Kasih status 500 kalau diblokir
+        return res.status(500).json({ error: error.message });
     }
 }

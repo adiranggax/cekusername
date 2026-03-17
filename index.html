@@ -141,8 +141,8 @@
             <option value="tiktok_photo">TikTok Photo (Slide)</option>
             <option value="instagram">Instagram</option>
             <option value="facebook">Facebook</option>
-            <option value="ytmp4">YouTube Video</option>
-            <option value="ytmp3">YouTube Audio</option>
+            <option value="yt_mp4">YouTube Video</option>
+            <option value="yt_mp3">YouTube Audio</option>
         </select>
 
         <input type="text" id="socialUrl" placeholder="Paste link media..." class="input-field w-full p-4 rounded-2xl text-sm text-white outline-none bg-slate-900/50 border border-white/5">
@@ -423,8 +423,10 @@ async function downloadSocial() {
             await handleTikTokPhoto(urlInput);
         } else if (type === 'instagram') {
     await handleInstagram(urlInput);
-} else if (type === 'facebook') { // <-- TAMBAHKAN INI
+} else if (type === 'facebook') {
     await handleFacebook(urlInput);
+} else if (type === 'yt_mp4' || type === 'yt_mp3') { // <-- TAMBAHKAN INI
+    await handleYouTube(urlInput, type);
 } else {
             alert("Fitur segera hadir!");
         }
@@ -573,6 +575,46 @@ async function forceDownload(url, filename) {
                         DOWNLOAD SD
                     </button>
                 </div>
+            </div>`;
+    }
+</script>
+    <script>
+    async function handleYouTube(url, type) {
+        const content = document.getElementById('socialMediaContent');
+        // Deteksi apakah user pilih MP3 atau MP4
+        const mode = type === 'yt_mp3' ? 'ytmp3' : 'ytmp4';
+        const apiUrl = `https://api.skylen.my.id/api/${mode}?url=${encodeURIComponent(url)}`;
+        
+        const response = await fetch(apiUrl);
+        const json = await response.json();
+        
+        const dlUrl = json.data?.response;
+        if (!dlUrl) throw new Error("Link YouTube tidak valid atau API sedang down!");
+
+        const isAudio = type === 'yt_mp3';
+
+        content.innerHTML = `
+            <div class="space-y-4 animate__animated animate__fadeIn">
+                <div class="px-2 pt-1 text-center">
+                    <p class="text-[10px] text-red-500 font-black uppercase italic tracking-widest">
+                        🔴 YouTube ${isAudio ? 'MP3 Audio' : 'MP4 Video'}
+                    </p>
+                </div>
+
+                <div class="p-8 rounded-[2rem] border-2 border-red-500/20 bg-gradient-to-b from-red-500/10 to-transparent flex flex-col items-center justify-center shadow-2xl">
+                    <div class="w-16 h-16 bg-red-600 rounded-full flex items-center justify-center mb-4 shadow-lg shadow-red-500/40">
+                        ${isAudio ? 
+                            '<svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 20 20"><path d="M18 3a1 1 0 00-1.196-.98l-10 2A1 1 0 006 5v9.135A3.235 3.235 0 005 14a3 3 0 103 3V5.95l8-1.6V10a3 3 0 103 3V3z"></path></svg>' : 
+                            '<svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 20 20"><path d="M2 6a2 2 0 012-2h12a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2V6zm10 2a1 1 0 00-1 1v3a1 1 0 001 1h2a1 1 0 001-1V9a1 1 0 00-1-1h-2z"></path></svg>'
+                        }
+                    </div>
+                    <p class="text-[9px] text-slate-400 text-center uppercase font-bold tracking-widest">Link Ready to Download</p>
+                </div>
+
+                <button onclick="forceDownload('${dlUrl}', 'youtube_${Date.now()}')" id="dlBtn"
+                    class="w-full py-4 bg-red-600 hover:bg-red-500 text-center rounded-2xl font-black text-[11px] text-white tracking-widest uppercase shadow-xl transition-all active:scale-95">
+                    DOWNLOAD ${isAudio ? 'MP3' : 'MP4'} NOW
+                </button>
             </div>`;
     }
 </script>

@@ -1,1 +1,121 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="" type="image/x-icon">
+    <title>Mass Adi</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap');
+        
+        body { 
+            background: #020617; 
+            color: #f8fafc; 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
 
+        /* Style Judul */
+        .title-name {
+            font-size: 24px;
+            font-weight: 800;
+            letter-spacing: 1px;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+        }
+
+        /* Style Waktu & Tanggal */
+        .datetime-box {
+            font-size: 14px;
+            font-weight: 600;
+            color: #94a3b8;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+
+        /* Tab Container */
+        .nav-container { 
+            display: flex; 
+            background: rgba(15, 23, 42, 0.9); 
+            border-radius: 1.5rem; 
+            padding: 6px; 
+            gap: 4px; 
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            width: 100%;
+            max-width: 500px;
+        }
+
+        .nav-tab { 
+            flex: 1; 
+            padding: 12px 5px; 
+            border-radius: 1.2rem; 
+            font-size: 11px; 
+            font-weight: 800; 
+            text-transform: uppercase; 
+            color: #64748b; 
+            text-align: center;
+            cursor: pointer;
+            transition: 0.3s;
+            border: none;
+            background: transparent;
+        }
+
+        .nav-tab.active { 
+            background: #3b82f6; 
+            color: white; 
+            box-shadow: 0 8px 20px rgba(59, 130, 246, 0.3); 
+        }
+    </style>
+</head>
+<body>
+
+    <h1 class="title-name">Mass Adi</h1>
+
+    <div id="datetime" class="datetime-box">
+        Loading waktu...
+    </div>
+
+    <div class="nav-container">
+        <button class="nav-tab active" onclick="switchTab(this)">Game</button>
+        <button class="nav-tab" onclick="switchTab(this)">Download</button>
+        <button class="nav-tab" onclick="switchTab(this)">Media</button>
+        <button class="nav-tab" onclick="switchTab(this)">Streaming</button>
+        <button class="nav-tab" onclick="switchTab(this)">System</button>
+    </div>
+
+    <script>
+        // Fungsi update waktu real-time
+        function updateDateTime() {
+            const now = new Date();
+            const options = { 
+                weekday: 'long', 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric' 
+            };
+            const dateStr = now.toLocaleDateString('id-ID', options);
+            const timeStr = now.toLocaleTimeString('id-ID', { 
+                hour: '2-digit', 
+                minute: '2-digit', 
+                second: '2-digit' 
+            });
+            
+            document.getElementById('datetime').innerHTML = `${dateStr} | ${timeStr}`;
+        }
+
+        // Jalankan waktu setiap detik
+        setInterval(updateDateTime, 1000);
+        updateDateTime();
+
+        // Fungsi pindah tab sederhana
+        function switchTab(btn) {
+            document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+            btn.classList.add('active');
+        }
+    </script>
+</body>
+</html>

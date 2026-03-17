@@ -46,6 +46,75 @@
 
         /* Sembunyikan Scrollbar */
         .hide-scroll::-webkit-scrollbar { display: none; }
+        /* Navigasi Tab (Mata Minus Friendly) */
+        .nav-tab {
+            font-size: 15px !important;
+            font-weight: 800 !important;
+            letter-spacing: 0.5px;
+            padding: 12px 20px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* Grid Game Styling */
+        .game-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+
+        .game-card {
+            cursor: pointer;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 1.25rem;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .game-card:hover {
+            background: rgba(255, 255, 255, 0.06);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .game-card.active-game {
+            background: rgba(59, 130, 246, 0.15);
+            border-color: #3b82f6;
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.2);
+        }
+
+        .game-card span { font-size: 20px; }
+        .game-card p { 
+            font-size: 10px; 
+            font-weight: 800; 
+            color: #fff; 
+            text-transform: uppercase; 
+            text-align: center;
+            letter-spacing: 0.5px;
+        }
+
+        /* Input Gede & Jelas */
+        .input-field {
+            font-size: 16px !important;
+            font-weight: 600;
+            padding: 16px !important;
+            border-radius: 1rem !important;
+        }
+
+        /* Result Box Animation */
+        #resGame {
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            box-shadow: inset 0 0 20px rgba(59, 130, 246, 0.05);
+        }
+
+        #gameNickname {
+            background: linear-gradient(to right, #fff, #3b82f6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
     </style>
 </head>
 <body class="p-4 flex justify-center items-start">
@@ -66,40 +135,66 @@
             <button onclick="switchTab('system', this)" class="nav-tab text-slate-400 py-3 rounded-xl text-[7px] font-black uppercase tracking-tighter transition-all">System</button>
         </nav>
 
-        <main id="main-content" class="min-h-[500px]">
 <section id="game" class="section-content active animate__animated animate__fadeInRight">
-                <div class="glass p-7 rounded-[2.5rem] space-y-5">
-                    <div class="flex items-center gap-2 text-blue-400 font-bold uppercase text-[11px] tracking-widest">
-                        <span class="animate-pulse">🎮</span> ID Validator
-                    </div>
-                    
-                    <select id="gameType" class="input-field w-full p-4 rounded-2xl text-sm text-white outline-none appearance-none cursor-pointer">
-                        <option value="emel">Mobile Legends</option>
-                        <option value="epep">Free Fire</option>
-                        <option value="pubg">PUBG Mobile</option>
-                        <option value="eafc">EA Sports FC (FCM)</option>
-                    </select>
+    <div class="glass p-6 rounded-[2.5rem] space-y-6">
+        <div class="flex items-center gap-2 text-blue-400 font-extrabold uppercase text-[10px] tracking-[0.2em] px-2">
+            <span class="animate-pulse text-sm">🎮</span> ID Validator Pro
+        </div>
+        
+        <div class="game-grid px-1">
+            <div onclick="setGame('emel', this)" class="game-card active-game">
+                <span>⚔️</span>
+                <p>Mobile Legends</p>
+            </div>
+            <div onclick="setGame('epep', this)" class="game-card">
+                <span>🔥</span>
+                <p>Free Fire</p>
+            </div>
+            <div onclick="setGame('codm', this)" class="game-card">
+                <span>🎖️</span>
+                <p>Call Of Duty Mobile</p>
+            </div>
+            <div onclick="setGame('pubg', this)" class="game-card">
+                <span>🔫</span>
+                <p>PUBG Mobile</p>
+            </div>
+            <div onclick="setGame('fcmobile', this)" class="game-card">
+                <span>⚽</span>
+                <p>FC Mobile</p>
+            </div>
+            <div onclick="setGame('mcgg', this)" class="game-card">
+                <span>🧱</span>
+                <p>Minecraft Game</p>
+            </div>
+        </div>
 
-                    <div class="flex items-center gap-2">
-                        <input type="text" id="gameId" placeholder="User ID" class="input-field flex-1 p-4 rounded-2xl text-sm text-white outline-none">
-                        <input type="text" id="gameZone" placeholder="Zone" class="input-field w-24 p-4 rounded-2xl text-sm text-white outline-none">
-                    </div>
+        <input type="hidden" id="gameType" value="emel">
 
-                    <button id="btnCheck" onclick="validateGame()" class="w-full py-4 bg-blue-600 hover:bg-blue-500 rounded-2xl font-black text-[11px] tracking-widest uppercase transition-all active:scale-95 shadow-lg shadow-blue-900/20">
-                        Check Username
-                    </button>
-                </div>
+        <div class="space-y-4">
+            <div class="flex items-center gap-2">
+                <input type="text" id="gameId" placeholder="User ID" 
+                    class="input-field flex-1 text-white outline-none">
+                
+                <input type="text" id="gameZone" placeholder="Zone" 
+                    class="input-field w-28 text-white outline-none">
+            </div>
+            
+            <button id="btnCheck" onclick="validateGame()" 
+                class="w-full py-5 bg-blue-600 hover:bg-blue-500 rounded-2xl font-black text-[13px] tracking-widest uppercase transition-all active:scale-95 shadow-xl shadow-blue-900/40">
+                Check Username
+            </button>
+        </div>
+    </div>
 
-                <div id="resGame" class="hidden mt-4 p-6 glass rounded-[2.2rem] text-center border-blue-500/20 animate__animated animate__bounceIn">
-                    <p class="text-[9px] text-slate-500 uppercase font-black tracking-widest mb-2">Account Found</p>
-                    <div class="flex flex-col items-center gap-3">
-                        <img id="gameFlag" src="" class="w-10 rounded-sm shadow-sm hidden">
-                        <h3 id="gameNickname" class="text-white font-black text-xl italic uppercase tracking-tight"></h3>
-                    </div>
-                </div>
-            </section>
-
-            <section id="social" class="section-content animate__animated animate__fadeInRight">
+    <div id="resGame" class="hidden mt-5 p-7 glass rounded-[2.5rem] text-center animate__animated animate__bounceIn">
+        <p class="text-[10px] text-slate-500 uppercase font-black tracking-[0.3em] mb-3">Account Found</p>
+        <div class="flex flex-col items-center gap-4">
+            <img id="gameFlag" src="" class="w-12 rounded shadow-lg hidden">
+            <h3 id="gameNickname" class="font-black text-2xl italic uppercase tracking-tight"></h3>
+        </div>
+    </div>
+</section>
+        <section id="social" class="section-content animate__animated animate__fadeInRight">
                 <div class="glass p-7 rounded-[2.5rem] space-y-5">
                     <div class="flex items-center gap-2 text-emerald-400 font-bold uppercase text-[11px] tracking-widest">
                         <span>📲</span> Media Downloader
@@ -238,7 +333,39 @@
         btn.classList.remove('text-slate-400');
     }
 
-    // --- 2. GAME VALIDATOR LOGIC ---
+// --- 3. GRID GAME CONTROLLER (Tambahkan Ini) ---
+    function setGame(type, el) {
+        // 1. Update nilai hidden input gameType
+        document.getElementById('gameType').value = type;
+
+        // 2. Efek Visual: Aktifkan kartu yang diklik
+        document.querySelectorAll('.game-card').forEach(card => {
+            card.classList.remove('active-game');
+        });
+        el.classList.add('active-game');
+
+        // 3. Logic Zone: Sembunyikan/Munculkan otomatis
+        const zoneInput = document.getElementById('gameZone');
+        // Hanya Mobile Legends (emel) dan Minecraft (mcgg) yang butuh Zone
+        if (type === 'emel' || type === 'mcgg') {
+            zoneInput.style.display = 'block';
+            zoneInput.placeholder = (type === 'emel') ? "Zone ID" : "Server";
+        } else {
+            zoneInput.style.display = 'none';
+            zoneInput.value = ''; // Reset isinya kalau disembunyikan
+        }
+
+        // Reset Box hasil kalau ganti game (biar rapi)
+        document.getElementById('resGame').classList.add('hidden');
+    }
+
+    // Jalankan setting default pas halaman pertama kali dibuka
+    document.addEventListener('DOMContentLoaded', () => {
+        const defaultGame = document.querySelector('.game-card');
+        if (defaultGame) setGame('emel', defaultGame);
+    });
+
+    // --- REVISI VALIDATE GAME (Update dari punya lu) ---
     async function validateGame() {
         const btn = document.getElementById('btnCheck');
         const resBox = document.getElementById('resGame');
@@ -251,31 +378,36 @@
 
         if (!id) return alert("User ID wajib diisi!");
 
-        // Mapping file API khusus EA Sports FC
-        let fileName = (game === 'eafc') ? 'fcmobile' : game;
-        
+        // Mapping nama file API biar sinkron
+        let fileName = game;
+        if (game === 'fcmobile') fileName = 'fcmobile'; 
+        if (game === 'codm') fileName = 'codm';
+
         btn.disabled = true;
         btn.innerHTML = '<span class="animate-spin inline-block mr-2">↻</span> PROCESSING...';
         resBox.classList.add('hidden');
         flagImg.classList.add('hidden');
 
         try {
-            // Tembak ke endpoint API lokal kamu
+            // URL endpoint API
             let url = `/api/${fileName}?id=${id}`; 
-            if (zone && ['emel', 'mcgg'].includes(game)) url += `&zone=${zone}`;
+            if (zone && (game === 'emel' || game === 'mcgg')) url += `&zone=${zone}`;
 
             const response = await fetch(url);
             if (!response.ok) throw new Error("Server API tidak merespon!");
 
             const data = await response.json();
-            const nickname = data.username || (data.data && data.data.username);
+            
+            // Handle berbagai format response nickname dari API
+            const nickname = data.username || (data.data && data.data.username) || data.nickname;
             const countryCode = data.country || (data.data && data.data.country);
 
             if (nickname) {
                 if (game === 'emel' && countryCode) {
                     const countryLower = countryCode.toLowerCase();
+                    // regionNames harus didefinisikan di awal script (Intl.DisplayNames)
                     const countryFullName = regionNames.of(countryCode.toUpperCase());
-                    resText.innerText = `${nickname} - ${countryFullName} (${countryCode.toUpperCase()})`;
+                    resText.innerText = `${nickname} - ${countryFullName}`;
                     flagImg.src = `https://flagcdn.com/w80/${countryLower}.png`;
                     flagImg.classList.remove('hidden');
                 } else {
@@ -287,14 +419,12 @@
             }
         } catch (error) {
             console.error(error);
-            alert("Sistem Error: " + error.message);
+            alert("Gagal Check: " + error.message);
         } finally {
             btn.disabled = false;
             btn.innerHTML = 'CHECK USERNAME';
         }
-    }
-
-    // --- 3. CREATIVE TOOLS HANDLER ---
+    }    // --- 3. CREATIVE TOOLS HANDLER ---
     function handleTool(name) {
         if(name === 'winkai') {
             alert("WinKai AI Engine sedang melakukan handshake dengan server...");

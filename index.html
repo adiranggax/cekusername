@@ -704,8 +704,6 @@ async function handleVidey(urlInput) {
     <script>
 async function handleTwitter(url) {
     const content = document.getElementById('socialMediaContent');
-    
-    // ENDPOINT BARU SESUAI TEMUANMU
     const apiUrl = `https://host.optikl.ink/download/x?url=${encodeURIComponent(url)}`;
     
     const response = await fetch(apiUrl);
@@ -713,39 +711,53 @@ async function handleTwitter(url) {
 
     const data = await response.json();
     
-    // Validasi data downloads
-    if (!data.downloads || !data.downloads.videos) throw new Error("Video tidak ditemukan!");
+    // 1. Cek apakah ini VIDEO atau FOTO
+    const hasVideo = data.downloads.videos && data.downloads.videos.length > 0;
+    const hasPhoto = data.downloads.photo && data.downloads.photo.url;
 
-    // Ambil Kualitas Tertinggi (Index 0 biasanya 1024p)
-    const videoHD = data.downloads.videos[0];
-    const thumb = data.thumbnail;
-    const duration = data.duration;
-    const title = data.title || "Twitter Video";
+    if (!hasVideo && !hasPhoto) throw new Error("Konten tidak didukung atau link salah!");
 
+    let mediaHtml = "";
+    let downloadUrl = "";
+    let label = "";
+
+    if (hasVideo) {
+        // TAMPILAN VIDEO
+        const videoHD = data.downloads.videos[0]; // Ambil yang paling atas (HD)
+        downloadUrl = videoHD.url;
+        label = `SAVE VIDEO (${videoHD.quality})`;
+        mediaHtml = `
+            <div class="relative rounded-[2rem] overflow-hidden border-2 border-blue-500/30 bg-black/60 shadow-2xl">
+                <video controls class="w-full h-auto block" poster="${data.thumbnail}">
+                    <source src="${videoHD.url}" type="video/mp4">
+                </video>
+            </div>`;
+    } else {
+        // TAMPILAN FOTO
+        downloadUrl = data.downloads.photo.url;
+        label = "SAVE IMAGE (HD)";
+        mediaHtml = `
+            <div class="relative rounded-[2rem] overflow-hidden border-2 border-blue-500/30 bg-black/60 shadow-2xl">
+                <img src="${downloadUrl}" class="w-full h-auto block" alt="Twitter Photo">
+            </div>`;
+    }
+
+    // 2. Render ke UI Skylen Ultra
     content.innerHTML = `
         <div class="space-y-4 animate__animated animate__fadeIn">
             <div class="px-2 pt-1 text-center">
                 <span class="bg-blue-500/20 text-blue-400 text-[9px] px-2 py-0.5 rounded-full font-bold tracking-widest uppercase">
-                    Twitter / X - ${duration}
+                    Twitter / X ${hasVideo ? 'Video' : 'Photo'}
                 </span>
-                <p class="text-[10px] text-white font-black mt-2 uppercase italic break-words leading-tight">
-                    ${title}
-                </p>
             </div>
 
-            <div class="relative rounded-[2rem] overflow-hidden border-2 border-blue-500/30 bg-black/60 shadow-2xl">
-                <video controls class="w-full h-auto block" poster="${thumb}">
-                    <source src="${videoHD.url}" type="video/mp4">
-                </video>
-            </div>
+            ${mediaHtml}
 
-            <div class="grid grid-cols-1 gap-2">
-                <button onclick="forceDownload('${videoHD.url}', 'twitter_${Date.now()}.mp4')" id="dlBtn"
-                    class="w-full py-4 bg-blue-600 hover:bg-blue-500 text-center rounded-2xl font-black text-[11px] text-white tracking-widest uppercase shadow-xl transition-all active:scale-95">
-                    SAVE VIDEO (${videoHD.quality})
-                </button>
-            </div>
+            <button onclick="forceDownload('${downloadUrl}', 'twitter_${Date.now()}.${hasVideo ? 'mp4' : 'jpg'}')" id="dlBtn"
+                class="w-full py-4 bg-blue-600 hover:bg-blue-500 text-center rounded-2xl font-black text-[11px] text-white tracking-widest uppercase shadow-xl transition-all active:scale-95">
+                ${label}
+            </button>
         </div>`;
-}    </script>
+}</script>
 </body>
 </html>

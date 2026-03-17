@@ -96,9 +96,56 @@
         <button class="nav-tab" onclick="switchTab(this)">Streaming</button>
         <button class="nav-tab" onclick="switchTab(this)">System</button>
     </div>
+    <section id="game" class="section-content active animate__animated animate__fadeIn">
+    <div class="glass p-6 rounded-[2.5rem] space-y-6">
+        
+        <div class="grid grid-cols-2 gap-3">
+            <div onclick="setGame('emel', this)" class="game-card active-game">
+                <span class="text-xl">⚔️</span>
+                <p>Mobile Legends</p>
+            </div>
+            <div onclick="setGame('epep', this)" class="game-card">
+                <span class="text-xl">🔥</span>
+                <p>Free Fire</p>
+            </div>
+            <div onclick="setGame('pubg', this)" class="game-card">
+                <span class="text-xl">🔫</span>
+                <p>PUBG Mobile</p>
+            </div>
+            <div onclick="setGame('codm', this)" class="game-card">
+                <span class="text-xl">🎖️</span>
+                <p>Call Of Duty Mobile</p>
+            </div>
+            <div onclick="setGame('fcmobile', this)" class="game-card">
+                <span class="text-xl">⚽</span>
+                <p>FC Mobile</p>
+            </div>
+            <div onclick="setGame('mcgg', this)" class="game-card">
+                <span class="text-xl">🧱</span>
+                <p>Minecraft Game</p>
+            </div>
+        </div>
 
-    <script>
-        // Fungsi update waktu real-time
+        <input type="hidden" id="gameType" value="emel">
+
+        <div class="space-y-4">
+            <div class="flex gap-2">
+                <input type="text" id="gameId" placeholder="User ID" class="input-field flex-1">
+                
+                <input type="text" id="gameZone" placeholder="Zone ID" class="input-field w-28">
+            </div>
+
+            <button onclick="validateGame()" id="btnCheck" class="w-full py-5 bg-blue-600 rounded-2xl font-black text-sm uppercase shadow-lg shadow-blue-900/40">
+                Check Username
+            </button>
+        </div>
+    </div>
+
+    <div id="resGame" class="hidden mt-4 p-6 glass rounded-[2.5rem] text-center">
+        <h3 id="gameNickname" class="font-black text-xl uppercase italic text-blue-400"></h3>
+    </div>
+</section>
+    <script> // Fungsi update waktu real-time
         function updateDateTime() {
             const now = new Date();
             const options = { 
@@ -127,5 +174,62 @@
             btn.classList.add('active');
         }
     </script>
+    <script>
+    // Fungsi khusus untuk handle response Nama + Negara (Khusus MLBB)
+    async function validateGame() {
+        const btn = document.getElementById('btnCheck');
+        const resBox = document.getElementById('resGame');
+        const resText = document.getElementById('gameNickname');
+        
+        const game = document.getElementById('gameType').value;
+        const id = document.getElementById('gameId').value;
+        const zone = document.getElementById('gameZone').value;
+
+        if (!id) return alert("User ID wajib diisi!");
+
+        btn.disabled = true;
+        btn.innerHTML = "PROCESSING...";
+        resBox.classList.add('hidden');
+
+        try {
+            // Jalur ke folder api lu
+            let url = `/api/${game}?id=${id}`;
+            if (zone && (game === 'emel' || game === 'mcgg')) url += `&zone=${zone}`;
+
+            const response = await fetch(url);
+            const data = await response.json();
+            
+            // Ambil data nickname & country dari API lu
+            const nickname = data.username || (data.data && data.data.username) || data.nickname;
+            const country = data.country || (data.data && data.data.country);
+
+            if (nickname) {
+                // LOGIC KHUSUS EMEL: Tampilkan Nama + Negara
+                if (game === 'emel' && country) {
+                    const countryLower = country.toLowerCase();
+                    resText.innerHTML = `
+                        <div class="flex flex-col items-center gap-2">
+                            <img src="https://flagcdn.com/w80/${countryLower}.png" class="w-10 rounded shadow-sm mb-1">
+                            <span>${nickname}</span>
+                            <span class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">${country}</span>
+                        </div>
+                    `;
+                } else {
+                    // Game lain cuma nama aja
+                    resText.innerText = nickname;
+                }
+                
+                resBox.classList.remove('hidden');
+            } else {
+                alert("ID Gak Ditemukan!");
+            }
+        } catch (err) {
+            alert("Error nembak API!");
+        } finally {
+            btn.disabled = false;
+            btn.innerHTML = "CHECK USERNAME";
+        }
+    }
+</script>
 </body>
 </html>
